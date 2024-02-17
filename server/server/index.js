@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const apiRoutes = require("./routes");
 
 require("dotenv").config();
 
@@ -14,6 +15,9 @@ const port =
 app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+
+// main route
+app.use("/api", apiRoutes);
 
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
