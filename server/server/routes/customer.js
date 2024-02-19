@@ -2,10 +2,6 @@ const express = require("express");
 const router = express.Router();
 const customerController = require("../controllers/customerController");
 
-// profile
-// router.get("/profile/:id", customerController.getCustomerProfile);
-// router.put("/profile/:id", customerController.updateCustomerProfile);
-
 // cart
 // router.post("/cart", customerController.newCart);
 // router.put("/cart/:cartId", customerController.updateCart);

@@ -2,10 +2,6 @@ const express = require("express");
 const router = express.Router();
 const adminController = require("../controllers/adminController");
 
-// profile
-// router.get("/profile/:id", adminController.getAdminProfile);
-// router.put("/profile/:id", adminController.updateAdminProfile);
-
 // restaurant
 // router.get("/restaurant/:resId", adminController.getAdminRestaurant);
 // router.put("/restaurant/:resId", adminController.updateAdminRestaurant);
