@@ -56,8 +56,17 @@ const restaurantSchema = new Schema(
     ],
     reviews: [
       {
-        type: Schema.Types.ObjectId,
-        ref: "Review",
+        customer: {
+          type: Schema.Types.ObjectId,
+          ref: "User",
+        },
+        rating: {
+          type: Number,
+          required: true,
+        },
+        comment: {
+          type: String,
+        },
       },
     ],
     menuItems: [

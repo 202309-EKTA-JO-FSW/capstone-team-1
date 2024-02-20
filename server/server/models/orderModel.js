@@ -13,7 +13,7 @@ const orderSchema = Schema(
     },
     cartItems: {
       type: mongoose.Types.ObjectId,
-      ref: "Cart",
+      ref: "User",
     },
     note: {
       type: String,
@@ -37,7 +37,7 @@ const orderSchema = Schema(
     },
     review: {
       type: Schema.Types.ObjectId,
-      ref: "Review",
+      ref: "Restaurant",
     },
   },
   {

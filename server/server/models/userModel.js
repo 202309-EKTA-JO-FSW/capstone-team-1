@@ -20,6 +20,31 @@ const addressSchema = new Schema({
   },
 });
 
+const cartSchema = new Schema({
+  restaurant: {
+    type: Schema.Types.ObjectId,
+    ref: "Restaurant",
+  },
+  menuItems: [
+    {
+      menuItem: {
+        type: Schema.Types.ObjectId,
+        ref: "MenuItem",
+        required: true,
+      },
+      quantity: {
+        type: Number,
+        default: 1,
+        min: 1,
+      },
+      total: {
+        type: Number,
+        required: true,
+      },
+    },
+  ],
+});
+
 const userSchema = new Schema(
   {
     first_name: {
@@ -63,6 +88,7 @@ const userSchema = new Schema(
       required: true,
     },
     address: addressSchema,
+    cart: cartSchema,
     isAdmin: {
       type: Boolean,
       required: true,
