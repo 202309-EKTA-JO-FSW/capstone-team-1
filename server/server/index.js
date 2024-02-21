@@ -19,6 +19,10 @@ app.use(express.json());
 // main route
 app.use("/api", apiRoutes);
 
+app.get("/test", (req, res) => {
+  res.send("testiinnng!!!");
+});
+
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
   connectToMongo();
