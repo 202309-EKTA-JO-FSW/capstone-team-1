@@ -9,12 +9,4 @@ router.post("/signup", authController.signup);
 
 router.get("/logout", authController.logout);
 
-// test route
-router.get("/users", async (req, res) => {
-  try {
-    const users = await User.find();
-    return res.status(200).json(users);
-  } catch (error) {}
-});
-
 module.exports = router;
