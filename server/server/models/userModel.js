@@ -4,19 +4,15 @@ const { Schema } = mongoose;
 const addressSchema = new Schema({
   country: {
     type: String,
-    required: true,
   },
   city: {
     type: String,
-    required: true,
   },
   street: {
     type: String,
-    required: true,
   },
   zipcode: {
-    type: String,
-    required: true,
+    type: Number,
   },
 });
 
@@ -69,7 +65,6 @@ const userSchema = new Schema(
     },
     providerId: {
       type: String,
-      unique: true,
     },
     age: {
       type: Number,
@@ -82,6 +77,8 @@ const userSchema = new Schema(
     },
     avatar: {
       type: String,
+      default:
+        "https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI=",
     },
     phone_number: {
       type: String,
@@ -92,6 +89,7 @@ const userSchema = new Schema(
     isAdmin: {
       type: Boolean,
       required: true,
+      default: false,
     },
     Orders: [
       {
