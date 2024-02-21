@@ -120,6 +120,12 @@ const signup = async (req, res) => {
   }
 };
 
+// logout
+const logout = (req, res) => {
+  res.clearCookie(jwt);
+  return res.status(200).json({ message: "Logout successful" });
+};
+
 // function to create a token
 function createToken(id) {
   return jwt.sign({ id }, process.env.SECRET_KEY, { expiresIn: 1000 * 1000 });

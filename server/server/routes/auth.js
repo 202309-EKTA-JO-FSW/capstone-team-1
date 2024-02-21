@@ -7,7 +7,7 @@ const User = require("../models/userModel");
 router.post("/login", authController.login);
 router.post("/signup", authController.signup);
 
-// router.get("/logout", authController.logout);
+router.get("/logout", authController.logout);
 
 // test route
 router.get("/users", async (req, res) => {
