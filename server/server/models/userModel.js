@@ -91,7 +91,7 @@ const userSchema = new Schema(
       required: true,
       default: false,
     },
-    Orders: [
+    orders: [
       {
         type: Schema.Types.ObjectId,
         ref: "Order",
@@ -106,5 +106,15 @@ const userSchema = new Schema(
     timestamps: true,
   }
 );
+
+userSchema.pre("save", function (next) {
+  // Capitalize first letter of first name
+  this.first_name =
+    this.first_name.charAt(0).toUpperCase() + this.first_name.slice(1);
+  // Capitalize first letter of last name
+  this.last_name =
+    this.last_name.charAt(0).toUpperCase() + this.last_name.slice(1);
+  next();
+});
 
 module.exports = mongoose.model("User", userSchema);
