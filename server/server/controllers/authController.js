@@ -122,7 +122,7 @@ const signup = async (req, res) => {
 
 // logout
 const logout = (req, res) => {
-  res.clearCookie(jwt);
+  res.clearCookie("jwt");
   return res.status(200).json({ message: "Logout successful" });
 };
 
