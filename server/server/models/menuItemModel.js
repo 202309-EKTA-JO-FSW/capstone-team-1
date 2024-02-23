@@ -22,6 +22,7 @@ const menuItemSchema = new Schema(
     available: {
       type: Boolean,
       required: true,
+      default: false,
     },
     type: {
       type: String,
