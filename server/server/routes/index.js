@@ -12,4 +12,7 @@ router.use("/restaurant", restaurantRoute);
 router.use("/auth", authRoute);
 router.use("/user", userRoute);
 
+// test route
+const testRoute = require("./testRoutes");
+router.use("/", testRoute);
 module.exports = router;

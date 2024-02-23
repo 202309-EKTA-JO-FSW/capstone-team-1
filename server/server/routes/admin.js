@@ -17,7 +17,7 @@ router.use(uploadMulter.single("image"));
 
 // items
 router.post("/restaurant/menuItem/new", adminController.addNewItem);
-// router.put("/restaurant/:resId/menuItem/:itemId", adminController.updateItem);
+router.put("/restaurant/menuItem/:itemId", adminController.updateItem);
 // router.delete(
 //   "/restaurant/:resId/menuItem/:itemId",
 //   adminController.deleteItem
