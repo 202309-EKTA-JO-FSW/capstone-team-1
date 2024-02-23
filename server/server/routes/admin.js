@@ -4,8 +4,13 @@ const adminController = require("../controllers/adminController");
 const Restaurant = require("../models/restaurantModel");
 const userModel = require("../models/userModel");
 const authUser = require("../middleware/authUser");
+const { uploadMulter } = require("../middleware/multer");
 
 router.use(authUser);
+// add multer in middleware to track the file comes from request
+// multer arg should be change according to what the fild of the image
+router.use(uploadMulter.single("image"));
+
 // restaurant
 // router.get("/restaurant/:resId", adminController.getAdminRestaurant);
 // router.put("/restaurant/:resId", adminController.updateAdminRestaurant);
