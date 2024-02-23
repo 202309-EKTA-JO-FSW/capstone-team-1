@@ -3,6 +3,7 @@ const router = express.Router();
 const User = require("../models/userModel");
 const Restaurant = require("../models/restaurantModel");
 const MenuItem = require("../models/menuItemModel");
+
 // User auth
 router.get("/restaurant", async (req, res) => {
   try {

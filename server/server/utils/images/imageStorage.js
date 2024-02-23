@@ -1,6 +1,11 @@
 const admin = require("firebase-admin");
 const serviceAccount = require("./serviceAccountKey.json");
-const { getStorage, getDownloadURL } = require("firebase-admin/storage");
+const {
+  getStorage,
+  getDownloadURL,
+  ref,
+  storage,
+} = require("firebase-admin/storage");
 
 // initialize firebase app as admin
 admin.initializeApp({
@@ -35,4 +40,28 @@ const uploadImage = async (imageFile, imageFolder) => {
   }
 };
 
-module.exports = { uploadImage };
+const deleteImage = (imageUrl) => {
+  try {
+    // grap file path from imageUrl
+    const pathStartIndex = imageUrl.indexOf("/o/") + 3;
+    const pathEndIndex = imageUrl.indexOf("?");
+    const imagePath = decodeURIComponent(
+      imageUrl.substring(pathStartIndex, pathEndIndex)
+    );
+
+    // Create a reference to the file to delete
+    const fileRef = admin.storage().bucket().file(imagePath);
+    fileRef
+      .delete()
+      .then(() => {
+        console.log("File Deleted");
+      })
+      .catch(function (error) {
+        throw Error(error.message);
+      });
+  } catch (error) {
+    throw Error(error.message);
+  }
+};
+
+module.exports = { uploadImage, deleteImage };

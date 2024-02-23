@@ -1,7 +1,7 @@
 const User = require("../models/userModel");
 const MenuItem = require("../models/menuItemModel");
 const Restaurant = require("../models/restaurantModel");
-const { uploadImage } = require("../utils/images/uploadImage");
+const { uploadImage, deleteImage } = require("../utils/images/imageStorage");
 
 const addNewItem = async (req, res) => {
   const { name, description, image, price, type } = req.body;
@@ -82,20 +82,22 @@ const updateItem = async (req, res) => {
         message: "MenuItem is not found",
       });
 
+    // menuItem model
+    const menuItem = await MenuItem.findById(itemId);
+
     // get image url
     // uploadImage arguments uploadImage(imagefile, imageFolder in firebase storage)
     let imageUrl;
     if (req.file) {
+      // delete the old image and then update the new one
+      deleteImage(menuItem.image);
       imageUrl = await uploadImage(req.file, "menuItemImages");
       if (!imageUrl) {
         return res.status(500).json({ message: "Failed to upload image" });
       }
     }
 
-    // menuItem model
-    const menuItem = await MenuItem.findById(itemId);
-
-    // update menu items
+    // update menu item
     menuItem.name = name || menuItem.name;
     menuItem.description = description || menuItem.description;
     menuItem.image = imageUrl || menuItem.image;
