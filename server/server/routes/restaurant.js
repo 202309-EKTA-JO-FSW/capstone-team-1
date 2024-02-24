@@ -9,11 +9,12 @@ const restaurantController = require("../controllers/restaurantController");
 // router.get("/filter", restaurantController.filterRestaurant);
 
 // menuItems
-// router.get("/:resId/menuItems", restaurantController.getAllRestaurantMenuItems);
-// router.get(
-//   "/:resId/menuItems/:itemId",
-//   restaurantController.getOneRestaurantMenuItem
-// );
+
+router.get("/:resId", restaurantController.getAllRestaurantMenuItems);
+router.get(
+  "/:resId/menuItems/:itemId",
+  restaurantController.getOneRestaurantMenuItem
+);
 // router.get(
 //   "/:resId/menuItems/filter",
 //   restaurantController.filterRestaurantMenuItems
