@@ -2,8 +2,9 @@ const express = require("express");
 const router = express.Router();
 const restaurantController = require("../controllers/restaurantController");
 
-// restaurant
+// restaurant 
 // router.get("/", restaurantController.getAllRestaurants);
+
 // router.get("/:resId", restaurantController.getOneRestaurant);
 // router.get("/search", restaurantController.searchRestaurant);
 // router.get("/filter", restaurantController.filterRestaurant);
