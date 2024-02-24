@@ -10,7 +10,7 @@ const restaurantController = require("../controllers/restaurantController");
 
 // menuItems
 
-router.get("/:resId", restaurantController.getAllRestaurantMenuItems);
+router.get("/:resId/menuItems", restaurantController.getAllRestaurantMenuItems);
 router.get(
   "/:resId/menuItems/:itemId",
   restaurantController.getOneRestaurantMenuItem
