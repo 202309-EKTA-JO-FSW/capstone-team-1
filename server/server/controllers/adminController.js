@@ -1,7 +1,7 @@
 const Restaurant=require("../models/restaurantModel");
 const getAdminRestaurant=async(req,res)=>
 {
-    const adminId=req.params.id;
+    const adminId=req.userId;
     try {
         const restaurant = await Restaurant.findOne({ owner: adminId });
         if (!restaurant)

@@ -3,8 +3,8 @@ const router = express.Router();
 const adminController = require("../controllers/adminController");
 
 // restaurant
-// router.get("/restaurant/:resId", adminController.getAdminRestaurant);
-// router.put("/restaurant/:resId", adminController.updateAdminRestaurant);
+ router.get("/restaurant", adminController.getAdminRestaurant);
+ router.put("/restaurant/:resId", adminController.updateAdminRestaurant);
 
 // items
 // router.post("/restaurant/:resId/menuItem/new", adminController.addNewItem);
