@@ -3,24 +3,29 @@ const MenuItem = require("../models/menuItemModel");
 const Restaurant = require("../models/restaurantModel");
 const { uploadImage, deleteImage } = require("../utils/images/imageStorage");
 
+// add a new menuItem
 const addNewItem = async (req, res) => {
   const { name, description, image, price, type } = req.body;
   try {
     const user = await User.findById(req.userId);
     // checking if the user is admin
-    if (!user.isAdmin) {
+    if (!user.isAdmin || user.isAdmin === null) {
       return res
         .status(403) // because user is unauthorized
-        .json({ message: "You don't have access to add menu items" });
+        .json({
+          message:
+            "Access Denied: Only owner of restaurant are allowed to add menu items",
+        });
     }
 
     const restaurant = await Restaurant.findById(user.restaurant);
 
     // check if there user has a restaurant
     if (!restaurant)
-      return res
-        .status(404)
-        .json({ message: "Create resturant before add a menu item" });
+      return res.status(404).json({
+        message:
+          "Cannot add menu item: Please create a restaurant profile first",
+      });
 
     // get image url
     // uploadImage arguments uploadImage(imagefile, imageFolder in firebase storage)
@@ -62,10 +67,13 @@ const updateItem = async (req, res) => {
   try {
     const user = await User.findById(req.userId);
     // checking if the user is admin
-    if (!user.isAdmin) {
+    if (!user.isAdmin || user.isAdmin === null) {
       return res
         .status(403) // because user is unauthorized
-        .json({ message: "You don't have access to update menu items" });
+        .json({
+          message:
+            "Access Denied: Only owner of restaurant are allowed to update menu items",
+        });
     }
 
     const restaurant = await Restaurant.findById(user.restaurant);
@@ -73,13 +81,14 @@ const updateItem = async (req, res) => {
     // check if there user has a restaurant
     if (!restaurant)
       return res.status(404).json({
-        message: "Create resturant before update a menu item",
+        message:
+          "Cannot update menu item: Please create a restaurant profile first.",
       });
 
     // check if the menuItem exist
     if (!restaurant.menuItems.includes(itemId))
       return res.status(404).json({
-        message: "MenuItem is not found",
+        message: "Menu item not found",
       });
 
     // menuItem model
@@ -116,4 +125,54 @@ const updateItem = async (req, res) => {
   }
 };
 
-module.exports = { addNewItem, updateItem };
+// delete menuItem
+const deleteItem = async (req, res) => {
+  const { itemId } = req.params;
+  try {
+    const user = await User.findById(req.userId);
+    // checking if the user is admin
+    if (!user.isAdmin || user.isAdmin === null) {
+      return res
+        .status(403) // because user is unauthorized
+        .json({
+          message:
+            "Access Denied: Only owner of restaurant are allowed to delete menu items",
+        });
+    }
+
+    const restaurant = await Restaurant.findById(user.restaurant);
+
+    // check if there user has a restaurant
+    if (!restaurant)
+      return res.status(404).json({
+        message:
+          "Cannot delete menu item: Please create a restaurant profile first.",
+      });
+
+    // check if the menuItem exist
+    if (!restaurant.menuItems.includes(itemId))
+      return res.status(404).json({
+        message: "Menu item not found",
+      });
+
+    // menuItem model
+    const menuItem = await MenuItem.findById(itemId);
+
+    if (menuItem.image) {
+      // delete image from firebase storage
+      deleteImage(menuItem.image);
+    }
+
+    // delete item by id
+    const deletedMenuItem = await MenuItem.findByIdAndDelete(itemId);
+
+    return res.status(200).json({
+      message: "Delete menuItem successful",
+      results: deletedMenuItem,
+    });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports = { addNewItem, updateItem, deleteItem };
