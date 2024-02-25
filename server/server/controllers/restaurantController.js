@@ -4,16 +4,14 @@ const menuItemModel = require("../models/menuItemModel");
 // get all MenuItems for chosen restaurant
 const getAllRestaurantMenuItems = async (req, res) => {
   const { resId } = req.params;
-  const page = req.query.page || 0;
-  const itemsPerPage = 10;
+  const page = parseInt(req.query.page) || 0;
+  const itemsPerPage = parseInt(req.query.offset) || 10;
   try {
-    const allMenuItems = await restaurantModel
-      .findById(resId)
-      .populate({ path: "menuItems", options :{
-        skip: page*itemsPerPage, 
-        limit: itemsPerPage
-      }});
-    if (!allMenuItems) {
+    const allMenuItems = await menuItemModel
+      .find({ "restaurant._id": resId })
+      .skip(page * itemsPerPage)
+      .limit(itemsPerPage);
+    if (allMenuItems.length === 0) {
       res.status(422).json({ message: "Restaurant doesn't have any Items" });
     } else {
       res.json(allMenuItems);
@@ -24,23 +22,41 @@ const getAllRestaurantMenuItems = async (req, res) => {
 };
 
 const getOneRestaurantMenuItem = async (req, res) => {
-  const { resId } = req.params.resId;
-  const { itemId } = req.params.itemId;
+  const { resId, itemId } = req.params;
   try {
-    const restaurantRequested = await restaurantModel.findById({ resId });
-    if (restaurantRequested.menuItems) {
-      const oneMenuItem = await menuItemModel.findById({ itemId });
-      res.status(200).json(oneMenuItem);
-    } else {
-      res.status(422).json({ message: err.message });
+    const singleMenuItem = await menuItemModel.findOne({
+      $and: [
+        {
+          _id: itemId,
+          "restaurant._id": resId,
+        },
+      ],
+    });
+    if (!singleMenuItem) {
+      return res.status(404).json({ message: "Menu item not found" });
     }
+    res.status(200).json(singleMenuItem);
   } catch (err) {
     res.status(422).json({ message: err.message });
+  }
+};
+
+const filterRestaurantMenuItems = async (req, res) => {
+  const { filterSelected } = req.query;
+  const {resId}=req.params;
+  try {
+    const filteredItems = await menuItemModel.find({
+      $and: [{ "restaurant._id": resId, filterSelected }],
+    });
+    res.status(200).json(filteredItems);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 };
 module.exports = {
   getAllRestaurantMenuItems,
   getOneRestaurantMenuItem,
+  filterRestaurantMenuItems,
 };
 
 //router.get("/:resId/menuItems", restaurantController.getAllRestaurantMenuItems);
