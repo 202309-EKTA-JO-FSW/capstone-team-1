@@ -1,7 +1,6 @@
-const restaurantModel = require("../models/restaurantModel");
 const menuItemModel = require("../models/menuItemModel");
 
-// get all MenuItems for chosen restaurant
+// get all MenuItems for chosen restaurant w/ pagination
 const getAllRestaurantMenuItems = async (req, res) => {
   const { resId } = req.params;
   const page = parseInt(req.query.page) || 0;
@@ -21,6 +20,7 @@ const getAllRestaurantMenuItems = async (req, res) => {
   }
 };
 
+// get one MenuItem 
 const getOneRestaurantMenuItem = async (req, res) => {
   const { resId, itemId } = req.params;
   try {
@@ -41,6 +41,7 @@ const getOneRestaurantMenuItem = async (req, res) => {
   }
 };
 
+// filter MenuItems based on query w/pagination
 const filterRestaurantMenuItems = async (req, res) => {
   const { filterSelected } = req.query;
   const { resId } = req.params;
@@ -59,25 +60,27 @@ const filterRestaurantMenuItems = async (req, res) => {
   }
 };
 
-
+// search MenuItems w/pagination
+const searchRestaurantMenuItems = async (req, res) => {
+  const { type, pageNum, offset } = req.query;
+  const page = parseInt(pageNum) || 0;
+  const itemsPerPage = parseInt(offset) || 10;
+  try {
+    const searchResult = await menuItemModel
+      .find({ type: { $regex: type, $options: "i" } }, {})
+      .skip(page * itemsPerPage)
+      .limit(itemsPerPage);
+    res.status(200).json(searchResult);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
 
 module.exports = {
   getAllRestaurantMenuItems,
   getOneRestaurantMenuItem,
   filterRestaurantMenuItems,
-  
+  searchRestaurantMenuItems,
 };
 
-//router.get("/:resId/menuItems", restaurantController.getAllRestaurantMenuItems);
-// router.get(
-//   "/:resId/menuItems/:itemId",
-//   restaurantController.getOneRestaurantMenuItem
-// );
-// router.get(
-//   "/:resId/menuItems/filter",
-//   restaurantController.filterRestaurantMenuItems
-// );
-// router.get(
-//   "/:resId/menuItems/search",
-//   restaurantController.searchRestaurantMenuItems
-// );
+
