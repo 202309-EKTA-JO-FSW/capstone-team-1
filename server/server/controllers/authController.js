@@ -142,4 +142,4 @@ function validateEmailAndPassword(email, password) {
   }
 }
 
-module.exports = { signup, login, logout };
+module.exports = { signup, login, logout, createToken };

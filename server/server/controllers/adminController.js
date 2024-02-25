@@ -14,7 +14,7 @@ const addNewItem = async (req, res) => {
         .status(403) // because user is unauthorized
         .json({
           message:
-            "Access Denied: Only owner of restaurant are allowed to add menu items",
+            "Access Denied: Only owner of restaurant is allowed to add menu items",
         });
     }
 
