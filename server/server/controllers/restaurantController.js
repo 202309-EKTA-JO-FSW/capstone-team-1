@@ -43,20 +43,29 @@ const getOneRestaurantMenuItem = async (req, res) => {
 
 const filterRestaurantMenuItems = async (req, res) => {
   const { filterSelected } = req.query;
-  const {resId}=req.params;
+  const { resId } = req.params;
+  const page = parseInt(req.query.page) || 0;
+  const itemsPerPage = parseInt(req.query.offset) || 10;
   try {
-    const filteredItems = await menuItemModel.find({
-      $and: [{ "restaurant._id": resId, filterSelected }],
-    });
+    const filteredItems = await menuItemModel
+      .find({
+        $and: [{ "restaurant._id": resId, filterSelected }],
+      })
+      .skip(page * itemsPerPage)
+      .limit(itemsPerPage);
     res.status(200).json(filteredItems);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
+
+
+
 module.exports = {
   getAllRestaurantMenuItems,
   getOneRestaurantMenuItem,
   filterRestaurantMenuItems,
+  
 };
 
 //router.get("/:resId/menuItems", restaurantController.getAllRestaurantMenuItems);
