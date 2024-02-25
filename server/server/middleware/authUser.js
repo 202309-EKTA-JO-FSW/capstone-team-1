@@ -16,6 +16,7 @@ const authUser = (req, res, next) => {
 
     // send user id
     req.userId = decodedUser.id;
+  
 
     next();
   } catch (error) {

@@ -3,6 +3,7 @@ const User=require('../models/userModel');
 const getAdminRestaurant=async(req,res)=>
 {
     const adminId=req.userId;
+    
     try {
         const user = await User.findById(adminId);
     if (!user || !user.isAdmin) {
@@ -28,15 +29,17 @@ const getAdminRestaurant=async(req,res)=>
 const updateAdminRestaurant=async(req,res)=>
 {
     const adminId=req.userId;
+    
     try {
         const user = await User.findById(adminId);
     if (!user || !user.isAdmin) {
       return res.status(401).json({ message: "Unauthorized" });
     }
+    
         const restaurantId=user.restaurant;
 if (!restaurantId)
 {
-    return res.status(404).json({ message: "Restaurant not found" });
+    return res.status(404).json({ message: "Restaurant not found, should create a restaurant" });
 }
         const updatedRestaurant=await Restaurant.findByIdAndUpdate(
             restaurantId,
@@ -75,10 +78,11 @@ const createRestaurant=async(req,res)=>
         address,
         owner:adminId
 
-    })
-    return res.status(201).json({ restaurant: newRestaurant });
+    });
+    user.restaurant = newRestaurant._id;
+        await user.save();
+    return res.status(201).json({ restaurant: newRestaurant ,message: "Updated successful"});
 
-   
 
 }
 catch (error) {
