@@ -7,37 +7,33 @@ const getAllRestaurantMenuItems = async (req, res) => {
   const itemsPerPage = parseInt(req.query.offset) || 10;
   try {
     const allMenuItems = await menuItemModel
-      .find({ "restaurant._id": resId })
+      .find({ restaurant: resId })
       .skip(page * itemsPerPage)
       .limit(itemsPerPage);
     if (allMenuItems.length === 0) {
       res.status(422).json({ message: "Restaurant doesn't have any Items" });
     } else {
-      res.json(allMenuItems);
+      res.status(200).json(allMenuItems);
     }
   } catch (err) {
-    res.status(422).json({ message: err.message });
+    res.status(500).json({ message: err.message });
   }
 };
 
-// get one MenuItem 
+// get one MenuItem
 const getOneRestaurantMenuItem = async (req, res) => {
   const { resId, itemId } = req.params;
   try {
     const singleMenuItem = await menuItemModel.findOne({
-      $and: [
-        {
-          _id: itemId,
-          "restaurant._id": resId,
-        },
-      ],
+      _id: itemId,
+      restaurant: resId,
     });
     if (!singleMenuItem) {
       return res.status(404).json({ message: "Menu item not found" });
     }
     res.status(200).json(singleMenuItem);
   } catch (err) {
-    res.status(422).json({ message: err.message });
+    res.status(500).json({ message: err.message });
   }
 };
 
@@ -50,7 +46,7 @@ const filterRestaurantMenuItems = async (req, res) => {
   try {
     const filteredItems = await menuItemModel
       .find({
-        $and: [{ "restaurant._id": resId, filterSelected }],
+        $and: [{ restaurant: resId, type: filterSelected }],
       })
       .skip(page * itemsPerPage)
       .limit(itemsPerPage);
@@ -62,12 +58,17 @@ const filterRestaurantMenuItems = async (req, res) => {
 
 // search MenuItems w/pagination
 const searchRestaurantMenuItems = async (req, res) => {
-  const { type, pageNum, offset } = req.query;
+  const { query, pageNum, offset } = req.query;
   const page = parseInt(pageNum) || 0;
   const itemsPerPage = parseInt(offset) || 10;
   try {
     const searchResult = await menuItemModel
-      .find({ type: { $regex: type, $options: "i" } }, {})
+      .find({
+        $or: [
+          { type: { $regex: query, $options: "i" } },
+          { name: { $regex: query, $options: "i" } },
+        ],
+      })
       .skip(page * itemsPerPage)
       .limit(itemsPerPage);
     res.status(200).json(searchResult);
@@ -82,5 +83,3 @@ module.exports = {
   filterRestaurantMenuItems,
   searchRestaurantMenuItems,
 };
-
-
