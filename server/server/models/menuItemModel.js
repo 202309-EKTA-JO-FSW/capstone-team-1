@@ -14,6 +14,8 @@ const menuItemSchema = new Schema(
     image: {
       type: String,
       required: true,
+      default:
+        "https://firebasestorage.googleapis.com/v0/b/capstone-project-486e3.appspot.com/o/images%2FO9IY130.jpg?alt=media&token=65c6fcea-df3d-4121-a28c-86a3537d2bde",
     },
     price: {
       type: Number,
@@ -22,6 +24,7 @@ const menuItemSchema = new Schema(
     available: {
       type: Boolean,
       required: true,
+      default: false,
     },
     type: {
       type: String,
@@ -30,6 +33,7 @@ const menuItemSchema = new Schema(
     restaurant: {
       type: Schema.Types.ObjectId,
       ref: "Restaurant",
+      required: true,
     },
   },
   {

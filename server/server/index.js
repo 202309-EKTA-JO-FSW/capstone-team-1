@@ -4,9 +4,10 @@ const apiRoutes = require("./routes");
 
 require("dotenv").config();
 
-const connectToMongo = require("./db/connection");
+const { connectToMongo } = require("./db/connection");
 
 const app = express();
+
 const port =
   process.env.NODE_ENV === "test"
     ? process.env.NODE_LOCAL_TEST_PORT
@@ -19,13 +20,11 @@ app.use(express.json());
 // main route
 app.use("/api", apiRoutes);
 
-app.get("/test", (req, res) => {
-  res.send("testiinnng!!!");
-});
+if (process.env.NODE_ENV !== "test") {
+  app.listen(port, () => {
+    console.log(`Server listening on port ${port}`);
 
-app.listen(port, () => {
-  console.log(`Server listening on port ${port}`);
-  connectToMongo();
-});
-
+    connectToMongo();
+  });
+}
 module.exports = app;
