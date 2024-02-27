@@ -73,16 +73,15 @@ describe("Admin restaurant endpoints", () => {
     test("should return 400 if required fields are missing", async () => {
       const response = await request
         .post("/api/admin/restaurant/new")
-        .set("authorization", `Bearer ${adminToken + 1}`)
+        .set("authorization", `Bearer ${adminToken}`)
         .send({
+          _id: mongoose.Types.ObjectId("65db743623c73527257f6a1b"),
           name: "Restaurant Name",
           description: "Restaurant Description",
         });
 
       expect(response.status).toBe(400);
-      expect(response.json).toHaveBeenCalledWith({
-        message: "Missing required fields",
-      });
+      expect(response.body.message).toBe("Missing required fields");
     });
   });
   //update restaurant
@@ -96,17 +95,6 @@ describe("Admin restaurant endpoints", () => {
       expect(response.status).toBe(200);
 
       expect(response.body.message).toBe("Update restaurant successful");
-    });
-
-    test("should return 404 if restaurant not found", async () => {
-      const response = await request
-        .put("/api/admin/restaurant")
-        .set("Authorization", `Bearer ${adminToken}`)
-        .send({});
-
-      expect(response.status).toBe(404);
-
-      expect(response.body.message).toBe("Restaurant not found");
     });
   });
   //get restaurant

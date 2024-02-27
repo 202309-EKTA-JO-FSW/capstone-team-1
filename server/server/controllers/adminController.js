@@ -45,12 +45,10 @@ const updateAdminRestaurant = async (req, res) => {
     if (!updatedRestaurant) {
       return res.status(404).json({ message: "Restaurant not found" });
     }
-    res
-      .status(200)
-      .json({
-        message: "Update restaurant successful",
-        results: updatedRestaurant,
-      });
+    res.status(200).json({
+      message: "Update restaurant successful",
+      results: updatedRestaurant,
+    });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
@@ -65,15 +63,7 @@ const createRestaurant = async (req, res) => {
     if (!user || !user.isAdmin) {
       return res.status(401).json({ message: "Unauthorized" });
     }
-    if (
-      !name ||
-      !description ||
-      !cuisine ||
-      !address.country ||
-      !address.city ||
-      !address.street ||
-      !address.zipcode
-    ) {
+    if (!name || !description || !cuisine) {
       return res.status(400).json({ message: "Missing required fields" });
     }
     const newRestaurant = await Restaurant.create({
