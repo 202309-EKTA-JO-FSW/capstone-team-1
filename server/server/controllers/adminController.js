@@ -45,7 +45,12 @@ const updateAdminRestaurant = async (req, res) => {
     if (!updatedRestaurant) {
       return res.status(404).json({ message: "Restaurant not found" });
     }
-    res.status(200).json({ restaurant: updatedRestaurant });
+    res
+      .status(200)
+      .json({
+        message: "Update restaurant successful",
+        results: updatedRestaurant,
+      });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
@@ -82,12 +87,10 @@ const createRestaurant = async (req, res) => {
     });
     user.restaurant = newRestaurant._id;
     await user.save();
-    return res
-      .status(201)
-      .json({
-        restaurant: newRestaurant,
-        message: "Create new restaurant successful",
-      });
+    return res.status(201).json({
+      restaurant: newRestaurant,
+      message: "Create new restaurant successful",
+    });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }

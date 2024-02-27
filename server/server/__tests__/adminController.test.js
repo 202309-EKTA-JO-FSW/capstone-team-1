@@ -85,6 +85,50 @@ describe("Admin restaurant endpoints", () => {
       });
     });
   });
+  //update restaurant
+  describe("PUT /admin/restaurant", () => {
+    test("should return 200 when restaurant is updated successfully", async () => {
+      const response = await request
+        .put("/api/admin/restaurant")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({ name: "Updated Restaurant" });
+
+      expect(response.status).toBe(200);
+
+      expect(response.body.message).toBe("Update restaurant successful");
+    });
+
+    test("should return 404 if restaurant not found", async () => {
+      const response = await request
+        .put("/api/admin/restaurant")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({});
+
+      expect(response.status).toBe(404);
+
+      expect(response.body.message).toBe("Restaurant not found");
+    });
+  });
+  //get restaurant
+  describe("GET /admin/restaurant", () => {
+    test("should return 200 when restaurant found for the admin", async () => {
+      const response = await request
+        .put("/api/admin/restaurant")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send();
+
+      expect(response.status).toBe(200);
+    });
+
+    test("should return 401 Unauthorized if user is not authenticated", async () => {
+      const response = await request
+        .post("/api/admin/restaurant")
+        .set("authorization", `Bearer ${adminToken + 1}`)
+        .send();
+
+      expect(response.status).toBe(401);
+    });
+  });
 
   // create menuItem
   describe("POST /admin/restaurant/menuItem/new create menu Item", () => {
