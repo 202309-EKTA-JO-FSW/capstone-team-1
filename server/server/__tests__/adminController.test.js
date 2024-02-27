@@ -1,95 +1,158 @@
-const { createToken } = require("../controllers/authController");
-const app = require("../utils/server");
+const app = require("../index");
 const request = require("supertest")(app);
+const db = require("../db/connection");
 const mongoose = require("mongoose");
-const { MongoMemoryServer } = require("mongodb-memory-server");
-const authUser = require("../middleware/authUser");
-require("dotenv").config();
+const { createToken } = require("../controllers/authController");
 const User = require("../models/userModel");
 const Restaurant = require("../models/restaurantModel");
-
-const menuItemObj = {
-  name: "Burger",
-  description: "It's a good burger belive me",
-  price: 5,
-  type: "fast food",
-};
-
-const userObj = {
-  _id: mongoose.Types.ObjectId("65db72803901db3d0cfba489"),
-  first_name: "George",
-  last_name: "Odisho",
-  email: "george@gmail.com",
-  password: "password",
-  age: 23,
-  gender: "male",
-  phone_number: "phoneNumber",
-  avatar: "image",
-  isAdmin: true,
-  restaurant: mongoose.Types.ObjectId("65db743623c73527257f6a1b"),
-};
-
-const restaurantObj = {
-  _id: mongoose.Types.ObjectId("65db743623c73527257f6a1b"),
-  name: "Mr.Burger",
-  description: "best burgers",
-  cuisine: "American",
-  profile_image: "image",
-  owner: mongoose.Types.ObjectId("65db72803901db3d0cfba489"),
-};
+const MenuItem = require("../models/menuItemModel");
+const {
+  adminMock,
+  customerMock,
+  restaurantMock,
+  menuItemMock,
+} = require("./data");
 
 beforeAll(async () => {
-  try {
-    const mongoServer = await MongoMemoryServer.create();
-    await mongoose.connect(mongoServer.getUri());
-    // Create the user object
-    await User.create(userObj);
-    // Create the restaurant object
-    await Restaurant.create(restaurantObj);
-  } catch (error) {
-    console.error("Error creating user:", error);
-  }
+  db.connectToMongo();
 });
 
 afterAll(async () => {
-  await mongoose.disconnect();
-  await mongoose.connection.close();
+  await db.closeDatabase();
 });
 
-describe("Admin restaurant endpoints", () => {
-  let authToken;
+beforeEach(async () => {
+  // Clear the database and reseed data before each test
+  await db.clearDatabase();
+  await seedData();
+});
 
-  beforeAll(async () => {
+async function seedData() {
+  // Seed necessary data before tests
+  await User.create(adminMock);
+  await User.create(customerMock);
+  await Restaurant.create(restaurantMock);
+}
+
+describe("Admin restaurant endpoints", () => {
+  let adminToken;
+  let customerToken;
+  beforeEach(async () => {
     // Authenticate the user and obtain the authentication token
-    const user = await User.findById(userObj._id);
-    authToken = createToken(user._id);
+    const admin = await User.findById(adminMock._id);
+    adminToken = createToken(admin._id);
+
+    const customer = await User.findById(customerMock._id);
+    customerToken = createToken(customer._id);
   });
 
-  describe("POST /admin/restaurant/menuItem/new", () => {
-    test("Should return 201 when create a new menuItem successful", async () => {
-      const responde = await request
+  // create menuItem
+  describe("POST /admin/restaurant/menuItem/new create menu Item", () => {
+    test("Should return 201 when create a new menuItem", async () => {
+      const respond = await request
         .post("/api/admin/restaurant/menuItem/new")
-        .set("authorization", `Bearer ${authToken}`)
-        .send(menuItemObj);
+        .set("authorization", `Bearer ${adminToken}`)
+        .send(menuItemMock);
 
-      expect(responde.status).toBe(201);
+      expect(respond.status).toBe(201);
     });
 
-    test("Should return 401 and message Please login if the admin try create a new menuItem without loged in", async () => {
-      const responde = await request
+    test("Should return 401 and message Please login if the admin try create a new menuItem without loged in or the token was expired", async () => {
+      const respond = await request
         .post("/api/admin/restaurant/menuItem/new")
-        .send(menuItemObj);
+        .set("authorization", `Bearer ${adminToken + 1}`)
+        .send(menuItemMock);
 
-      expect(responde.body.message).toBe("Please login");
-      expect(responde.status).toBe(401);
+      expect(respond.body.message).toBe("Please login");
+      expect(respond.status).toBe(401);
     });
-    test("Should return 401 and message Please login if the admin try create a new menuItem without loged in", async () => {
-      const responde = await request
-        .post("/api/admin/restaurant/menuItem/new")
-        .send(menuItemObj);
 
-      expect(responde.body.message).toBe("Please login");
-      expect(responde.status).toBe(401);
+    test("Should return 403 access denied when the user is customer", async () => {
+      const respond = await request
+        .post("/api/admin/restaurant/menuItem/new")
+        .set("authorization", `Bearer ${customerToken}`)
+        .send(menuItemMock);
+
+      expect(respond.status).toBe(403);
+    });
+  });
+
+  // update menuItem
+  describe("PUT /admin/restaurant/menuItem/:itemId update menu Item", () => {
+    // creat a meanu Item
+    let newMenuItem;
+    beforeEach(async () => {
+      newMenuItem = await MenuItem.create({
+        ...menuItemMock,
+        restaurant: restaurantMock._id,
+      });
+    });
+
+    test("Should return 200 when menuItem updated successfully", async () => {
+      const respond = await request
+        .put(`/api/admin/restaurant/menuItem/${newMenuItem._id}`)
+        .set("authorization", `Bearer ${adminToken}`)
+        .send({ name: "Mickel" });
+
+      expect(respond.status).toBe(200);
+      expect(respond.body.message).toBe("Update menuItem successful");
+    });
+
+    test("Should return 403 when customer try to updated menuItem", async () => {
+      const respond = await request
+        .put(`/api/admin/restaurant/menuItem/${newMenuItem._id}`)
+        .set("authorization", `Bearer ${customerToken}`)
+        .send({ name: "Mickel" });
+      expect(respond.status).toBe(403);
+    });
+    test("Should return 404 No Found when restaurant doesn't have the menuItem ", async () => {
+      newMenuItem = await MenuItem.create({
+        ...menuItemMock,
+        _id: mongoose.Types.ObjectId(),
+        image: "image",
+        restaurant: mongoose.Types.ObjectId(),
+      });
+      const respond = await request
+        .put(`/api/admin/restaurant/menuItem/${newMenuItem._id}`)
+        .set("authorization", `Bearer ${adminToken}`)
+        .send({ name: "Mickel" });
+
+      expect(respond.status).toBe(404);
+    });
+  });
+
+  // delete meanuItem
+  describe("DELETE /admin/restaurant/menuItem/:itemId delete menu Item", () => {
+    let newMenuItem;
+    beforeEach(async () => {
+      newMenuItem = await MenuItem.create({
+        ...menuItemMock,
+        restaurant: restaurantMock._id,
+      });
+    });
+    test("Should return 200 & Delete menuItem successful when menuItem deleted successfully", async () => {
+      const respond = await request
+        .delete(`/api/admin/restaurant/menuItem/${menuItemMock._id}`)
+        .set("authorization", `Bearer ${adminToken}`);
+
+      expect(respond.status).toBe(200);
+      expect(respond.body.message).toBe("Delete menuItem successful");
+    });
+
+    test("Should return 403 when customer try to cancel the menuItem", async () => {
+      const respond = await request
+        .delete(`/api/admin/restaurant/menuItem/${menuItemMock._id}`)
+        .set("authorization", `Bearer ${customerToken}`);
+
+      expect(respond.status).toBe(403);
+    });
+
+    test("Should return 404 No Found when restaurant doesn't have the menuItem", async () => {
+      const respond = await request
+        .delete(`/api/admin/restaurant/menuItem/${mongoose.Types.ObjectId()}`)
+        .set("authorization", `Bearer ${adminToken}`);
+
+      expect(respond.status).toBe(404);
     });
   });
 });

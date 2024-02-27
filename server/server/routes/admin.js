@@ -15,7 +15,7 @@ router.use(authUser);
 // router.get("/restaurant/:resId", adminController.getAdminRestaurant);
 // router.put("/restaurant/:resId", adminController.updateAdminRestaurant);
 
-// items
+// menuItems
 router.post("/restaurant/menuItem/new", adminController.addNewItem);
 router.put("/restaurant/menuItem/:itemId", adminController.updateItem);
 router.delete("/restaurant/menuItem/:itemId", adminController.deleteItem);

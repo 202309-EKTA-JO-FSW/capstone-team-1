@@ -15,7 +15,7 @@ const menuItemSchema = new Schema(
       type: String,
       required: true,
       default:
-        "https://firebasestorage.googleapis.com/v0/b/capstone-project-486e3.appspot.com/o/no_image%2FmenuItem.png?alt=media&token=59f3bc62-5103-47f9-b8f9-4fbcb44c04a7",
+        "https://firebasestorage.googleapis.com/v0/b/capstone-project-486e3.appspot.com/o/images%2FO9IY130.jpg?alt=media&token=65c6fcea-df3d-4121-a28c-86a3537d2bde",
     },
     price: {
       type: Number,

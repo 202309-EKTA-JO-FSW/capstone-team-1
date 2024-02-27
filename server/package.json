@@ -10,7 +10,7 @@
     "build": "docker-compose up --build",
     "prune": "docker-compose down -v",
     "stop": "docker-compose down",
-    "test:app": "NODE_ENV=test jest --exit --require mocha-steps ./server/tests",
+    "test:app": "NODE_ENV=test jest --noStackTrace --forceExit --detectOpenHandles --roots=./server",
     "test": "CONT=$(docker ps -aqf name=node-app) && [ $CONT ] && docker exec -t -w /backend-app $CONT npm run test:app"
   },
   "author": "",

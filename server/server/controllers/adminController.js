@@ -158,6 +158,12 @@ const deleteItem = async (req, res) => {
     // menuItem model
     const menuItem = await MenuItem.findById(itemId);
 
+    if (!menuItem) {
+      return res.status(404).json({
+        message: "Menu item not found",
+      });
+    }
+
     if (menuItem.image) {
       // delete image from firebase storage
       deleteImage(menuItem.image);
