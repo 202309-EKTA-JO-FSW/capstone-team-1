@@ -1,196 +1,198 @@
-const express = require("express");
-const router = express.Router();
-const {
-  getAdminRestaurant,
-  updateAdminRestaurant,
-  createRestaurant,
-} = require("../controllers/adminController");
-const Restaurant = require("../models/restaurantModel");
+const app = require("../index");
+const request = require("supertest")(app);
+const db = require("../db/connection");
+const mongoose = require("mongoose");
+const { createToken } = require("../controllers/authController");
 const User = require("../models/userModel");
-const authUser = require("../middleware/authUser");
-jest.mock("../models/restaurantModel", () => ({
-  findOne: jest.fn(),
-  findByIdAndUpdate: jest.fn(),
-  create: jest.fn(),
-}));
+const Restaurant = require("../models/restaurantModel");
+const MenuItem = require("../models/menuItemModel");
+const {
+  adminMock,
+  customerMock,
+  restaurantMock,
+  menuItemMock,
+} = require("./data");
 
-jest.mock("../models/userModel", () => ({
-  findById: jest.fn(),
-}));
-jest.mock("../middleware/authUser", () =>
-  jest.fn((req, res, next) => {
-    req.userId = "authenticatedUserId"; // Mock authenticated user ID
-    next();
-  })
-);
-describe("Admin Controller", () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
+beforeAll(async () => {
+  db.connectToMongo();
+});
+
+afterAll(async () => {
+  await db.closeDatabase();
+});
+
+beforeEach(async () => {
+  // Clear the database and reseed data before each test
+  await db.clearDatabase();
+  await seedData();
+});
+
+async function seedData() {
+  // Seed necessary data before tests
+  await User.create(adminMock);
+  await User.create(customerMock);
+  await Restaurant.create(restaurantMock);
+}
+
+describe("Admin restaurant endpoints", () => {
+  let adminToken;
+  let customerToken;
+  beforeEach(async () => {
+    // Authenticate the user and obtain the authentication token
+    const admin = await User.findById(adminMock._id);
+    adminToken = createToken(admin._id);
+
+    const customer = await User.findById(customerMock._id);
+    customerToken = createToken(customer._id);
   });
 
-  describe("getAdminRestaurant", () => {
-    test("should only allow authenticated users to get restaurant", async () => {
-      const req = {
-        headers: {
-          Authorization: "Bearer adminToken",
-        },
-      };
-      const res = {
-        status: jest.fn().mockReturnThis(),
-        json: jest.fn(),
-      };
+  //create restaurant
+  describe("POST /admin/restaurant/new", () => {
+    test("should return 201 when a new restaurant is created successfully", async () => {
+      const response = await request
+        .post("/api/admin/restaurant/new")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send(restaurantMock);
 
-      await getAdminRestaurant(req, res);
+      expect(response.status).toBe(201);
 
-      expect(User.findById).toHaveBeenCalledWith("authenticatedUserId");
-      expect(Restaurant.findOne).toHaveBeenCalledWith({
-        owner: "authenticatedUserId",
-      });
-    });
-    test("should return 401 if user is not authenticated", async () => {
-      const req = {
-        headers: {
-          Authorization: "Bearer invalidToken", // Invalid token or no token
-        },
-      };
-      const res = {
-        status: jest.fn().mockReturnThis(),
-        json: jest.fn(),
-      };
-
-      await getAdminRestaurant(req, res);
-
-      expect(res.status).toHaveBeenCalledWith(401);
-      expect(res.json).toHaveBeenCalledWith({ message: "Unauthorized" });
-    });
-    test("should return the correct restaurant for the given userId", async () => {
-      const userId = "adminUserId";
-      const mockRestaurant = { name: "Mock Restaurant", owner: userId };
-      Restaurant.findOne.mockResolvedValue(mockRestaurant);
-
-      const req = { userId };
-      const res = {
-        status: jest.fn().mockReturnThis(),
-        json: jest.fn(),
-      };
-
-      await getAdminRestaurant(req, res);
-
-      expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith({ restaurant: mockRestaurant });
-    });
-
-    test("should return 404 if restaurant is not found", async () => {
-      const req = {
-        headers: {
-          Authorization: "Bearer adminToken", // Add the token here
-        },
-        userId: "authenticatedUserId",
-      };
-      const res = {
-        status: jest.fn().mockReturnThis(),
-        json: jest.fn(),
-      };
-
-      Restaurant.findOne.mockResolvedValue(null); // Simulate restaurant not found
-
-      await getAdminRestaurant(req, res);
-
-      expect(User.findById).toHaveBeenCalledWith("authenticatedUserId");
-      expect(Restaurant.findOne).toHaveBeenCalledWith({
-        owner: "authenticatedUserId",
-      });
-      expect(res.status).toHaveBeenCalledWith(404);
-      expect(res.json).toHaveBeenCalledWith({
-        message: "Restaurant not found",
-      });
-    });
-
-    test("should return 500 if an error occurs", async () => {
-      const req = {
-        headers: {
-          Authorization: "Bearer adminToken", // Add the token here
-        },
-        userId: "authenticatedUserId",
-      };
-      const res = {
-        status: jest.fn().mockReturnThis(),
-        json: jest.fn(),
-      };
-
-      Restaurant.findOne.mockRejectedValue(new Error("Database error")); // Simulate database error
-
-      await getAdminRestaurant(req, res);
-
-      expect(User.findById).toHaveBeenCalledWith("authenticatedUserId");
-      expect(Restaurant.findOne).toHaveBeenCalledWith({
-        owner: "authenticatedUserId",
-      });
-      expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.json).toHaveBeenCalledWith({ message: "Database error" });
-    });
-  });
-  describe("updateAdminRestaurant", () => {
-    test("should update restaurant details", async () => {
-      // Mock the findByIdAndUpdate function to return an updated restaurant
-      const mockRestaurant = { name: "Updated Restaurant" };
-      Restaurant.findByIdAndUpdate.mockResolvedValue(mockRestaurant);
-
-      const req = {
-        params: { resId: "restaurantId" },
-        body: { name: "Updated Restaurant" },
-      };
-      const res = {
-        status: jest.fn().mockReturnThis(),
-        json: jest.fn(),
-      };
-
-      await updateAdminRestaurant(req, res);
-
-      expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith({ restaurant: mockRestaurant });
-    });
-
-    test("should return 404 if restaurant not found", async () => {
-      // Mock the findByIdAndUpdate function to return null (restaurant not found)
-      Restaurant.findByIdAndUpdate.mockResolvedValue(null);
-
-      const req = {
-        params: { resId: "restaurantId" },
-        body: { name: "Updated Restaurant" },
-      };
-      const res = {
-        status: jest.fn().mockReturnThis(),
-        json: jest.fn(),
-      };
-
-      await updateAdminRestaurant(req, res);
-
-      expect(res.status).toHaveBeenCalledWith(404);
-      expect(res.json).toHaveBeenCalledWith({
-        message: "Restaurant not found",
-      });
-    });
-
-    test("should return 500 if an error occurs", async () => {
-      // Mock the findByIdAndUpdate function to throw an error
-      Restaurant.findByIdAndUpdate.mockRejectedValue(
-        new Error("Database error")
+      expect(response.body).toHaveProperty(
+        "message",
+        "Create new restaurant successful"
       );
+    });
 
-      const req = {
-        params: { resId: "restaurantId" },
-        body: { name: "Updated Restaurant" },
-      };
-      const res = {
-        status: jest.fn().mockReturnThis(),
-        json: jest.fn(),
-      };
+    test("should return 401 Unauthorized if user is not authenticated", async () => {
+      const response = await request
+        .post("/api/admin/restaurant/new")
+        .set("authorization", `Bearer ${adminToken + 1}`)
+        .send(restaurantMock);
 
-      await updateAdminRestaurant(req, res);
+      expect(response.status).toBe(401);
+    });
+    test("should return 400 if required fields are missing", async () => {
+      const response = await request
+        .post("/api/admin/restaurant/new")
+        .set("authorization", `Bearer ${adminToken + 1}`)
+        .send({
+          name: "Restaurant Name",
+          description: "Restaurant Description",
+        });
 
-      expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.json).toHaveBeenCalledWith({ message: "Database error" });
+      expect(response.status).toBe(400);
+      expect(response.json).toHaveBeenCalledWith({
+        message: "Missing required fields",
+      });
+    });
+  });
+
+  // create menuItem
+  describe("POST /admin/restaurant/menuItem/new create menu Item", () => {
+    test("Should return 201 when create a new menuItem", async () => {
+      const respond = await request
+        .post("/api/admin/restaurant/menuItem/new")
+        .set("authorization", `Bearer ${adminToken}`)
+        .send(menuItemMock);
+
+      expect(respond.status).toBe(201);
+    });
+
+    test("Should return 401 and message Please login if the admin try create a new menuItem without loged in or the token was expired", async () => {
+      const respond = await request
+        .post("/api/admin/restaurant/menuItem/new")
+        .set("authorization", `Bearer ${adminToken + 1}`)
+        .send(menuItemMock);
+
+      expect(respond.body.message).toBe("Please login");
+      expect(respond.status).toBe(401);
+    });
+
+    test("Should return 403 access denied when the user is customer", async () => {
+      const respond = await request
+        .post("/api/admin/restaurant/menuItem/new")
+        .set("authorization", `Bearer ${customerToken}`)
+        .send(menuItemMock);
+
+      expect(respond.status).toBe(403);
+    });
+  });
+
+  // update menuItem
+  describe("PUT /admin/restaurant/menuItem/:itemId update menu Item", () => {
+    // creat a meanu Item
+    let newMenuItem;
+    beforeEach(async () => {
+      newMenuItem = await MenuItem.create({
+        ...menuItemMock,
+        restaurant: restaurantMock._id,
+      });
+    });
+
+    test("Should return 200 when menuItem updated successfully", async () => {
+      const respond = await request
+        .put(`/api/admin/restaurant/menuItem/${newMenuItem._id}`)
+        .set("authorization", `Bearer ${adminToken}`)
+        .send({ name: "Mickel" });
+
+      expect(respond.status).toBe(200);
+      expect(respond.body.message).toBe("Update menuItem successful");
+    });
+
+    test("Should return 403 when customer try to updated menuItem", async () => {
+      const respond = await request
+        .put(`/api/admin/restaurant/menuItem/${newMenuItem._id}`)
+        .set("authorization", `Bearer ${customerToken}`)
+        .send({ name: "Mickel" });
+      expect(respond.status).toBe(403);
+    });
+    test("Should return 404 No Found when restaurant doesn't have the menuItem ", async () => {
+      newMenuItem = await MenuItem.create({
+        ...menuItemMock,
+        _id: mongoose.Types.ObjectId(),
+        image: "image",
+        restaurant: mongoose.Types.ObjectId(),
+      });
+      const respond = await request
+        .put(`/api/admin/restaurant/menuItem/${newMenuItem._id}`)
+        .set("authorization", `Bearer ${adminToken}`)
+        .send({ name: "Mickel" });
+
+      expect(respond.status).toBe(404);
+    });
+  });
+
+  // delete meanuItem
+  describe("DELETE /admin/restaurant/menuItem/:itemId delete menu Item", () => {
+    let newMenuItem;
+    beforeEach(async () => {
+      newMenuItem = await MenuItem.create({
+        ...menuItemMock,
+        restaurant: restaurantMock._id,
+      });
+    });
+    test("Should return 200 & Delete menuItem successful when menuItem deleted successfully", async () => {
+      const respond = await request
+        .delete(`/api/admin/restaurant/menuItem/${menuItemMock._id}`)
+        .set("authorization", `Bearer ${adminToken}`);
+
+      expect(respond.status).toBe(200);
+      expect(respond.body.message).toBe("Delete menuItem successful");
+    });
+
+    test("Should return 403 when customer try to cancel the menuItem", async () => {
+      const respond = await request
+        .delete(`/api/admin/restaurant/menuItem/${menuItemMock._id}`)
+        .set("authorization", `Bearer ${customerToken}`);
+
+      expect(respond.status).toBe(403);
+    });
+
+    test("Should return 404 No Found when restaurant doesn't have the menuItem", async () => {
+      const respond = await request
+        .delete(`/api/admin/restaurant/menuItem/${mongoose.Types.ObjectId()}`)
+        .set("authorization", `Bearer ${adminToken}`);
+
+      expect(respond.status).toBe(404);
     });
   });
 });
