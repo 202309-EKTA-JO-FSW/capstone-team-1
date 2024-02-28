@@ -4,7 +4,7 @@ const authUser = (req, res, next) => {
   try {
     const { authorization } = req.headers;
 
-    if (!authorization || authorization === false) {
+    if (!authorization) {
       return res.status(401).json({ message: "Please login" });
     }
 
@@ -16,7 +16,6 @@ const authUser = (req, res, next) => {
 
     // send user id
     req.userId = decodedUser.id;
-  
 
     next();
   } catch (error) {
