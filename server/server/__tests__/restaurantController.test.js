@@ -98,7 +98,7 @@ describe("GET :resId/menuItems/filter", () => {
       `/api/restaurant/${restaurantMock._id}/menuItems/filter?type=${menuItemMock.type}`
     );
     expect(response.status).toBe(200);
-    //expect(respond.body.menuItemMock.length).toBe(1);
+    //expect(response.body.menuItemMock.length).toBe(1);
   });
 
   
@@ -117,6 +117,6 @@ describe("GET /:resId/menuItems/search", () => {
       `/api/restaurant/${restaurantMock._id}/menuItems/search?type=${menuItemMock.type}`
     );
     expect(response.status).toBe(200);
-    //expect(respond.body.menuItemMock.length).toBe(1);
+    //expect(response.body.menuItemMock.length).toBe(1);
   });
 });
