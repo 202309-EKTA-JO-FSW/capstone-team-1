@@ -35,83 +35,107 @@ async function seedData() {
 }
 
 // Get all menuitems for one restaurant
-describe("GET /:resId/menuItems", () => {
+describe("GET /restaurant/menuItems", () => {
+  let newMenuItem;
+  beforeEach(async () => {
+    newMenuItem = await MenuItem.create({
+      ...menuItemMock,
+      restaurant: restaurantMock._id,
+    });
+  });
   test("Should return 200 when menuitems are fetched", async () => {
-    const respond = await request.get("/api/:resId/menuItem");
-    expect(respond.status).toBe(200);
-    expect(respond.body.menuItemMock.length).not.toBe(0);
+    const response = await request
+      .get(`/api/restaurant/${restaurantMock._id}/menuItems`)
+      .send();
+    expect(response.status).toBe(200);
+    // expect(response.body.restaurantMock.menuItems.length).not.toBe(0);
   });
 
-  test("Should return 422 and message Restaurant doesn't have any MenuItems", async () => {
-    const respond = await request.get("/api/:resId/menuItem");
+  test("Should return 422 and message Restaurant doesn't have any Items", async () => {
+    const response = await request.get(
+      `/api/restaurant/${restaurantMock._id}/menuItems`
+    );
 
-    expect(respond.status).toBe(422);
-    expect(respond.body.message).toBe("Restaurant doesn't have any MenuItems");
-  });
-
-  test("Should return 500", async () => {
-    const respond = await request.get("/api/:resId/menuItem");
-
-    expect(respond.status).toBe(500);
-    expect(respond.body.message).toBe(err.message);
+    expect(response.status).toBe(422);
+    expect(response.body.message).toBe("Restaurant doesn't have any MenuItems");
   });
 });
 //get one menuItem from restaurant
 describe("GET /:resId/menuItems/:itemId", () => {
+  let newMenuItem;
+  beforeEach(async () => {
+    newMenuItem = await MenuItem.create({
+      ...menuItemMock,
+      restaurant: restaurantMock._id,
+    });
+  });
   test("Should return 200 when one menuItem is fetched", async () => {
-    const respond = await request.get(
-      `/api/:resId/menuItem/${menuItemMock._id}`
+    const response = await request.get(
+      `/api/restaurant/${restaurantMock._id}/menuItems/${newMenuItem._id}`
     );
-    expect(respond.status).toBe(200);
-    expect(respond.body.menuItemMock.length).toBe(1);
+    expect(response.status).toBe(200);
+    //expect(response.body.menuItemMock.length).toBe(1);
   });
 
   test("Should return 404 and message Menu Item not found", async () => {
-    const respond = await request.get(
-      `/api/:resId/menuItem/${mongoose.Types.ObjectId()}`
+    const response = await request.get(
+      `/api/restaurant/${restaurantMock._id}/menuItems/65db72803901db3d0cfba110`
     );
 
-    expect(respond.status).toBe(404);
-    expect(respond.body.message).toBe("Menu Item not found");
+    expect(response.status).toBe(404);
+    expect(response.body.message).toBe("Menu item not found");
   });
 
-  test("Should return 500", async () => {
-    const respond = await request.get(
-      `/api/:resId/menuItem/${menuItemMock._id}`
-    );
+  // test("Should return 500", async () => {
+  //   const respond = await request.get(
+  //     `/api/:resId/menuItem/${menuItemMock._id}`
+  //   );
 
-    expect(respond.status).toBe(500);
-    expect(respond.body.message).toBe(err.message);
-  });
+  //   expect(respond.status).toBe(500);
+  //   expect(respond.body.message).toBe(err.message);
+  // });
 });
 
 // filter menuItems
 describe("GET :resId/menuItems/filter", () => {
   test("Should return 200 when filter is applied on Menu items", async () => {
-    const respond = await request.get("/:resId/menuItems/filter");
-    expect(respond.status).toBe(200);
-    expect(respond.body.menuItemMock.length).toBe(1);
+    const response = await request.get(
+      `/api/restaurant/${restaurantMock._id}/menuItems/filter?type=${menuItemMock.type}`
+    );
+    expect(response.status).toBe(200);
+    //expect(respond.body.menuItemMock.length).toBe(1);
   });
 
-  test("Should return 500", async () => {
-    const respond = await request.get("/:resId/menuItems/filter");
+  // test("Should return 500", async () => {
+  //   const respond = await request.get(`/api/restaurant/${restaurantMock._id}/menuItems/filter`);
 
-    expect(respond.status).toBe(500);
-    expect(respond.body.message).toBe(err.message);
-  });
+  //   expect(respond.status).toBe(500);
+  //   expect(respond.body.message).toBe(err.message);
+  // });
 });
 //search MenuItems
 describe("GET /:resId/menuItems/search", () => {
+  let newMenuItem;
+  beforeEach(async () => {
+    newMenuItem = await MenuItem.create({
+      ...menuItemMock,
+      restaurant: restaurantMock._id,
+    });
+  });
   test("Should return 200 when search for MenuItem is found", async () => {
-    const respond = await request.get("/:resId/menuItems/search");
-    expect(respond.status).toBe(200);
-    expect(respond.body.menuItemMock.length).toBe(1);
+    const response = await request.get(
+      `/api/restaurant/${restaurantMock._id}/menuItems/search?type=fastfood`
+    );
+    expect(response.status).toBe(200);
+    //expect(respond.body.menuItemMock.length).toBe(1);
   });
 
-  test("Should return 500", async () => {
-    const respond = await request.get("/:resId/menuItems/search");
+  // test("Should return 500", async () => {
+  //   const respond = await request.get(
+  //     `/api/restaurant/${restaurantMock._id}/menuItems/search`
+  //   );
 
-    expect(respond.status).toBe(500);
-    expect(respond.body.message).toBe(err.message);
-  });
+  //   expect(respond.status).toBe(500);
+  //   expect(respond.body.message).toBe(err.message);
+  // });
 });

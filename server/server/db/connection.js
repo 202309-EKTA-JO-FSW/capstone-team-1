@@ -23,4 +23,18 @@ const connectToMongo = () => {
   });
 };
 
-module.exports = connectToMongo;
+const closeDatabase = async (drop = false) => {
+  if (!DB_HOST) return;
+  drop && (await mongoose.connection.dropDatabase());
+  await mongoose.disconnect();
+  await mongoose.connection.close();
+};
+
+const clearDatabase = async () => {
+  const collections = mongoose.connection.collections;
+  for (const key in collections) {
+    await collections[key].deleteMany();
+  }
+};
+
+module.exports = { connectToMongo, closeDatabase, clearDatabase };

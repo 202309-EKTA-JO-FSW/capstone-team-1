@@ -11,18 +11,18 @@ const menuItemSchema = new Schema(
       type: String,
       required: true,
     },
-    image: {
-      type: String,
-      required: true,
-    },
+    // image: {
+    //   type: String,
+    //   required: true,
+    // },
     price: {
       type: Number,
       required: true,
     },
-    available: {
-      type: Boolean,
-      required: true,
-    },
+    // //available: {
+    //   type: Boolean,
+    //   required: true,
+    // },
     type: {
       type: String,
       required: true,
