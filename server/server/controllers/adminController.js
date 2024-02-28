@@ -2,16 +2,14 @@ const Restaurant = require("../models/restaurantModel");
 const User = require("../models/userModel");
 const MenuItem = require("../models/menuItemModel");
 const { uploadImage, deleteImage } = require("../utils/images/imageStorage");
-
+//get restaurant
 const getAdminRestaurant = async (req, res) => {
   const adminId = req.userId;
-
   try {
     const user = await User.findById(adminId);
     if (!user || !user.isAdmin) {
       return res.status(401).json({ message: "Unauthorized" });
     }
-
     const restaurant = await Restaurant.findOne({ owner: adminId });
     if (!restaurant) {
       return res.status(404).json({ message: "Restaurant not found" });
@@ -21,16 +19,14 @@ const getAdminRestaurant = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
-
+//update restaurant
 const updateAdminRestaurant = async (req, res) => {
   const adminId = req.userId;
-
   try {
     const user = await User.findById(adminId);
     if (!user || !user.isAdmin) {
       return res.status(401).json({ message: "Unauthorized" });
     }
-
     const restaurantId = user.restaurant;
     if (!restaurantId) {
       return res
@@ -53,7 +49,7 @@ const updateAdminRestaurant = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
-
+//create restaurant
 const createRestaurant = async (req, res) => {
   const adminId = req.userId;
   const { name, description, cuisine, contact, profile_image, address } =
