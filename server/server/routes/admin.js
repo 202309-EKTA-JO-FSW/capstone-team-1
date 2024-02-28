@@ -12,8 +12,9 @@ router.use(uploadMulter.single("image"));
 router.use(authUser);
 
 // restaurant
-// router.get("/restaurant/:resId", adminController.getAdminRestaurant);
-// router.put("/restaurant/:resId", adminController.updateAdminRestaurant);
+router.post("/restaurant/new", adminController.createRestaurant);
+router.get("/restaurant", adminController.getAdminRestaurant);
+router.put("/restaurant", adminController.updateAdminRestaurant);
 
 // menuItems
 router.post("/restaurant/menuItem/new", adminController.addNewItem);

@@ -9,7 +9,7 @@ const addNewItem = async (req, res) => {
   try {
     const user = await User.findById(req.userId);
     // checking if the user is admin
-    if (!user.isAdmin || user.isAdmin === null) {
+    if (!user || !user.isAdmin) {
       return res
         .status(403) // because user is unauthorized
         .json({
@@ -67,7 +67,7 @@ const updateItem = async (req, res) => {
   try {
     const user = await User.findById(req.userId);
     // checking if the user is admin
-    if (!user.isAdmin || user.isAdmin === null) {
+    if (!user || !user.isAdmin) {
       return res
         .status(403) // because user is unauthorized
         .json({
@@ -112,7 +112,7 @@ const updateItem = async (req, res) => {
     menuItem.image = imageUrl || menuItem.image;
     menuItem.price = price || menuItem.price;
     menuItem.available = available || menuItem.available;
-    menuItem.type = type || menuItem;
+    menuItem.type = type || menuItem.type;
 
     await menuItem.save();
 
@@ -131,7 +131,7 @@ const deleteItem = async (req, res) => {
   try {
     const user = await User.findById(req.userId);
     // checking if the user is admin
-    if (!user.isAdmin || user.isAdmin === null) {
+    if (!user || !user.isAdmin) {
       return res
         .status(403) // because user is unauthorized
         .json({
@@ -172,6 +172,10 @@ const deleteItem = async (req, res) => {
     // delete item by id
     const deletedMenuItem = await MenuItem.findByIdAndDelete(itemId);
 
+    // Remove the deleted menuItem from the restaurant's menuItems
+    restaurant.menuItems.pull(itemId);
+    await restaurant.save();
+
     return res.status(200).json({
       message: "Delete menuItem successful",
       results: deletedMenuItem,
@@ -181,4 +185,93 @@ const deleteItem = async (req, res) => {
   }
 };
 
-module.exports = { addNewItem, updateItem, deleteItem };
+//create restaurant
+const createRestaurant = async (req, res) => {
+  const adminId = req.userId;
+  const { name, description, cuisine, contact, profile_image, address } =
+    req.body;
+  try {
+    const user = await User.findById(adminId);
+    if (!user || !user.isAdmin) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    if (!name || !description || !cuisine) {
+      return res.status(400).json({ message: "Missing required fields" });
+    }
+    const newRestaurant = await Restaurant.create({
+      name,
+      description,
+      cuisine,
+      contact,
+      profile_image,
+      address,
+      owner: adminId,
+    });
+    user.restaurant = newRestaurant._id;
+    await user.save();
+    return res.status(201).json({
+      restaurant: newRestaurant,
+      message: "Create new restaurant successful",
+    });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+// get retaurant
+const getAdminRestaurant = async (req, res) => {
+  const adminId = req.userId;
+  try {
+    const user = await User.findById(adminId);
+    if (!user || !user.isAdmin) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    const restaurant = await Restaurant.findOne({ owner: adminId });
+    if (!restaurant) {
+      return res.status(404).json({ message: "Restaurant not found" });
+    }
+    return res.status(200).json({ restaurant });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+//update restaurant
+const updateAdminRestaurant = async (req, res) => {
+  const adminId = req.userId;
+  try {
+    const user = await User.findById(adminId);
+    if (!user || !user.isAdmin) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    const restaurantId = user.restaurant;
+    if (!restaurantId) {
+      return res
+        .status(404)
+        .json({ message: "Restaurant not found, should create a restaurant" });
+    }
+    const updatedRestaurant = await Restaurant.findByIdAndUpdate(
+      restaurantId,
+      { $set: req.body },
+      { new: true }
+    );
+    if (!updatedRestaurant) {
+      return res.status(404).json({ message: "Restaurant not found" });
+    }
+    res.status(200).json({
+      message: "Update restaurant successful",
+      results: updatedRestaurant,
+    });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports = {
+  getAdminRestaurant,
+  updateAdminRestaurant,
+  createRestaurant,
+  addNewItem,
+  updateItem,
+  deleteItem,
+};
