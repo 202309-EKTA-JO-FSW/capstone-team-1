@@ -1,6 +1,7 @@
 const MenuItem = require("../models/menuItemModel");
 const User = require("../models/userModel");
 
+// add menuItems to the cart
 const newCart = async (req, res) => {
   const { menuItemId } = req.body;
   try {
@@ -22,7 +23,10 @@ const newCart = async (req, res) => {
     }
 
     // the user will be able only to order from one restaurant
-    if (!user.cart.restaurant.equals(menuItem.restaurant)) {
+    if (
+      user.cart.restaurant !== null &&
+      !user.cart.restaurant.equals(menuItem.restaurant)
+    ) {
       return res
         .status(403)
         .json({ message: "You can only order from one restaurant at a time" });
@@ -53,9 +57,10 @@ const newCart = async (req, res) => {
   }
 };
 
+// add and remove menuItems from the cart
 const updateCart = async (req, res) => {
   const { status } = req.body;
-  const { cartId } = req.params;
+  const { itemId } = req.params;
   try {
     const user = await User.findById(req.userId);
 
@@ -63,7 +68,7 @@ const updateCart = async (req, res) => {
     if (!user) return res.status(403).json({ message: "Access denied" });
 
     // find the menuItemn
-    const menuItem = await MenuItem.findById(cartId);
+    const menuItem = await MenuItem.findById(itemId);
 
     // check if the menuItem is available
     if (!menuItem)
@@ -75,20 +80,18 @@ const updateCart = async (req, res) => {
 
     if (status === "add") {
       user.cart.menuItems[itemIndex].quantity += 1;
-      user.cart.menuItems[itemIndex].total =
-        user.cart.menuItems[itemIndex].quantity * menuItem.price;
     } else if (status === "remove") {
       if (user.cart.menuItems[itemIndex].quantity === 1) {
         user.cart.menuItems.splice(itemIndex, 1);
       } else {
         user.cart.menuItems[itemIndex].quantity -= 1;
-        user.cart.menuItems[itemIndex].total =
-          user.cart.menuItems[itemIndex].quantity * menuItem.price;
       }
+      user.cart.menuItems[itemIndex].total =
+        user.cart.menuItems[itemIndex].quantity * menuItem.price;
     } else {
       res
         .status(400)
-        .json({ message: "status should be either add or remove #15" });
+        .json({ message: "Status should be either add or remove" });
     }
 
     await user.save();
@@ -101,4 +104,31 @@ const updateCart = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-module.exports = { newCart, updateCart };
+
+// cancel cart
+const cancelCart = async (req, res) => {
+  try {
+    const user = await User.findById(req.userId);
+
+    // check if there is a user
+    if (!user) return res.status(403).json({ message: "Access denied" });
+
+    // check if the cart exist
+    if (!user.cart)
+      res.status(400).json({ message: "Could not find any cart" });
+
+    // if so, make it null as delete the cart
+    user.cart = null;
+
+    await user.save();
+
+    res
+      .status(200)
+      .json({ message: "Cart deleted successfully", results: user });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports = { newCart, updateCart, cancelCart };

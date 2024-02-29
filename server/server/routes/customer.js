@@ -10,7 +10,7 @@ router.use(authUser);
 // cart
 router.post("/cart", customerController.newCart);
 router.put("/cart/:itemId", customerController.updateCart);
-// router.delete("/cart/:cartId", customerController.cancelCart);
+router.delete("/cart", customerController.cancelCart);
 
 // checkout
 // router.post("/checkout", customerController.checkout);
