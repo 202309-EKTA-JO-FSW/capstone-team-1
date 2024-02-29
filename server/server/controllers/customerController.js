@@ -53,4 +53,52 @@ const newCart = async (req, res) => {
   }
 };
 
-module.exports = { newCart };
+const updateCart = async (req, res) => {
+  const { status } = req.body;
+  const { cartId } = req.params;
+  try {
+    const user = await User.findById(req.userId);
+
+    // check if there is a user
+    if (!user) return res.status(403).json({ message: "Access denied" });
+
+    // find the menuItemn
+    const menuItem = await MenuItem.findById(cartId);
+
+    // check if the menuItem is available
+    if (!menuItem)
+      return res.status(404).json({ message: "Menu item not found" });
+
+    const itemIndex = user.cart.menuItems.findIndex((item) =>
+      item.menuItem.equals(menuItem._id)
+    );
+
+    if (status === "add") {
+      user.cart.menuItems[itemIndex].quantity += 1;
+      user.cart.menuItems[itemIndex].total =
+        user.cart.menuItems[itemIndex].quantity * menuItem.price;
+    } else if (status === "remove") {
+      if (user.cart.menuItems[itemIndex].quantity === 1) {
+        user.cart.menuItems.splice(itemIndex, 1);
+      } else {
+        user.cart.menuItems[itemIndex].quantity -= 1;
+        user.cart.menuItems[itemIndex].total =
+          user.cart.menuItems[itemIndex].quantity * menuItem.price;
+      }
+    } else {
+      res
+        .status(400)
+        .json({ message: "status should be either add or remove #15" });
+    }
+
+    await user.save();
+
+    res
+      .status(200)
+      .json({ message: "cart updated successfully", results: user });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
+  }
+};
+module.exports = { newCart, updateCart };
