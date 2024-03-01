@@ -6,6 +6,16 @@ const menuItemMock = {
   description: "It's a good burger belive me",
   price: 5,
   type: "fast food",
+  available: true,
+};
+const menuItemMock2 = {
+  _id: mongoose.Types.ObjectId("65db72803901db3d0cfba122"),
+  name: "Burger",
+  description: "It's a good burger belive me",
+  price: 5,
+  type: "fast food",
+  available: true,
+  restaurant: mongoose.Types.ObjectId(),
 };
 
 const adminMock = {
@@ -57,10 +67,12 @@ const restaurantMock1 = {
   menuItems: [],
 };
 
+
 module.exports = {
   adminMock,
   customerMock,
   menuItemMock,
   restaurantMock,
-  restaurantMock1,
+  menuItemMock2,
+  restaurantMock1
 };
