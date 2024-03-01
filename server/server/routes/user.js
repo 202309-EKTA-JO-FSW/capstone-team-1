@@ -6,7 +6,7 @@ const { uploadMulter } = require("../middleware/multer");
 
 // add multer in middleware to track the file comes from request
 // multer arg should be change according to what the fild of the image
-router.use(uploadMulter.single("image"));
+router.use(uploadMulter.single("avatar"));
 router.use(authUser);
 // profile
 router.get("/profile", userController.getUserProfile);

@@ -34,16 +34,16 @@ describe("User profile endpoints", () => {
   describe("GET /user/profile", () => {
     test("should return 200 when user found", async () => {
       const response = await request
-        .put("/api/user/profile")
+        .get("/api/user/profile")
         .set("Authorization", `Bearer ${userToken}`)
         .send();
-
+      console.log(response.text);
       expect(response.status).toBe(200);
     });
 
     test("should return 401  if user is not authenticated  or the token was expired", async () => {
       const response = await request
-        .post("/api/user/profile")
+        .put("/api/user/profile")
         .set("authorization", `Bearer ${userToken + 1}`)
         .send();
 
