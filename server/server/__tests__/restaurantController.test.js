@@ -5,7 +5,6 @@ const mongoose = require("mongoose");
 const Restaurant = require("../models/restaurantModel");
 const MenuItem = require("../models/menuItemModel");
 const { restaurantMock, menuItemMock, restaurantMock1 } = require("./data");
-const menuItemModel = require("../models/menuItemModel");
 
 beforeAll(async () => {
   db.connectToMongo();
@@ -45,11 +44,12 @@ describe("GET /restaurant/menuItems", () => {
     expect(response.body.length).toBe(1);
   });
 
-  test("Should return 422 and message Restaurant doesn't have any Items", async () => {
+  test("Should return 404 and message Restaurant doesn't have any Items", async () => {
     const response = await request.get(
       `/api/restaurant/${restaurantMock1._id}/menuItems`
     );
-    expect(response.status).toBe(422);
+
+    expect(response.status).toBe(404);
     expect(response.body.message).toBe("Restaurant doesn't have any MenuItems");
   });
 });
@@ -65,7 +65,7 @@ describe("GET /:resId/menuItems/:itemId", () => {
   });
   test("Should return 200 when one menuItem is fetched", async () => {
     const response = await request.get(
-      `/api/restaurant/${restaurantMock._id}/menuItems/${newMenuItem._id}`
+      `/api/restaurant/${restaurantMock._id}/menuItem/${newMenuItem._id}`
     );
     expect(response.status).toBe(200);
     expect(response.body.length).not.toBe(0);
@@ -73,7 +73,7 @@ describe("GET /:resId/menuItems/:itemId", () => {
 
   test("Should return 404 and message Menu Item not found", async () => {
     const response = await request.get(
-      `/api/restaurant/${restaurantMock._id}/menuItems/65db72803901db3d0cfba110`
+      `/api/restaurant/${restaurantMock._id}/menuItem/65db72803901db3d0cfba110`
     );
 
     expect(response.status).toBe(404);
@@ -91,20 +91,18 @@ describe("GET :resId/menuItems/filter", () => {
     });
   });
   test("Should return 200 when filter is applied on Menu items", async () => {
-   
     const response = await request
       .get(`/api/restaurant/${restaurantMock._id}/menuItems/filter`)
-      .query({ filterSelected: "fast food" });
+      .query({ type: "fast food" });
 
     expect(response.status).toBe(200);
-    //expect(response.body.menuItemMock.length).toBe(1);
   });
 });
+
 //search MenuItems
 describe("GET /:resId/menuItems/search", () => {
-  let newMenuItem;
   beforeEach(async () => {
-    newMenuItem = await MenuItem.create({
+    await MenuItem.create({
       ...menuItemMock,
       restaurant: restaurantMock._id,
     });
@@ -112,9 +110,8 @@ describe("GET /:resId/menuItems/search", () => {
   test("Should return 200 when search for MenuItem is found", async () => {
     const response = await request
       .get(`/api/restaurant/${restaurantMock._id}/menuItems/search`)
-      .query({ query: "fast food" });
+      .query({ name: "Burger" });
 
     expect(response.status).toBe(200);
-    //expect(response.body.menuItemMock.length).toBe(1);
   });
 });
