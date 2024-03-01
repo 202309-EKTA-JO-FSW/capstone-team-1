@@ -1,7 +1,7 @@
 const MenuItem = require("../models/menuItemModel");
 const User = require("../models/userModel");
 const Order = require("../models/orderModel");
-const orderModel = require("../models/orderModel");
+const Restaurant = require("../models/restaurantModel");
 
 // add menuItems to the cart
 const newCart = async (req, res) => {
@@ -128,29 +128,25 @@ const cancelCart = async (req, res) => {
 
     res
       .status(200)
-      .json({ message: "Cart deleted successfully", results: Order });
+      .json({ message: "Cart deleted successfully", results: user });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: error.message });
   }
 };
 
-// checkout
-// router.post("/checkout", customerController.checkout);
-// router.put("/checkout/:checkoutId", customerController.updateCheckout);
-// router.delete("/checkout/:checkoutId", customerController.cancelCheckout);
-
 //Checkout function
 
 //Post Checkout - create new order
 
-const newCheckout = async (req, res) => {
+const newOrder = async (req, res) => {
   try {
     const user = await User.findById(req.userId);
+    const restaurant = await Restaurant.findById(req.resId);
 
     // check if there is a cart
     if (!user.cart) return res.status(422).json({ message: "Empty Cart" });
-    const newOrder = new Order({
+    const newOrder = await Order.create({
       customer: req.userId,
       restaurant: user.cart.restaurant,
       cartItems: user.cart,
@@ -158,12 +154,87 @@ const newCheckout = async (req, res) => {
       subtotal: user.cart.menuItems.total,
       total: deliveryFees + subtotal,
     });
-    newOrder.save();
-    res.status(201).json({ message: "Ready for Checkout", results: newOrder });
+
+    res.status(201).json({ message: "Ready for Checkout", newOrder });
+
+    //add order to the restaurant
+    restaurant.orders.push(newOrder);
+    await restaurant.save();
+
+    //add order to the customer
+    user.orders.push(newOrder);
+    await user.save();
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: error.message });
   }
 };
 
-module.exports = { newCart, updateCart, cancelCart, newCheckout };
+//update checkout/order
+
+const updateOrder = async (req, res) => {
+  try {
+    //check checkout/order id
+    const order = await Order.findById(req.orderId);
+
+    // check if the order is available
+    if (!order) return res.status(404).json({ message: "Order not found" });
+
+    // customer can only add note before  delivery
+    if (req.body.note && order.status !== "delivered") {
+      order.note = req.body.note;
+    } else {
+      res
+        .status(400)
+        .json({ message: "Cannot add notes to order after it's delivered" });
+    }
+    //customer can only add review after delivery
+    if (req.body.review && order.status === "delivered") {
+      order.review = req.body.review;
+      //add review to the restaurant
+      const restaurant = await Restaurant.findById(req.resId); // do we use restaurant model or the order model to get the resId?
+      restaurant.reviews.push(order.review); // not sure if we push order.review or the orderId
+      await restaurant.save();
+    } else {
+      res
+        .status(400)
+        .json({ message: "Cannot review order before it's delivered" });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+//cancel checkout - delete order
+const cancelOrder = async (req, res) => {
+  try {
+    const user = await User.findById(req.userId);
+    const order = await Order.findById(req.orderId);
+    const restaurant = await Restaurant.findById(order.restaurant._id);
+
+    // check if there is a user
+    if (!user) return res.status(403).json({ message: "Access denied" });
+
+    // check if the order exists
+    if (!order) res.status(400).json({ message: "No order found" });
+
+    // if found, delete the order and remove it from restaurant and user models
+    const deletedOrder = await Order.deleteOne(req.orderId);
+
+    res
+      .status(200)
+      .json({ message: "Order deleted successfully", deletedOrder });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
+  }
+};
+module.exports = {
+  newCart,
+  updateCart,
+  cancelCart,
+  newOrder,
+  updateOrder,
+  cancelOrder,
+};
