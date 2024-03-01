@@ -15,7 +15,7 @@ const newCart = async (req, res) => {
 
     // check if the menuItem is available
     if (!menuItem || !menuItem.available)
-      return res.status(400).json({ message: "Menu item not avaialble" });
+      return res.status(404).json({ message: "Menu item not avaialble" });
 
     // if there is no cart, we need just to creat a cart feild
     if (!user.cart) {
@@ -80,14 +80,16 @@ const updateCart = async (req, res) => {
 
     if (status === "add") {
       user.cart.menuItems[itemIndex].quantity += 1;
+      user.cart.menuItems[itemIndex].total =
+        user.cart.menuItems[itemIndex].quantity * menuItem.price;
     } else if (status === "remove") {
       if (user.cart.menuItems[itemIndex].quantity === 1) {
         user.cart.menuItems.splice(itemIndex, 1);
       } else {
         user.cart.menuItems[itemIndex].quantity -= 1;
+        user.cart.menuItems[itemIndex].total =
+          user.cart.menuItems[itemIndex].quantity * menuItem.price;
       }
-      user.cart.menuItems[itemIndex].total =
-        user.cart.menuItems[itemIndex].quantity * menuItem.price;
     } else {
       res
         .status(400)
