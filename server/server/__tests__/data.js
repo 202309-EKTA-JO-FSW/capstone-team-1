@@ -57,4 +57,10 @@ const restaurantMock1 = {
   menuItems: [],
 };
 
-module.exports = { adminMock, customerMock, menuItemMock, restaurantMock, restaurantMock1 };
+module.exports = {
+  adminMock,
+  customerMock,
+  menuItemMock,
+  restaurantMock,
+  restaurantMock1,
+};
