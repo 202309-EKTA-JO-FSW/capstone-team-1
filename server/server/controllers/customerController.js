@@ -1,5 +1,7 @@
 const MenuItem = require("../models/menuItemModel");
 const User = require("../models/userModel");
+const Order = require("../models/orderModel");
+const orderModel = require("../models/orderModel");
 
 // add menuItems to the cart
 const newCart = async (req, res) => {
@@ -126,11 +128,42 @@ const cancelCart = async (req, res) => {
 
     res
       .status(200)
-      .json({ message: "Cart deleted successfully", results: user });
+      .json({ message: "Cart deleted successfully", results: Order });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: error.message });
   }
 };
 
-module.exports = { newCart, updateCart, cancelCart };
+// checkout
+// router.post("/checkout", customerController.checkout);
+// router.put("/checkout/:checkoutId", customerController.updateCheckout);
+// router.delete("/checkout/:checkoutId", customerController.cancelCheckout);
+
+//Checkout function
+
+//Post Checkout - create new order
+
+const newCheckout = async (req, res) => {
+  try {
+    const user = await User.findById(req.userId);
+
+    // check if there is a cart
+    if (!user.cart) return res.status(422).json({ message: "Empty Cart" });
+    const newOrder = new Order({
+      customer: req.userId,
+      restaurant: user.cart.restaurant,
+      cartItems: user.cart,
+      deliveryFees: 2.5,
+      subtotal: user.cart.menuItems.total,
+      total: deliveryFees + subtotal,
+    });
+    newOrder.save();
+    res.status(201).json({ message: "Ready for Checkout", results: newOrder });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports = { newCart, updateCart, cancelCart, newCheckout };
