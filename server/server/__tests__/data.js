@@ -46,4 +46,21 @@ const restaurantMock = {
   menuItems: [menuItemMock._id],
 };
 
-module.exports = { adminMock, customerMock, menuItemMock, restaurantMock };
+//mock restaurant without menuItems
+const restaurantMock1 = {
+  _id: mongoose.Types.ObjectId("65db743623c73527257f6a1c"),
+  name: "Pizza Town",
+  description: "Italian pizza",
+  cuisine: "Italian",
+  profile_image: "image",
+  owner: mongoose.Types.ObjectId("65db72803901db3d0cfba489"),
+  menuItems: [],
+};
+
+module.exports = {
+  adminMock,
+  customerMock,
+  menuItemMock,
+  restaurantMock,
+  restaurantMock1,
+};
