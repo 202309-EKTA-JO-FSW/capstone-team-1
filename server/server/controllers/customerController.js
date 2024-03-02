@@ -119,7 +119,7 @@ const cancelCart = async (req, res) => {
 
     // check if the cart exist
     if (!user.cart)
-      res.status(400).json({ message: "Could not find any cart" });
+      res.status(404).json({ message: "Could not find any cart" });
 
     // if so, make it null as delete the cart
     user.cart = null;
@@ -142,28 +142,39 @@ const cancelCart = async (req, res) => {
 const newOrder = async (req, res) => {
   try {
     const user = await User.findById(req.userId);
-    const restaurant = await Restaurant.findById(req.resId);
+    let deliveryFee = 2.5;
+    let totalofMenuItems = user.aggregate([
+      { $undwind: "$cart" },
+      { $unwind: "$cart.menuItems" },
+      { $group: { _id: null, total: { $sum: "$cart.menuItems.total" } } },
+      { $project: { _id: 0, total: 1 } },
+    ]);
+    let totalofOrder = deliveryFee + totalofMenuItems;
 
     // check if there is a cart
     if (!user.cart) return res.status(422).json({ message: "Empty Cart" });
+
+    //create new instance of Order
     const newOrder = await Order.create({
-      customer: req.userId,
+      customer: user._id,
       restaurant: user.cart.restaurant,
-      cartItems: user.cart,
-      deliveryFees: 2.5,
-      subtotal: user.cart.menuItems.total,
-      total: deliveryFees + subtotal,
+      cartItems: user.cart.menuItems,
+      deliveryFees: deliveryFee,
+      subtotal: totalofMenuItems,
+      total: totalofOrder,
     });
 
-    res.status(201).json({ message: "Ready for Checkout", newOrder });
-
     //add order to the restaurant
+
+    const restaurant = await Restaurant.findById(newOrder.restaurant._id);
     restaurant.orders.push(newOrder);
     await restaurant.save();
 
     //add order to the customer
     user.orders.push(newOrder);
     await user.save();
+
+    return res.status(201).json({ message: "Ready for Checkout", newOrder });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: error.message });
@@ -174,6 +185,10 @@ const newOrder = async (req, res) => {
 
 const updateOrder = async (req, res) => {
   try {
+    const user = await User.findById(req.userId);
+
+    // check if there is a user
+    if (!user) return res.status(403).json({ message: "Access denied" });
     //check checkout/order id
     const order = await Order.findById(req.orderId);
 
@@ -184,7 +199,7 @@ const updateOrder = async (req, res) => {
     if (req.body.note && order.status !== "delivered") {
       order.note = req.body.note;
     } else {
-      res
+      return res
         .status(400)
         .json({ message: "Cannot add notes to order after it's delivered" });
     }
@@ -192,11 +207,14 @@ const updateOrder = async (req, res) => {
     if (req.body.review && order.status === "delivered") {
       order.review = req.body.review;
       //add review to the restaurant
-      const restaurant = await Restaurant.findById(req.resId); // do we use restaurant model or the order model to get the resId?
+      const restaurant = await Restaurant.findById({
+        _id: order.restaurant._id,
+      });
       restaurant.reviews.push(order.review); // not sure if we push order.review or the orderId
       await restaurant.save();
+      return res.status(201).json({ message: "Order updated successfully" });
     } else {
-      res
+      return res
         .status(400)
         .json({ message: "Cannot review order before it's delivered" });
     }
@@ -217,10 +235,22 @@ const cancelOrder = async (req, res) => {
     if (!user) return res.status(403).json({ message: "Access denied" });
 
     // check if the order exists
-    if (!order) res.status(400).json({ message: "No order found" });
+    if (!order) return res.status(404).json({ message: "No order found" });
 
     // if found, delete the order and remove it from restaurant and user models
     const deletedOrder = await Order.deleteOne(req.orderId);
+
+    //delete order from user
+    const orderIndexUser = user.orders.findIndex((delOrder) =>
+      delOrder.order.equals(order._id)
+    );
+    user.orders.splice(orderIndexUser, 1);
+
+    //delete order from restaurant
+    const orderIndexRes = restaurant.orders.findIndex((delOrder) =>
+      delOrder.order.equals(order._id)
+    );
+    restaurant.orders.splice(orderIndexRes, 1);
 
     res
       .status(200)
