@@ -1,17 +1,24 @@
 const express = require("express");
 const router = express.Router();
 const adminController = require("../controllers/adminController");
+const authUser = require("../middleware/authUser");
+const { uploadMulter } = require("../middleware/multer");
+
+// add multer in middleware to track the file comes from request
+// multer arg should be change according to what the fild of the image
+router.use(uploadMulter.single("image"));
+
+// add auth user in middleware to authorize the user
+router.use(authUser);
 
 // restaurant
-// router.get("/restaurant/:resId", adminController.getAdminRestaurant);
-// router.put("/restaurant/:resId", adminController.updateAdminRestaurant);
+router.post("/restaurant/new", adminController.createRestaurant);
+router.get("/restaurant", adminController.getAdminRestaurant);
+router.put("/restaurant", adminController.updateAdminRestaurant);
 
-// items
-// router.post("/restaurant/:resId/menuItem/new", adminController.addNewItem);
-// router.put("/restaurant/:resId/menuItem/:itemId", adminController.updateItem);
-// router.delete(
-//   "/restaurant/:resId/menuItem/:itemId",
-//   adminController.deleteItem
-// );
+// menuItems
+router.post("/restaurant/menuItem/new", adminController.addNewItem);
+router.put("/restaurant/menuItem/:itemId", adminController.updateItem);
+router.delete("/restaurant/menuItem/:itemId", adminController.deleteItem);
 
 module.exports = router;

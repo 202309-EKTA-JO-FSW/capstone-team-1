@@ -19,6 +19,9 @@ const authUser = (req, res, next) => {
 
     next();
   } catch (error) {
+    if (error.message === "invalid signature") {
+      return res.status(401).json({ message: "Please login" });
+    }
     return res.status(401).json({ message: error.message });
   }
 };
