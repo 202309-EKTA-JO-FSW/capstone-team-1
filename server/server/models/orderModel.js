@@ -11,10 +11,24 @@ const orderSchema = Schema(
       type: Schema.Types.ObjectId,
       ref: "Restaurant",
     },
-    cart: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-    },
+    cartItems: [
+      {
+        menuItem: {
+          type: Schema.Types.ObjectId,
+          ref: "MenuItem", // Assuming there's a MenuItem model
+          required: true,
+        },
+        quantity: {
+          type: Number,
+          default: 1,
+          min: 1,
+        },
+        total: {
+          type: Number,
+          required: true,
+        },
+      },
+    ],
     note: {
       type: String,
     },
