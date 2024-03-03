@@ -139,17 +139,17 @@ const cancelCart = async (req, res) => {
 //Post Checkout - create new order
 const checkout = async (req, res) => {
   const userId = req.userId;
-  const { notes } = req.body;
+
   try {
     // Find the user by ID and populate the cart field
-    const userCart = await User.findById(userId).populate("cartItems");
+    const userCart = await User.findById(userId);
     if (!userCart) {
       return res.status(404).json({ message: "there's no cart" });
     }
     const { cart } = userCart;
     //Calculate subtotal, delivery fees, and total based on cart items
     let subtotal = 0;
-    cart.menuItem.forEach((item) => {
+    cart.menuItems.forEach((item) => {
       subtotal += item.quantity * item.total;
     });
     const deliveryFee = 2.5;
@@ -159,15 +159,15 @@ const checkout = async (req, res) => {
       customer: userId,
       restaurant: cart.restaurant,
       cartItems: cart.menuItems,
-      note: notes,
       deliveryFees: deliveryFee,
       subtotal: subtotal,
       total: total,
-      status: "accepted", // Default status for a new order
     };
-    const order = await order.create(newOrder);
+
+    const order = await Order.create(newOrder);
     //add order to the restaurant
-    const restaurantId = newOrder.restaurant._id;
+
+    const restaurantId = order.restaurant;
     const restaurant = await Restaurant.findById(restaurantId);
     restaurant.orders.push(newOrder._id);
     await restaurant.save();
@@ -207,7 +207,7 @@ const updateCheckout = async (req, res) => {
         .json({ message: "Cannot add reviews until the order is delivered" });
     }
     // Save the updated order
-    const updatedOrder = await order.save();
+    await order.save();
 
     //add review to the restaurant
     const restaurant = await Restaurant.findById(order.restaurant);

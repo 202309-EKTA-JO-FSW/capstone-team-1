@@ -15,7 +15,7 @@ const orderSchema = Schema(
       {
         menuItem: {
           type: Schema.Types.ObjectId,
-          ref: "MenuItem", // Assuming there's a MenuItem model
+          ref: "MenuItem",
           required: true,
         },
         quantity: {
