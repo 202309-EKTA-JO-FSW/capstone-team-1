@@ -142,14 +142,14 @@ const checkout = async (req, res) => {
   const { notes } = req.body;
   try {
     // Find the user by ID and populate the cart field
-    const userCart = await User.findById(userId).populate(cart);
+    const userCart = await User.findById(userId).populate("cart");
     if (!userCart) {
       return res.status(404).json({ message: "there's no cart" });
     }
     const { cart } = userCart;
     //Calculate subtotal, delivery fees, and total based on cart items
     let subtotal = 0;
-    cart.menuItems.menuItem.forEach((item) => {
+    cart.menuItems.forEach((item) => {
       subtotal += item.quantity * item.total;
     });
     const deliveryFee = 2.5;
