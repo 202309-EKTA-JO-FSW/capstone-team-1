@@ -13,8 +13,8 @@ router.put("/cart/:itemId", customerController.updateCart);
 router.delete("/cart", customerController.cancelCart);
 
 // checkout
-// router.post("/checkout", customerController.checkout);
-// router.put("/checkout/:checkoutId", customerController.updateCheckout);
-// router.delete("/checkout/:checkoutId", customerController.cancelCheckout);
+router.post("/checkout", customerController.checkout);
+router.put("/checkout/:checkoutId", customerController.updateCheckout);
+router.delete("/checkout/:checkoutId", customerController.cancelCheckout);
 
 module.exports = router;
