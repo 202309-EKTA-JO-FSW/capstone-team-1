@@ -136,47 +136,43 @@ const cancelCart = async (req, res) => {
 };
 
 //Checkout function
-
 //Post Checkout - create new order
-
-const newOrder = async (req, res) => {
+const checkout = async (req, res) => {
+  const userId = req.userId;
+  const { notes } = req.body;
+  // Find the user by ID and populate the cart field
+  const userCart = await User.findById(userId).populate(cart);
+  if (!userCart) {
+    return res.status(404).json({ message: "there's no cart" });
+  }
+  const { cart } = userCart;
+  //Calculate subtotal, delivery fees, and total based on cart items
+  let subtotal = 0;
+  cart.menuItems.menuItem.forEach((item) => {
+    subtotal += item.quantity * item.total;
+  });
+  const deliveryFee = 2.5;
+  // Calculate total including delivery fees
+  cart.menuItems.total = subtotal + deliveryFee;
+  const newOrder = {
+    customer: userId,
+    restaurant: cart.restaurant,
+    cartItems: cart.menuItems,
+    note: notes,
+    deliveryFees: deliveryFee,
+    subtotal: subtotal,
+    total: total,
+    status: "accepted", // Default status for a new order
+  };
+  const order = await order.create(newOrder);
+  //add order to the restaurant
+  const restaurantId = newOrder.restaurant._id;
+  const restaurant = await Restaurant.findById(restaurantId);
+  restaurant.orders.push(newOrder._id);
+  await restaurant.save();
+  return res.status(201).json({ message: "Ready for Checkout", newOrder });
   try {
-    const user = await User.findById(req.userId);
-    let deliveryFee = 2.5;
-    let totalofMenuItems = user.aggregate([
-      { $undwind: "$cart" },
-      { $unwind: "$cart.menuItems" },
-      { $group: { _id: null, total: { $sum: "$cart.menuItems.total" } } },
-      { $project: { _id: 0, total: 1 } },
-    ]);
-    let totalofOrder = deliveryFee + totalofMenuItems;
-
-    // check if there is a cart
-    if (!user.cart) return res.status(422).json({ message: "Empty Cart" });
-
-    //create new instance of Order
-    const newOrder = await Order.create({
-      customer: user._id,
-      restaurant: user.cart.restaurant,
-      cartItems: user.cart.menuItems,
-      deliveryFees: deliveryFee,
-      subtotal: totalofMenuItems,
-      total: totalofOrder,
-    });
-
-    //add order to the restaurant
-
-    const restaurant = await Restaurant.findById(newOrder.restaurant._id);
-    restaurant.orders.push(newOrder);
-    await restaurant.save();
-
-    //add order to the customer
-    user.orders.push(newOrder);
-    await user.save();
-
-    return res.status(201).json({ message: "Ready for Checkout", newOrder });
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: error.message });
   }
 };
