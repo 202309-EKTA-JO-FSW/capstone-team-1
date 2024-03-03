@@ -233,30 +233,33 @@ const cancelCheckout = async (req, res) => {
   try {
     const user = await User.findById(req.userId);
     if (!user) return res.status(403).json({ message: "Access denied" });
-    const order = await Order.findById(req.orderId);
+    const order = await Order.findById(checkoutId);
     if (!order) return res.status(404).json({ message: "No order found" });
 
     // if found, delete the order and remove it from restaurant and user models
-    const deletedOrder = await Order.deleteOne(req.orderId);
+    const deletedOrder = await Order.deleteOne({ _id: checkoutId });
 
-    //delete order from user
+    // Remove the order from the user's orders list
     const orderIndexUser = user.orders.findIndex((delOrder) =>
-      delOrder.order.equals(order._id)
+      delOrder.equals(order._id)
     );
     user.orders.splice(orderIndexUser, 1);
-    const restaurant = await Restaurant.findById(order.restaurant._id);
-    //delete order from restaurant
+    await user.save();
+
+    // Remove the order from the restaurant's orders list
+    const restaurant = await Restaurant.findById(order.restaurant);
     const orderIndexRes = restaurant.orders.findIndex((delOrder) =>
-      delOrder.order.equals(order._id)
+      delOrder.equals(order._id)
     );
     restaurant.orders.splice(orderIndexRes, 1);
+    await restaurant.save();
 
     res
       .status(200)
       .json({ message: "Order deleted successfully", deletedOrder });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 module.exports = {
