@@ -26,7 +26,11 @@ const login = async (req, res) => {
     const token = createToken(user._id);
 
     // store token in cookie
-    res.cookie("jwt", token, { httpOnly: true, secure: true });
+    res.cookie("jwt", token, {
+      httpOnly: true,
+      secure: true,
+      maxAge: 1000 * 60 * 60 * 24,
+    });
 
     // send token with user details
     return res.status(201).json({
@@ -100,7 +104,11 @@ const signup = async (req, res) => {
     const token = createToken(user._id);
 
     // store token in cookie
-    res.cookie("jwt", token, { httpOnly: true, secure: true });
+    res.cookie("jwt", token, {
+      httpOnly: true,
+      secure: true,
+      maxAge: 1000 * 60 * 60 * 24,
+    });
 
     // send token with user details
     return res.status(201).json({
@@ -128,7 +136,7 @@ const logout = (req, res) => {
 
 // function to create a token
 function createToken(id) {
-  return jwt.sign({ id }, process.env.SECRET_KEY, { expiresIn: 1000 * 1000 });
+  return jwt.sign({ id }, process.env.SECRET_KEY);
 }
 
 // validate email and password
