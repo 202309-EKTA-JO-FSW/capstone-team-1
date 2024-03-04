@@ -27,7 +27,7 @@ const login = async (req, res) => {
 
     // store token in cookie
     res.cookie("jwt", token, { httpOnly: true, secure: true });
-    
+
     // send token with user details
     return res.status(201).json({
       user: {
@@ -79,13 +79,13 @@ const signup = async (req, res) => {
 
     // store the user in database
     const user = await User.create({
-      first_name: firstName,
-      last_name: lastName,
+      firstName,
+      lastName,
       email,
       password: hashedPassword,
       age,
       gender,
-      phone_number: phoneNumber,
+      phoneNumber,
       avatar,
       isAdmin,
       address: {
@@ -106,7 +106,7 @@ const signup = async (req, res) => {
     return res.status(201).json({
       user: {
         email: user.email,
-        name: `${user.first_name} ${user.last_name}`,
+        name: `${user.firstName} ${user.lastName}`,
         avatar: user.avatar,
       },
       message: "Login successful",

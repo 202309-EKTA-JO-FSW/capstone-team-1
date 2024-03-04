@@ -188,8 +188,7 @@ const deleteItem = async (req, res) => {
 //create restaurant
 const createRestaurant = async (req, res) => {
   const adminId = req.userId;
-  const { name, description, cuisine, contact, profile_image, address } =
-    req.body;
+  const { name, description, cuisine, contact, image, address } = req.body;
   try {
     const user = await User.findById(adminId);
     if (!user || !user.isAdmin) {
@@ -203,7 +202,7 @@ const createRestaurant = async (req, res) => {
       description,
       cuisine,
       contact,
-      profile_image,
+      image,
       address,
       owner: adminId,
     });

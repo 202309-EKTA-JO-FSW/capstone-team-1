@@ -51,8 +51,8 @@ const updateUserProfile = async (req, res) => {
       }
     }
     // update user
-    user.first_name = firstName || user.first_name;
-    user.last_name = lastName || user.last_name;
+    user.firstName = firstName || user.firstName;
+    user.lastName = lastName || user.lastName;
     user.email = email || user.email;
     user.password = password || user.password;
     user.avatar = imageUrl || user.avatar;

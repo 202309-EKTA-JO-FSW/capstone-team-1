@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
-const addressSchema = new Schema({
+const addressSchema = Schema({
   country: {
     type: String,
   },
@@ -16,7 +16,7 @@ const addressSchema = new Schema({
   },
 });
 
-const cartSchema = new Schema({
+const cartSchema = Schema({
   restaurant: {
     type: Schema.Types.ObjectId,
     ref: "Restaurant",
@@ -43,11 +43,11 @@ const cartSchema = new Schema({
 
 const userSchema = new Schema(
   {
-    first_name: {
+    firstName: {
       type: String,
       required: true,
     },
-    last_name: {
+    lastName: {
       type: String,
       required: true,
     },
@@ -80,7 +80,7 @@ const userSchema = new Schema(
       default:
         "https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI=",
     },
-    phone_number: {
+    phoneNumber: {
       type: String,
       required: true,
     },
@@ -109,11 +109,11 @@ const userSchema = new Schema(
 
 userSchema.pre("save", function (next) {
   // Capitalize first letter of first name
-  this.first_name =
-    this.first_name.charAt(0).toUpperCase() + this.first_name.slice(1);
+  this.firstName =
+    this.firstName.charAt(0).toUpperCase() + this.firstName.slice(1);
   // Capitalize first letter of last name
-  this.last_name =
-    this.last_name.charAt(0).toUpperCase() + this.last_name.slice(1);
+  this.lastName =
+    this.lastName.charAt(0).toUpperCase() + this.lastName.slice(1);
   next();
 });
 
