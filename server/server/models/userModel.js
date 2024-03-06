@@ -45,10 +45,12 @@ const userSchema = new Schema(
   {
     firstName: {
       type: String,
+      maxLength: 20,
       required: true,
     },
     lastName: {
       type: String,
+      maxLength: 20,
       required: true,
     },
     email: {
@@ -107,6 +109,7 @@ const userSchema = new Schema(
   }
 );
 
+// capitlize name before store it
 userSchema.pre("save", function (next) {
   // Capitalize first letter of first name
   this.firstName =

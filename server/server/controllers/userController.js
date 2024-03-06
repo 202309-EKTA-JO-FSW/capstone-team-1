@@ -27,7 +27,6 @@ const updateUserProfile = async (req, res) => {
     age,
     gender,
     phoneNumber,
-    avatar,
     country,
     city,
     street,
@@ -39,6 +38,7 @@ const updateUserProfile = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found, please login" });
     }
+
     // get image url
     // uploadImage arguments uploadImage(imagefile, imageFolder in firebase storage)
     let imageUrl;

@@ -1,7 +1,10 @@
 const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const validator = require("validator");
+const {
+  validationSignup,
+  validateEmailAndPassword,
+} = require("../utils/validation");
 
 const login = async (req, res) => {
   const { email, password } = req.body;
@@ -42,6 +45,12 @@ const login = async (req, res) => {
       message: "Login successful",
     });
   } catch (error) {
+    // checking if the it's validation error
+    if (error.name === "ValidationError") {
+      console.error(error);
+      return res.status(400).json({ message: error.message });
+    }
+    console.error(error);
     return res.status(500).json({ message: error.message });
   }
 };
@@ -56,7 +65,6 @@ const signup = async (req, res) => {
     age,
     gender,
     phoneNumber,
-    avatar,
     country,
     city,
     street,
@@ -68,6 +76,10 @@ const signup = async (req, res) => {
     // validate email & password
     validateEmailAndPassword(email, password);
 
+    // validate signup field
+    validationSignup(req.body);
+
+    // looking up for user
     const userExist = await User.findOne({ email });
 
     // check if email exist
@@ -90,7 +102,6 @@ const signup = async (req, res) => {
       age,
       gender,
       phoneNumber,
-      avatar,
       isAdmin,
       address: {
         country,
@@ -122,32 +133,33 @@ const signup = async (req, res) => {
   } catch (error) {
     // checking if the it's validation error
     if (error.name === "ValidationError") {
+      console.error(error);
       return res.status(400).json({ message: error.message });
     }
+    console.error(error);
     return res.status(500).json({ message: error.message });
   }
 };
 
 // logout
 const logout = (req, res) => {
-  res.clearCookie("jwt");
-  return res.status(200).json({ message: "Logout successful" });
+  try {
+    res.clearCookie("jwt");
+    return res.status(200).json({ message: "Logout successful" });
+  } catch (error) {
+    // checking if the it's validation error
+    if (error.name === "ValidationError") {
+      console.error(error);
+      return res.status(400).json({ message: error.message });
+    }
+    console.error(error);
+    return res.status(500).json({ message: error.message });
+  }
 };
 
 // function to create a token
 function createToken(id) {
   return jwt.sign({ id }, process.env.SECRET_KEY);
-}
-
-// validate email and password
-function validateEmailAndPassword(email, password) {
-  if (!validator.isEmail(email)) {
-    throw new Error("Invalid Email");
-  }
-
-  if (!validator.isStrongPassword(password)) {
-    throw new Error("Password is not strong enough");
-  }
 }
 
 module.exports = { signup, login, logout, createToken };
