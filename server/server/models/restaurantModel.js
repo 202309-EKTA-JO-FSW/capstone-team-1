@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
-const addressSchema = new Schema({
+const addressSchema = Schema({
   country: {
     type: String,
     required: true,
@@ -40,7 +40,7 @@ const restaurantSchema = new Schema(
       facebook: String,
       others: String,
     },
-    profile_image: {
+    image: {
       type: String,
     },
     address: addressSchema,

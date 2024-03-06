@@ -1,7 +1,10 @@
 const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const validator = require("validator");
+const {
+  validationSignup,
+  validateEmailAndPassword,
+} = require("../utils/validation");
 
 const login = async (req, res) => {
   const { email, password } = req.body;
@@ -26,8 +29,12 @@ const login = async (req, res) => {
     const token = createToken(user._id);
 
     // store token in cookie
-    res.cookie("jwt", token, { httpOnly: true, secure: true });
-    
+    res.cookie("jwt", token, {
+      httpOnly: true,
+      secure: true,
+      maxAge: 1000 * 60 * 60 * 24,
+    });
+
     // send token with user details
     return res.status(201).json({
       user: {
@@ -38,6 +45,12 @@ const login = async (req, res) => {
       message: "Login successful",
     });
   } catch (error) {
+    // checking if the it's validation error
+    if (error.name === "ValidationError") {
+      console.error(error);
+      return res.status(400).json({ message: error.message });
+    }
+    console.error(error);
     return res.status(500).json({ message: error.message });
   }
 };
@@ -52,7 +65,6 @@ const signup = async (req, res) => {
     age,
     gender,
     phoneNumber,
-    avatar,
     country,
     city,
     street,
@@ -64,6 +76,10 @@ const signup = async (req, res) => {
     // validate email & password
     validateEmailAndPassword(email, password);
 
+    // validate signup field
+    validationSignup(req.body);
+
+    // looking up for user
     const userExist = await User.findOne({ email });
 
     // check if email exist
@@ -79,14 +95,13 @@ const signup = async (req, res) => {
 
     // store the user in database
     const user = await User.create({
-      first_name: firstName,
-      last_name: lastName,
+      firstName,
+      lastName,
       email,
       password: hashedPassword,
       age,
       gender,
-      phone_number: phoneNumber,
-      avatar,
+      phoneNumber,
       isAdmin,
       address: {
         country,
@@ -100,13 +115,17 @@ const signup = async (req, res) => {
     const token = createToken(user._id);
 
     // store token in cookie
-    res.cookie("jwt", token, { httpOnly: true, secure: true });
+    res.cookie("jwt", token, {
+      httpOnly: true,
+      secure: true,
+      maxAge: 1000 * 60 * 60 * 24,
+    });
 
     // send token with user details
     return res.status(201).json({
       user: {
         email: user.email,
-        name: `${user.first_name} ${user.last_name}`,
+        name: `${user.firstName} ${user.lastName}`,
         avatar: user.avatar,
       },
       message: "Login successful",
@@ -114,32 +133,33 @@ const signup = async (req, res) => {
   } catch (error) {
     // checking if the it's validation error
     if (error.name === "ValidationError") {
+      console.error(error);
       return res.status(400).json({ message: error.message });
     }
+    console.error(error);
     return res.status(500).json({ message: error.message });
   }
 };
 
 // logout
 const logout = (req, res) => {
-  res.clearCookie("jwt");
-  return res.status(200).json({ message: "Logout successful" });
+  try {
+    res.clearCookie("jwt");
+    return res.status(200).json({ message: "Logout successful" });
+  } catch (error) {
+    // checking if the it's validation error
+    if (error.name === "ValidationError") {
+      console.error(error);
+      return res.status(400).json({ message: error.message });
+    }
+    console.error(error);
+    return res.status(500).json({ message: error.message });
+  }
 };
 
 // function to create a token
 function createToken(id) {
-  return jwt.sign({ id }, process.env.SECRET_KEY, { expiresIn: 1000 * 1000 });
-}
-
-// validate email and password
-function validateEmailAndPassword(email, password) {
-  if (!validator.isEmail(email)) {
-    throw new Error("Invalid Email");
-  }
-
-  if (!validator.isStrongPassword(password)) {
-    throw new Error("Password is not strong enough");
-  }
+  return jwt.sign({ id }, process.env.SECRET_KEY);
 }
 
 module.exports = { signup, login, logout, createToken };

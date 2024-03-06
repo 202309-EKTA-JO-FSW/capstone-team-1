@@ -20,7 +20,7 @@ const menuItemMock2 = {
 
 const adminMock = {
   _id: mongoose.Types.ObjectId("65db72803901db3d0cfba489"),
-  first_name: "George",
+  firstName: "George",
   last_name: "Odisho",
   email: "george@gmail.com",
   password: "password",
@@ -34,8 +34,8 @@ const adminMock = {
 
 const customerMock = {
   _id: mongoose.Types.ObjectId("65db72803901db3d0cfba984"),
-  first_name: "Gagi",
-  last_name: "Odisho",
+  firstName: "Gagi",
+  lastName: "Odisho",
   email: "george2@gmail.com",
   password: "password",
   age: 23,
@@ -51,7 +51,7 @@ const restaurantMock = {
   name: "Mr.Burger",
   description: "best burgers",
   cuisine: "American",
-  profile_image: "image",
+  image: "image",
   owner: mongoose.Types.ObjectId("65db72803901db3d0cfba489"),
   menuItems: [menuItemMock._id],
 };
@@ -62,11 +62,10 @@ const restaurantMock1 = {
   name: "Pizza Town",
   description: "Italian pizza",
   cuisine: "Italian",
-  profile_image: "image",
+  image: "image",
   owner: mongoose.Types.ObjectId("65db72803901db3d0cfba489"),
   menuItems: [],
 };
-
 
 module.exports = {
   adminMock,
@@ -74,5 +73,5 @@ module.exports = {
   menuItemMock,
   restaurantMock,
   menuItemMock2,
-  restaurantMock1
+  restaurantMock1,
 };

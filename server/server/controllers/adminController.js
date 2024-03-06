@@ -2,11 +2,17 @@ const User = require("../models/userModel");
 const MenuItem = require("../models/menuItemModel");
 const Restaurant = require("../models/restaurantModel");
 const { uploadImage, deleteImage } = require("../utils/images/imageStorage");
+const { validateRestaurant } = require("../utils/validation");
 
 // add a new menuItem
 const addNewItem = async (req, res) => {
-  const { name, description, image, price, type } = req.body;
+  const { name, description, price, type } = req.body;
   try {
+    // valdite menuItem fields
+    if (!name || !description || !price || !type) {
+      return res.status(400).json({ message: "All fields must be filled" });
+    }
+
     const user = await User.findById(req.userId);
     // checking if the user is admin
     if (!user || !user.isAdmin) {
@@ -188,9 +194,11 @@ const deleteItem = async (req, res) => {
 //create restaurant
 const createRestaurant = async (req, res) => {
   const adminId = req.userId;
-  const { name, description, cuisine, contact, profile_image, address } =
-    req.body;
+  const { name, description, cuisine, contact, image, address } = req.body;
   try {
+    // validate restaurant feilds
+    validateRestaurant(req.body);
+
     const user = await User.findById(adminId);
     if (!user || !user.isAdmin) {
       return res.status(401).json({ message: "Unauthorized" });
@@ -203,7 +211,7 @@ const createRestaurant = async (req, res) => {
       description,
       cuisine,
       contact,
-      profile_image,
+      image,
       address,
       owner: adminId,
     });

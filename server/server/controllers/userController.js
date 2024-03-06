@@ -27,7 +27,6 @@ const updateUserProfile = async (req, res) => {
     age,
     gender,
     phoneNumber,
-    avatar,
     country,
     city,
     street,
@@ -39,6 +38,7 @@ const updateUserProfile = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found, please login" });
     }
+
     // get image url
     // uploadImage arguments uploadImage(imagefile, imageFolder in firebase storage)
     let imageUrl;
@@ -51,8 +51,8 @@ const updateUserProfile = async (req, res) => {
       }
     }
     // update user
-    user.first_name = firstName || user.first_name;
-    user.last_name = lastName || user.last_name;
+    user.firstName = firstName || user.firstName;
+    user.lastName = lastName || user.lastName;
     user.email = email || user.email;
     user.password = password || user.password;
     user.avatar = imageUrl || user.avatar;
