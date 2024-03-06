@@ -1,6 +1,6 @@
 const validator = require("validator");
 
-// validate signup feild
+// validate signup fields
 const validationSignup = (body) => {
   if (!body.firstName) {
     throw Error("First Name is required");
@@ -26,4 +26,19 @@ const validateEmailAndPassword = (email, password) => {
   }
 };
 
-module.exports = { validationSignup, validateEmailAndPassword };
+// validate restaurant fields
+const validateRestaurant = (body) => {
+  if (!body.name) {
+    throw Error("Name is required");
+  } else if (!body.description) {
+    throw Error("Description is required");
+  } else if (!body.cuisine) {
+    throw Error("Cuisine is required");
+  }
+};
+
+module.exports = {
+  validationSignup,
+  validateEmailAndPassword,
+  validateRestaurant,
+};
