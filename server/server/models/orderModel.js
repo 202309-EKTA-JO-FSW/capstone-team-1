@@ -47,7 +47,6 @@ const orderSchema = Schema(
     status: {
       type: String,
       enum: ["accepted", "cooking", "completed", "deliveried"],
-      default: "accepted",
     },
     review: {
       type: Schema.Types.ObjectId,
