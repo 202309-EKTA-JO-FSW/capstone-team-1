@@ -14,7 +14,8 @@ router.delete("/cart", customerController.cancelCart);
 
 // checkout
 router.post("/checkout", customerController.checkout);
-router.put("/checkout/:checkoutId", customerController.updateCheckout);
+router.get("/checkout", customerController.getCheckout);
+router.put("/checkout/:checkoutId", customerController.processCheckout);
 router.delete("/checkout/:checkoutId", customerController.cancelCheckout);
 
 module.exports = router;

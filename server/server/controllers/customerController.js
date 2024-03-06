@@ -144,7 +144,7 @@ const checkout = async (req, res) => {
     // Find the user by ID and populate the cart field
     const userCart = await User.findById(userId);
     if (!userCart) {
-      return res.status(404).json({ message: "there's no cart" });
+      return res.status(404).json({ message: "Cart is empty" });
     }
     const { cart } = userCart;
     //Calculate subtotal, delivery fees, and total based on cart items
@@ -165,23 +165,18 @@ const checkout = async (req, res) => {
     };
 
     const order = await Order.create(newOrder);
-    //add order to the restaurant
 
-    const restaurantId = order.restaurant;
-    const restaurant = await Restaurant.findById(restaurantId);
-    restaurant.orders.push(newOrder._id);
-    await restaurant.save();
-    return res.status(201).json({ message: "Ready for Checkout", newOrder });
+    return res.status(201).json({ message: "Ready for Checkout", order });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: error.message });
   }
 };
 
-//update checkout/order
-
-const updateCheckout = async (req, res) => {
+// process checkout/order
+const processCheckout = async (req, res) => {
   const { checkoutId } = req.params;
+  const { note } = req.body;
   try {
     const user = await User.findById(req.userId);
     if (!user) return res.status(403).json({ message: "Access denied" });
@@ -190,37 +185,53 @@ const updateCheckout = async (req, res) => {
     // check if the order is available
     if (!order) return res.status(404).json({ message: "Order not found" });
 
-    // customer can only add note before  delivery
-    if (req.body.note && order.status !== "delivered") {
+    // customer can only add note before precess the order
+    if (note) {
       order.note = req.body.note;
-    } else if (req.body.note && order.status === "delivered") {
+    } else if (note && order.status === "accepted") {
       return res
         .status(400)
-        .json({ message: "Cannot add notes to order after it's delivered" });
+        .json({ message: "Cannot add notes to order after it's accepted" });
     }
-    //customer can only add review after delivery
-    if (req.body.review && order.status === "delivered") {
-      order.review = req.body.review;
-    } else if (req.body.review && order.status !== "delivered") {
-      return res
-        .status(400)
-        .json({ message: "Cannot add reviews until the order is delivered" });
-    }
-    // Save the updated order
+
+    // make the order accepted
+    order.status = "accepted";
+
     await order.save();
 
-    //add review to the restaurant
-    const restaurant = await Restaurant.findById(order.restaurant);
-    if (!restaurant)
-      return res.status(404).json({ message: "Restaurant not found" });
-
-    restaurant.reviews.push({
-      customer: req.userId,
-      rating: req.body.review.rating,
-      comment: req.body.review.comment,
-    });
+    // add order to the restaurant
+    const restaurantId = order.restaurant;
+    const restaurant = await Restaurant.findById(restaurantId);
+    restaurant.orders.push(order._id);
     await restaurant.save();
-    return res.status(201).json({ message: "Order updated successfully" });
+
+    // add order to the customer model
+    user.orders.push(order._id);
+    await user.save();
+
+    //customer can only add review after delivery
+    // if (req.body.review && order.status === "delivered") {
+    //   order.review = req.body.review;
+    // } else if (req.body.review && order.status !== "delivered") {
+    //   return res
+    //     .status(400)
+    //     .json({ message: "Cannot add reviews until the order is delivered" });
+    // }
+    // // Save the updated order
+    // await order.save();
+
+    //add review to the restaurant
+    // const restaurant = await Restaurant.findById(order.restaurant);
+    // if (!restaurant)
+    //   return res.status(404).json({ message: "Restaurant not found" });
+
+    // restaurant.reviews.push({
+    //   customer: req.userId,
+    //   rating: req.body.review.rating,
+    //   comment: req.body.review.comment,
+    // });
+    // await restaurant.save();
+    return res.status(201).json({ message: "Order is proceeded successfully" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: error.message });
@@ -234,7 +245,7 @@ const cancelCheckout = async (req, res) => {
     const user = await User.findById(req.userId);
     if (!user) return res.status(403).json({ message: "Access denied" });
     const order = await Order.findById(checkoutId);
-    if (!order) return res.status(404).json({ message: "No order found" });
+    if (!order) return res.status(404).json({ message: "Order not found" });
 
     // if found, delete the order and remove it from restaurant and user models
     const deletedOrder = await Order.deleteOne({ _id: checkoutId });
@@ -259,14 +270,41 @@ const cancelCheckout = async (req, res) => {
       .json({ message: "Order deleted successfully", deletedOrder });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: error.message });
   }
 };
+
+// get checkout
+const getCheckout = async (req, res) => {
+  try {
+    // find user
+    const user = await User.findById(req.userId);
+    if (!user) return res.status(403).json({ message: "Access denied" });
+
+    // find orders
+    const order = await Order.find({ customer: user._id });
+    if (!order) return res.status(404).json({ message: "No orders has made" });
+
+    // check if the order is delivered
+    if (order.status === deliveried) {
+      return res
+        .status(400)
+        .json({ message: "The order is already delivered" });
+    }
+
+    return res.status(200).json(order);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   newCart,
   updateCart,
   cancelCart,
   checkout,
-  updateCheckout,
+  processCheckout,
   cancelCheckout,
+  getCheckout,
 };
