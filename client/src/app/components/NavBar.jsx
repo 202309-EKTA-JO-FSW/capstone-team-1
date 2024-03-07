@@ -1,8 +1,9 @@
 import Link from "next/link";
 import React from "react";
-
+import Logo from "./navbar/Logo";
 const NavBar = () => {
   return <div>
+    <Logo/>
     <ul>
       <li>
     <Link href="/">Home</Link>
