@@ -9,7 +9,7 @@ const SignupForm = () => {
     email: "",
     password: "",
     confirmPassword: "",
-    age: 0,
+    age: "age",
     gender: "",
     phoneNumber: "",
     country: "",
@@ -22,6 +22,7 @@ const SignupForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(form);
+    setForm(formData);
   };
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -53,6 +54,7 @@ const SignupForm = () => {
             name="firstName"
             placeholder="First Name"
             className="w-full p-3 mr-4 field"
+            value={form.firstName}
             onChange={handleChange}
           />
           <input
@@ -60,6 +62,7 @@ const SignupForm = () => {
             name="lastName"
             placeholder="Last Name"
             className="w-full p-3 ml-4 field"
+            value={form.lastName}
             onChange={handleChange}
           />
         </div>
@@ -70,6 +73,7 @@ const SignupForm = () => {
           name="email"
           placeholder="Email"
           className="w-full p-3 field"
+          value={form.email}
           onChange={handleChange}
         />
 
@@ -79,6 +83,7 @@ const SignupForm = () => {
           name="password"
           placeholder="Password"
           className="w-full p-3 field"
+          value={form.password}
           onChange={handleChange}
         />
         <input
@@ -86,6 +91,7 @@ const SignupForm = () => {
           name="confirmPassword"
           placeholder="Confirm Password"
           className="w-full p-3 field"
+          value={form.confirmPassword}
           onChange={handleChange}
         />
 
@@ -96,6 +102,7 @@ const SignupForm = () => {
             name="age"
             placeholder="Age"
             className="w-full p-3 mr-4 field"
+            value={form.age}
             onChange={handleChange}
           />
 
@@ -104,6 +111,7 @@ const SignupForm = () => {
             type="text"
             name="gender"
             className="w-full p-3 ml-4 text-gray-700 field"
+            value={form.gender}
             onChange={handleChange}
           >
             <option value="gender">Gender</option>
@@ -118,6 +126,7 @@ const SignupForm = () => {
           name="phoneNumber"
           placeholder="Phone Number"
           className="w-full p-3 field"
+          value={form.phoneNumber}
           onChange={handleChange}
         />
 
@@ -128,6 +137,7 @@ const SignupForm = () => {
             name="country"
             placeholder="Country"
             className="w-full p-3 mr-4 field"
+            value={form.country}
             onChange={handleChange}
           />
           <input
@@ -135,6 +145,7 @@ const SignupForm = () => {
             name="city"
             placeholder="City"
             className="w-full p-3 ml-4 field"
+            value={form.city}
             onChange={handleChange}
           />
         </div>
@@ -144,6 +155,7 @@ const SignupForm = () => {
             name="street"
             placeholder="Street"
             className="w-full p-3 mr-4 field"
+            value={form.street}
             onChange={handleChange}
           />
           <input
@@ -151,11 +163,17 @@ const SignupForm = () => {
             name="zipcode"
             placeholder="Zip code"
             className="w-full p-3 ml-4 field"
+            value={form.zipcode}
             onChange={handleChange}
           />
         </div>
         <div className="mb-8">
-          <input type="checkbox" name="isAdmin" onChange={handleChange} />
+          <input
+            type="checkbox"
+            name="isAdmin"
+            onChange={handleChange}
+            value={form.isAdmin}
+          />
           <label htmlFor="isAdmin">
             {" "}
             Sign up as an owner of the restaurant
