@@ -6,7 +6,7 @@ import React from 'react'
 function Logo() {
   return (
    <Link href="/">
-<Image src="/favicon.ico" alt="Logo" width={150} height={100}/>
+<Image src="/favicon.ico" alt="Logo" width={50} height={50}/>
 
 </Link>
   )
