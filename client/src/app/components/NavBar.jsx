@@ -9,16 +9,20 @@ import Link from "next/link";
 const NavBar = () => {
   return (
     
-    <nav className="flex justify-between  w-full sticky bg-white top-0  ">
-        <section className="flex items-center gap-3 flex-wrap  justify-between">
+    <nav className="flex justify-between  w-full sticky bg-white top-0 [font-family:'Poppins-Medium',Helvetica] font-medium ">
+        <section className="flex items-center gap-3 flex-wrap  justify-center">
           <Logo />
           <NavLinks/>
+          <Link href="/admin/restaurant" className= "md:ml-3  text-black hover:text-main-green">My Restaurants</Link>
         </section>
         <section className="flex items-center gap-3 flex-wrap  justify-between">
           <Link href="/customer/cart">
            <GiShoppingCart className="text-2xl hover:text-main-green"/>
           </Link>
+          <p>Hello, Name</p>
+          <Link href="/auth/login">
           <Button/>
+          </Link>
         </section>
        
     </nav>

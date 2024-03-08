@@ -6,6 +6,7 @@ const NavLinks = () => {
         {name: "Home", link:"/"},
         {name: "Restaurants", link:"/restaurant"},
         {name: "About Us", link:"/about"},
+        
 
     ]
   return (
