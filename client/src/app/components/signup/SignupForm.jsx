@@ -11,7 +11,7 @@ const SignupForm = ({ onSignup }) => {
     email: "",
     password: "",
     confirmPassword: "",
-    age: 0,
+    age: "0",
     gender: "",
     phoneNumber: "",
     country: "",
@@ -35,14 +35,14 @@ const SignupForm = ({ onSignup }) => {
     onSignup(signup.message);
 
     // check if there is a user to refresh the page
-    if (signup.message === "Signup successful") {
+    if (signup.user) {
       setForm(formData);
 
       // redirect the user to home page after signup
       router.push("/");
     }
   };
-  console.log(form);
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
 
@@ -61,7 +61,7 @@ const SignupForm = ({ onSignup }) => {
 
   // check if the user signed up succefully to store the details in local storage
   useEffect(() => {
-    if (signupRes.message === "Signup successful") {
+    if (signupRes.user) {
       localStorage.setItem("user", JSON.stringify(signupRes.user));
     }
   }, [signupRes]);

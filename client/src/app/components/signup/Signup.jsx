@@ -8,7 +8,7 @@ const Signup = () => {
   const handleSignup = (signupRes) => {
     setSignupRes(signupRes);
   };
-  console.log(signupRes);
+
   return (
     <div className="flex justify-center">
       <SignupForm onSignup={handleSignup} />
