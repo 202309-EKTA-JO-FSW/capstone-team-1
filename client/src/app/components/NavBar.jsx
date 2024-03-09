@@ -18,7 +18,10 @@ const NavBar = () => {
         <section className="flex items-center gap-3 flex-wrap  justify-center">
           <Logo />
           <NavLinks/>
-          <Link href="/admin/restaurant" className= "md:ml-3  text-black hover:text-main-green">My Restaurants</Link>
+          {(isLoggedIn && user.isAdmin ) &&
+           <Link href="/admin/restaurant" className= "md:ml-3  text-black hover:text-main-green">My Restaurants</Link>
+          }
+          
         </section>
         <section className="flex items-center gap-3 flex-wrap  justify-between">
           <Link href="/customer/cart">
