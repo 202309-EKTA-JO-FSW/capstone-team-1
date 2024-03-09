@@ -29,7 +29,7 @@ const login = async (req, res) => {
     const token = createToken(user._id);
 
     // store token in cookie
-    res.cookie("jwt", token, {
+    res.cookie("token", token, {
       httpOnly: true,
       secure: true,
       maxAge: 1000 * 60 * 60 * 24,
@@ -41,6 +41,7 @@ const login = async (req, res) => {
         email: user.email,
         name: `${user.first_name} ${user.last_name}`,
         avatar: user.avatar,
+        isAdmin: user.isAdmin,
       },
       message: "Login successful",
     });
@@ -73,11 +74,11 @@ const signup = async (req, res) => {
   } = req.body;
 
   try {
-    // validate email & password
-    validateEmailAndPassword(email, password);
-
     // validate signup field
     validationSignup(req.body);
+
+    // validate email & password
+    validateEmailAndPassword(email, password);
 
     // looking up for user
     const userExist = await User.findOne({ email });
@@ -115,7 +116,7 @@ const signup = async (req, res) => {
     const token = createToken(user._id);
 
     // store token in cookie
-    res.cookie("jwt", token, {
+    res.cookie("token", token, {
       httpOnly: true,
       secure: true,
       maxAge: 1000 * 60 * 60 * 24,
@@ -127,8 +128,9 @@ const signup = async (req, res) => {
         email: user.email,
         name: `${user.firstName} ${user.lastName}`,
         avatar: user.avatar,
+        isAdmin: user.isAdmin,
       },
-      message: "Login successful",
+      message: "Signup successful",
     });
   } catch (error) {
     // checking if the it's validation error

@@ -11,7 +11,7 @@ const validationSignup = (body) => {
   } else if (!body.gender) {
     throw Error("Gender is required");
   } else if (!body.phoneNumber) {
-    throw Error("Gender is required");
+    throw Error("Phone Number is required");
   }
 };
 
