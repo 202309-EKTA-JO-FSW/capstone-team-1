@@ -1,12 +1,11 @@
-import React from "react";
-import SignupForm from "../components/auth/SignupForm";
+import Signup from "../components/signup/Signup";
 
-const Signup = () => {
+const SignupPage = () => {
   return (
-    <section className="flex justify-center">
-      <SignupForm />
+    <section>
+      <Signup />
     </section>
   );
 };
 
-export default Signup;
+export default SignupPage;

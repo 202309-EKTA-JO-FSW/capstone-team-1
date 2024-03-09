@@ -1,15 +1,17 @@
 "use client";
+import { fetchSignup } from "@/app/lib/data";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import Btn from "../Btn";
 
-import { useState } from "react";
-
-const SignupForm = () => {
+const SignupForm = ({ onSignup }) => {
   const formData = {
     firstName: "",
     lastName: "",
     email: "",
     password: "",
     confirmPassword: "",
-    age: "age",
+    age: 0,
     gender: "",
     phoneNumber: "",
     country: "",
@@ -18,12 +20,29 @@ const SignupForm = () => {
     zipcode: "",
     isAdmin: false,
   };
+  const router = useRouter();
   const [form, setForm] = useState(formData);
-  const handleSubmit = (e) => {
+  const [signupRes, setSignupRes] = useState({});
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(form);
-    setForm(formData);
+
+    // save the user in database
+    const signup = await fetchSignup(form);
+    setSignupRes(signup);
+
+    // send the signup message to parent component
+    onSignup(signup.message);
+
+    // check if there is a user to refresh the page
+    if (signup.message === "Signup successful") {
+      setForm(formData);
+
+      // redirect the user to home page after signup
+      router.push("/");
+    }
   };
+  console.log(form);
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
 
@@ -39,6 +58,13 @@ const SignupForm = () => {
       }));
     }
   };
+
+  // check if the user signed up succefully to store the details in local storage
+  useEffect(() => {
+    if (signupRes.message === "Signup successful") {
+      localStorage.setItem("user", JSON.stringify(signupRes.user));
+    }
+  }, [signupRes]);
 
   return (
     <div className="flex flex-col justify-center items-center w-full md:w-[600px] p-7">
@@ -102,7 +128,7 @@ const SignupForm = () => {
             name="age"
             placeholder="Age"
             className="w-full p-3 mr-4 field"
-            value={form.age}
+            value={form.age || "Age"}
             onChange={handleChange}
           />
 
@@ -179,12 +205,7 @@ const SignupForm = () => {
             Sign up as an owner of the restaurant
           </label>
         </div>
-        <button
-          type="submit"
-          className="bg-main-green py-3 px-8 rounded-3xl text-white text-sm hover:bg-opacity-75"
-        >
-          Sign up
-        </button>
+        <Btn type="submit" text={"Sign up"} />
       </form>
     </div>
   );
