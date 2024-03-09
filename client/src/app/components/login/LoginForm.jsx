@@ -48,7 +48,7 @@ const LoginForm = ({ onLogin }) => {
   }, [login]);
 
   return (
-    <div className="flex flex-col justify-center items-center w-full sm:w-[600px] p-10">
+    <div className="flex flex-col justify-center items-center w-full sm:w-[500px] p-10">
       <h1 className="text-4xl font-bold my-10">Welcome back!</h1>
       <form
         className="flex flex-col justify-center items-center w-full"
@@ -59,7 +59,7 @@ const LoginForm = ({ onLogin }) => {
           type="email"
           name="email"
           placeholder="Email"
-          className="w-full p-3 field"
+          className="w-full field"
           value={form.email}
           onChange={handleChange}
         />
@@ -69,7 +69,7 @@ const LoginForm = ({ onLogin }) => {
           type="password"
           name="password"
           placeholder="Password"
-          className="w-full p-3 field"
+          className="w-full field"
           value={form.password}
           onChange={handleChange}
         />

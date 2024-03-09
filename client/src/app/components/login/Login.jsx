@@ -17,9 +17,9 @@ const Login = () => {
       {/* navigate the user to signup page */}
       <p className="text=[20px]">
         Not a member?{" "}
-        <spam className="text-main-green hover:text-opacity-70">
+        <span className="text-main-green hover:text-opacity-70">
           <Link href={"/signup"}>Register Now</Link>
-        </spam>
+        </span>
         {/* login messages comes from backend */}
       </p>
       <LoginMessage loginRes={loginRes} />
