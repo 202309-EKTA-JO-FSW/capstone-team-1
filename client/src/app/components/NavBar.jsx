@@ -15,7 +15,7 @@ const NavBar = () => {
 
 useEffect(() => {
   const user = JSON.parse(localStorage.getItem('user'));
-  if (user) {
+  if (!user) {
    setUser(user);
   }
 }, []);
@@ -29,7 +29,7 @@ useEffect(() => {
           <Logo />
           <NavLinks/>
           {/* conditional rendering of My Restaurants if admin is logged in */}
-          {user.isAdmin &&
+          {(user && user.isAdmin) &&
            <Link href="/admin/myrestaurant" className= "md:ml-3  text-black hover:text-main-green">My Restaurants</Link>
           }
           
@@ -42,7 +42,7 @@ useEffect(() => {
           {user 
           ? <p>Hello, {user.name}</p>
           : <Link href="/login">
-          <Btn text={LOGIN}/>
+          <Btn text={'LOGIN'}/>
           </Link>
           }
         </section>
