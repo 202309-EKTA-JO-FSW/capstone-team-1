@@ -5,3 +5,4 @@ const restaurantUrl = () => {
 };
 
 export const signupUrl = main_url + "/auth/signup";
+export const loginUrl = main_url + "/auth/login";

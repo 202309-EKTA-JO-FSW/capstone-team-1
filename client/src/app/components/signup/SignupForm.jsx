@@ -11,7 +11,7 @@ const SignupForm = ({ onSignup }) => {
     email: "",
     password: "",
     confirmPassword: "",
-    age: 0,
+    age: "",
     gender: "",
     phoneNumber: "",
     country: "",
@@ -35,14 +35,14 @@ const SignupForm = ({ onSignup }) => {
     onSignup(signup.message);
 
     // check if there is a user to refresh the page
-    if (signup.message === "Signup successful") {
+    if (signup.user) {
       setForm(formData);
 
       // redirect the user to home page after signup
       router.push("/");
     }
   };
-  console.log(form);
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
 
@@ -61,13 +61,13 @@ const SignupForm = ({ onSignup }) => {
 
   // check if the user signed up succefully to store the details in local storage
   useEffect(() => {
-    if (signupRes.message === "Signup successful") {
+    if (signupRes.user) {
       localStorage.setItem("user", JSON.stringify(signupRes.user));
     }
   }, [signupRes]);
 
   return (
-    <div className="flex flex-col justify-center items-center w-full md:w-[600px] p-7">
+    <div className="flex flex-col justify-start items-center w-full sm:w-[600px] p-7">
       <h1 className="text-4xl font-bold my-10">Create an account</h1>
       <form
         className="flex flex-col justify-center items-center w-full"
@@ -79,7 +79,7 @@ const SignupForm = ({ onSignup }) => {
             type="text"
             name="firstName"
             placeholder="First Name"
-            className="w-full p-3 mr-4 field"
+            className="w-full mr-4 field"
             value={form.firstName}
             onChange={handleChange}
           />
@@ -87,7 +87,7 @@ const SignupForm = ({ onSignup }) => {
             type="text"
             name="lastName"
             placeholder="Last Name"
-            className="w-full p-3 ml-4 field"
+            className="w-full ml-4 field"
             value={form.lastName}
             onChange={handleChange}
           />
@@ -98,7 +98,7 @@ const SignupForm = ({ onSignup }) => {
           type="email"
           name="email"
           placeholder="Email"
-          className="w-full p-3 field"
+          className="w-full field"
           value={form.email}
           onChange={handleChange}
         />
@@ -108,7 +108,7 @@ const SignupForm = ({ onSignup }) => {
           type="password"
           name="password"
           placeholder="Password"
-          className="w-full p-3 field"
+          className="w-full field"
           value={form.password}
           onChange={handleChange}
         />
@@ -116,7 +116,7 @@ const SignupForm = ({ onSignup }) => {
           type="password"
           name="confirmPassword"
           placeholder="Confirm Password"
-          className="w-full p-3 field"
+          className="w-full field"
           value={form.confirmPassword}
           onChange={handleChange}
         />
@@ -127,8 +127,9 @@ const SignupForm = ({ onSignup }) => {
             type="number"
             name="age"
             placeholder="Age"
-            className="w-full p-3 mr-4 field"
-            value={form.age || "Age"}
+            className="w-full mr-4 field"
+            min={0}
+            value={form.age}
             onChange={handleChange}
           />
 
@@ -136,7 +137,7 @@ const SignupForm = ({ onSignup }) => {
           <select
             type="text"
             name="gender"
-            className="w-full p-3 ml-4 text-gray-700 field"
+            className="w-full ml-4 text-gray-700 field"
             value={form.gender}
             onChange={handleChange}
           >
@@ -151,7 +152,7 @@ const SignupForm = ({ onSignup }) => {
           type="number"
           name="phoneNumber"
           placeholder="Phone Number"
-          className="w-full p-3 field"
+          className="w-full field"
           value={form.phoneNumber}
           onChange={handleChange}
         />
@@ -162,7 +163,7 @@ const SignupForm = ({ onSignup }) => {
             type="text"
             name="country"
             placeholder="Country"
-            className="w-full p-3 mr-4 field"
+            className="w-full mr-4 field"
             value={form.country}
             onChange={handleChange}
           />
@@ -170,7 +171,7 @@ const SignupForm = ({ onSignup }) => {
             type="text"
             name="city"
             placeholder="City"
-            className="w-full p-3 ml-4 field"
+            className="w-full ml-4 field"
             value={form.city}
             onChange={handleChange}
           />
@@ -180,7 +181,7 @@ const SignupForm = ({ onSignup }) => {
             type="text"
             name="street"
             placeholder="Street"
-            className="w-full p-3 mr-4 field"
+            className="w-full mr-4 field"
             value={form.street}
             onChange={handleChange}
           />
@@ -188,7 +189,7 @@ const SignupForm = ({ onSignup }) => {
             type="number"
             name="zipcode"
             placeholder="Zip code"
-            className="w-full p-3 ml-4 field"
+            className="w-full ml-4 field"
             value={form.zipcode}
             onChange={handleChange}
           />
