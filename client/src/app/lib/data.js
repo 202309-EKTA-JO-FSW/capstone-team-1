@@ -1,12 +1,23 @@
 import { restaurantUrl } from "./utils";
-const fetchResturants = async () => {
+export const fetchRestaurants = async () => {
   try {
-    const response = await fetch(restaurantUrl());
+    const response = await fetch(restaurantUrl);
     const restaurants = await response.json();
     return restaurants;
   } catch (error) {
-    console.error("error get restaurant", error.message);
+    console.error("Error getting restaurants:", error.message);
     throw error;
   }
 };
-export default fetchResturants;
+
+export const searchRestaurant = async (searchQuery, page, limit) => {
+  try {
+    const url = `${restaurantUrl}?search=${searchQuery}&page=${page}&limit=${limit}`;
+    const response = await fetch(url);
+    const restaurants = await response.json();
+    return restaurants;
+  } catch (error) {
+    console.error("Error searching restaurants:", error.message);
+    throw error;
+  }
+};

@@ -1,24 +1,39 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import fetchRestaurants from "../lib/data";
+import { fetchRestaurants, searchRestaurant } from "../lib/data";
 import RestaurantCard from "../components/Restaurant/RestaurantCard";
+import Pagination from "../components/Restaurant/Pagination";
 
 const RestaurantList = () => {
   const [restaurants, setRestaurants] = useState([]);
   const [searchTxt, setSearchTxt] = useState("");
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+  const [hasMore, setHasMore] = useState(true);
   useEffect(() => {
-    const getRestaurants = async () => {
-      try {
-        const restaurantsData = await fetchRestaurants();
+    getRestaurants();
+  }, [searchTxt, page, limit]);
+  const getRestaurants = async () => {
+    try {
+      let restaurantsData;
+      if (searchTxt) {
+        restaurantsData = await searchRestaurant(searchTxt, page, limit);
+      } else {
+        restaurantsData = await fetchRestaurants(page, limit);
         console.log(restaurantsData);
         setRestaurants(restaurantsData);
-      } catch (error) {
-        console.error("Error getting restaurants:", error.message);
       }
-    };
-    getRestaurants();
-  }, []);
-
+    } catch (error) {
+      console.error("Error getting restaurants:", error.message);
+    }
+  };
+  const handleSearchValue = (event) => {
+    setSearchTxt(event.target.value);
+    setPage(1);
+  };
+  const handleNextPage = () => {
+    setPage((prevPage) => prevPage + 1);
+  };
   return (
     <div class=" p-4 md:p-8 lg:p-12 w-full ">
       <h1 class="flex justify-center font-bold text-5xl">Restaurants</h1>
@@ -29,6 +44,8 @@ const RestaurantList = () => {
             id="location-search"
             class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-lg border-2 border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-200 dark:border-gray-200 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-200"
             placeholder="Search for restaurant"
+            value={searchTxt}
+            onChange={handleSearchValue}
           />
           <button
             type="submit"
@@ -43,9 +60,9 @@ const RestaurantList = () => {
             >
               <path
                 stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
                 d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
               />
             </svg>
@@ -53,10 +70,14 @@ const RestaurantList = () => {
           </button>
         </div>
       </div>
+      <div class="relative w-full flex flex-row">
+        {restaurants &&
+          restaurants.map((restaurant) => (
+            <RestaurantCard key={restaurant.id} restaurant={restaurant} />
+          ))}
+      </div>
 
-      {restaurants.map((restaurant) => (
-        <RestaurantCard key={restaurant.id} restaurant={restaurant} />
-      ))}
+      {hasMore && <Pagination onNextPage={handleNextPage} />}
     </div>
   );
 };
