@@ -24,8 +24,8 @@ useEffect(() => {
 
   return (
     
-    <nav className="flex justify-between  w-full sticky bg-white top-0 [font-family:'Poppins-Medium',Helvetica] font-medium ">
-        <section className="flex items-center gap-3 flex-wrap  justify-center">
+    <nav className="flex justify-between  w-full sticky top-0  [font-family:'Poppins-Medium',Helvetica] font-medium ">
+        <section className="flex items-center gap-2 flex-wrap  justify-between pl-3 pt-2 py-2">
           <Logo />
           <NavLinks/>
           {/* conditional rendering of My Restaurants if admin is logged in */}
@@ -34,7 +34,7 @@ useEffect(() => {
           }
           
         </section>
-        <section className="flex items-center gap-3 flex-wrap  justify-between">
+        <section className="flex items-center gap-4 flex-wrap  justify-between pr-3 pt-2 py-2">
           <Link href="/customer/cart">
            <GiShoppingCart className="text-2xl hover:text-main-green"/>
           </Link>

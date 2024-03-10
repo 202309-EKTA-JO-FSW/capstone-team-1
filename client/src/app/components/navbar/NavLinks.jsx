@@ -10,7 +10,7 @@ const NavLinks = () => {
 
     ]
   return (
-    <ul className=" md:flex gap-x-8  justify-evenly md:items-center" >
+    <ul className=" md:flex gap-x-3  justify-evenly md:items-center pl-5" >
         {
             Links.map((link)=>(
                 <li key={link.name} className= "md:ml-3  text-black hover:text-main-green">
