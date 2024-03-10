@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect, useState } from "react";
 import Logo from "./navbar/Logo";
-import Button from "./navbar/Button";
+import Btn from "./navbar/Btn";
 import NavLinks from "./navbar/NavLinks";
 import {GiShoppingCart} from "react-icons/gi"
 import Link from "next/link";
@@ -42,7 +42,7 @@ useEffect(() => {
           {user 
           ? <p>Hello, {user.name}</p>
           : <Link href="/login">
-          <Button/>
+          <Btn text={LOGIN}/>
           </Link>
           }
         </section>
