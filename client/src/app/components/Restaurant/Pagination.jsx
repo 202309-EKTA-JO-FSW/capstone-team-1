@@ -1,14 +1,16 @@
 import React from "react";
 
-function Pagination({ onNextPage }) {
+function Pagination({ limit, length }) {
+  const paginationNumbers = [];
+
+  for (let i = 1; i <= Math.ceil(length / limit); i++) {
+    paginationNumbers.push(i);
+  }
   return (
-    <div className="flex justify-center mt-4">
-      <button
-        className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md mr-2"
-        onClick={onNextPage}
-      >
-        Next Page
-      </button>
+    <div className="pagination">
+      {paginationNumbers.map((pageNumber) => (
+        <button key={pageNumber}>{pageNumber}</button>
+      ))}
     </div>
   );
 }

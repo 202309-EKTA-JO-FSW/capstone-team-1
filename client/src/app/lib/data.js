@@ -10,9 +10,11 @@ export const fetchRestaurants = async () => {
   }
 };
 
-export const searchRestaurant = async (searchQuery, page, limit) => {
+export const searchRestaurant = async (search, page, limit) => {
   try {
-    const url = `${restaurantUrl}?search=${searchQuery}&page=${page}&limit=${limit}`;
+    console.log(search);
+    const url = `${restaurantUrl}?search=${search}&page=${page}&limit=${limit}`;
+    console.log(url);
     const response = await fetch(url);
     const restaurants = await response.json();
     return restaurants;
