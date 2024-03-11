@@ -2,7 +2,7 @@
 import { fetchSignup } from "@/app/lib/data";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import Btn from "../Btn";
+import Btn from "../../Btn";
 
 const SignupForm = ({ onSignup }) => {
   const formData = {

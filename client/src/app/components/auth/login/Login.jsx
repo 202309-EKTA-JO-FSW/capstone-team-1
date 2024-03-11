@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import LoginForm from "./LoginForm";
 import Link from "next/link";
 import LoginMessage from "./LoginMessage";
+import GoogleAuth from "../GoogleAuth";
 
 const Login = () => {
   const [loginRes, setLoginRes] = useState("");
@@ -22,6 +23,8 @@ const Login = () => {
         </span>
         {/* login messages comes from backend */}
       </p>
+
+      <GoogleAuth />
       <LoginMessage loginRes={loginRes} />
     </div>
   );

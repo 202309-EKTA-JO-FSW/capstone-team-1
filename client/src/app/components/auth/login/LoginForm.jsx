@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Btn from "../Btn";
+import Btn from "../../Btn";
 import { fetchLogin } from "@/app/lib/data";
 import { useRouter } from "next/navigation";
 

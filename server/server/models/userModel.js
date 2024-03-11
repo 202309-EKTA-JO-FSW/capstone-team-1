@@ -70,11 +70,9 @@ const userSchema = new Schema(
     },
     age: {
       type: Number,
-      required: true,
     },
     gender: {
       type: String,
-      required: true,
       enum: ["male", "female"],
     },
     avatar: {

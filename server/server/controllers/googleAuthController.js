@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const User = require("../models/userModel");
 const passport = require("passport");
+const { createToken } = require("./authController");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 
 passport.use(
@@ -11,56 +12,82 @@ passport.use(
       clientSecret: process.env.GAPP_CLIENT_SECRET,
       callbackURL: "http://localhost:3001/api/auth/google/callback",
     },
-    function (accessToken, refreshToken, profile, cb) {
-      const user = User.findOne({ email: profile.emails[0].value });
-      if (!user) {
-        User.create(
-          {
+    async (accessToken, refreshToken, profile, cb) => {
+      try {
+        let user = await User.findOne({ email: profile.emails[0].value });
+
+        if (!user) {
+          user = await User.create({
             firstName: profile.name.givenName,
             lastName: profile.name.familyName,
             email: profile.emails[0].value,
-            password: "",
+            password: "no-password",
             provider: profile.provider,
             providerId: profile.id,
-            age: "",
-            gender: "",
             avatar: profile.photos[0].value,
-            phoneNumber: "",
-          },
-          function (err, user) {
-            return cb(err, user);
-          }
-        );
+            phoneNumber: "0",
+          });
+        }
+
+        return cb(null, user);
+      } catch (err) {
+        return cb(err);
       }
     }
   )
 );
 
 passport.serializeUser((user, done) => {
-  // store the id in session
   done(null, user.id);
 });
 
 passport.deserializeUser(async (id, done) => {
-  // return the user's data according to the id
-  const user = await User.findById(id);
-  done(null, user);
+  try {
+    const user = await User.findById(id);
+    done(null, user);
+  } catch (err) {
+    done(err);
+  }
+});
+
+// login with google consent
+router.get(
+  "/google",
+  passport.authenticate("google", {
+    scope: ["profile", "email", "openid"],
+  })
+);
+
+// send the info to frontend if there is a user
+router.get("/me", async (req, res) => {
+  const user = req.user;
+  if (!user) return res.status(404).json({ message: "User not found" });
+
+  return res.status(200).json({
+    user: {
+      name: `${user.firstName} ${user.lastName}`,
+      avatar: user.avatar,
+      isAdmin: user.isAdmin,
+    },
+  });
 });
 
 router.get(
-  "/google",
-  passport.authenticate("google", { scope: ["profile", "email", "openid"] }),
-  (req, res) => {
-    res.send("test");
-    res.end();
-  }
-);
-
-router.get(
   "/google/callback",
-  passport.authenticate("google", { failureRedirect: "/" }, (req, res) => {
-    console.log(req.user);
-  })
+  passport.authenticate("google", { failureRedirect: "/", session: false }),
+  (req, res) => {
+    if (!req.user) return res.status(404).json("User not found");
+    // create a token
+    const token = createToken(req.user._id);
+
+    // store token in cookie
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: true,
+      maxAge: 1000 * 60 * 60 * 24,
+    });
+    return res.status(200).redirect("http://localhost:3000");
+  }
 );
 
 module.exports = router;
