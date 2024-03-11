@@ -1,8 +1,8 @@
-'use client'
+'use client';
 import Image from 'next/image';
 import { useState } from 'react';
 
-const MenuItemCard = () => {
+const MenuItemCard = ({ menuItem }) => {
   const [quantity, setQuantity] = useState(0);
 
   const handleIncrement = () => {
@@ -15,23 +15,24 @@ const MenuItemCard = () => {
     }
   };
 
+  
   return (
     <div className="bg-white shadow-md rounded-md p-4 flex flex-col items-center" style={{ width: 250, height: 300 }}>
       <div className="relative h-32 w-full mb-2">
         <Image
-          src="https://dummyimage.com/400/000/fff"
-          alt="Fattoush Salad"
+          src={menuItem.image}
+          alt={menuItem.name}
           layout="fill"
           objectFit="cover"
         />
       </div>
-      <h3 className="text-lg font-bold text-center mb-6">Fattoush Salad</h3>
+      <h3 className="text-lg font-bold text-center mb-6">{menuItem.name}</h3>
       <div className="flex justify-between w-full">
         <div>
-          <p className="text-lg font-semibold">24.00 JOD</p>
+          <p className="text-lg font-semibold">{`${menuItem.price}}`}</p>
         </div>
         <div className="flex items-center">
-          <span className="mr-1">4.5</span>
+          <span className="mr-1">{menuItem.rating || 'No Rating'}</span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-4 w-4 text-yellow-400"
