@@ -64,7 +64,7 @@ function Restaurant() {
           <p className="font-bold text-2xl">Loading...</p>
         ) : restaurants.length > 0 ? (
           restaurants.map((restaurant) => (
-            <RestaurantCard key={restaurant.id} restaurant={restaurant} />
+            <RestaurantCard key={restaurant._id} restaurant={restaurant} />
           ))
         ) : (
           <p className="font-bold text-2xl">No restaurants found</p>
