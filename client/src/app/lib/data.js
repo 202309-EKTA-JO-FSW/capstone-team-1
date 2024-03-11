@@ -1,4 +1,4 @@
-const { signupUrl, loginUrl, googleAuthUrl } = require("./utils");
+const { signupUrl, loginUrl, googleAuthUrl, googleMeUrl } = require("./utils");
 
 const fetchResturants = async () => {
   try {
@@ -46,7 +46,7 @@ export const fetchLogin = async (form) => {
 // google auth
 export const fetchGoogleAuth = async () => {
   try {
-    const res = await fetch(googleAuthUrl);
+    const res = await fetch(googleMeUrl);
 
     return res.json();
   } catch (error) {

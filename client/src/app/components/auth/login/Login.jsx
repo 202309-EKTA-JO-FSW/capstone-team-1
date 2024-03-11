@@ -15,6 +15,13 @@ const Login = () => {
     <div className="flex flex-col items-center pt-24">
       <LoginForm onLogin={handleLogin} />
 
+      {/* or line */}
+      <div className="w-[250px] sm:w-[380px]  flex justify-center items-center">
+        <div className="w-full h-[1px] bg-gray-400"></div>
+        <div className="mx-2">or</div>
+        <div className="w-full h-[1px] bg-gray-400"></div>
+      </div>
+      <GoogleAuth />
       {/* navigate the user to signup page */}
       <p className="text=[20px]">
         Not a member?{" "}
@@ -23,8 +30,6 @@ const Login = () => {
         </span>
         {/* login messages comes from backend */}
       </p>
-
-      <GoogleAuth />
       <LoginMessage loginRes={loginRes} />
     </div>
   );

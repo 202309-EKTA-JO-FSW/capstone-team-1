@@ -58,27 +58,14 @@ router.get(
   })
 );
 
-// send the info to frontend if there is a user
-router.get("/me", async (req, res) => {
-  const user = req.user;
-  if (!user) return res.status(404).json({ message: "User not found" });
-
-  return res.status(200).json({
-    user: {
-      name: `${user.firstName} ${user.lastName}`,
-      avatar: user.avatar,
-      isAdmin: user.isAdmin,
-    },
-  });
-});
-
 router.get(
   "/google/callback",
   passport.authenticate("google", { failureRedirect: "/", session: false }),
   (req, res) => {
-    if (!req.user) return res.status(404).json("User not found");
+    const user = req.user;
+    if (!user) return res.status(404).json("User not found");
     // create a token
-    const token = createToken(req.user._id);
+    const token = createToken(user._id);
 
     // store token in cookie
     res.cookie("token", token, {
@@ -86,6 +73,7 @@ router.get(
       secure: true,
       maxAge: 1000 * 60 * 60 * 24,
     });
+
     return res.status(200).redirect("http://localhost:3000");
   }
 );

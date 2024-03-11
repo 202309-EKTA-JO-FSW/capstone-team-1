@@ -1,7 +1,6 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import NavBar from "./components/NavBar";
-import { GoogleOAuthProvider } from "@react-oauth/google";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -14,11 +13,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body suppressHydrationWarning={true} className={inter.className}>
-        <GoogleOAuthProvider clientId="852636242594-estnr5c03h8chi9lh376e1h5gdvojdlp.apps.googleusercontent.com">
-          <NavBar />
-          {children}
-          {/* <Footer />? */}
-        </GoogleOAuthProvider>
+        <NavBar />
+        {children}
+        {/* <Footer />? */}
       </body>
     </html>
   );
