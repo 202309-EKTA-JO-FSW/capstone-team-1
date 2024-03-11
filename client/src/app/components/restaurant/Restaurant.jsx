@@ -14,15 +14,15 @@ function Restaurant() {
 
   const getRestaurants = async () => {
     try {
-      let restaurantsData;
+      let restaurantsData = [];
       console.log(searchTxt);
       if (searchTxt) {
         restaurantsData = await searchRestaurant(searchTxt, page, limit);
       } else {
         restaurantsData = await fetchRestaurants(page, limit);
         console.log(restaurantsData);
-        setRestaurants(restaurantsData);
       }
+      setRestaurants(restaurantsData);
     } catch (error) {
       console.error("Error getting restaurants:", error.message);
     } finally {
