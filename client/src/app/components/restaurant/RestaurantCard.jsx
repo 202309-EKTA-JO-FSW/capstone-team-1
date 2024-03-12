@@ -1,12 +1,13 @@
 import React from "react";
 import Card from "../Card";
 import Link from "next/link";
+import Image from "next/image";
 function RestaurantCard({ restaurant }) {
   return (
-    <div className="flex flex-row p-4 md:p-8 w-full">
-      <Link href={`/menuItems/${restaurant._id}`}>
+    <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/5 p-3 ">
+      <Link href={`/restaurant/${restaurant._id}`}>
         <Card>
-          <img
+          <Image
             src={restaurant.image}
             alt={restaurant.name}
             className="w-full h-40 object-cover object-center rounded-full"

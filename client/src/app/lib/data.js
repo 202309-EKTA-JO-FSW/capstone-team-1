@@ -1,7 +1,8 @@
 import { restaurantUrl } from "./utils";
-export const fetchRestaurants = async () => {
+export const fetchRestaurants = async (page, limit) => {
   try {
-    const response = await fetch(restaurantUrl);
+    const url = `${restaurantUrl}?page=${page}&limit=${limit}`;
+    const response = await fetch(url);
     const restaurants = await response.json();
     return restaurants;
   } catch (error) {

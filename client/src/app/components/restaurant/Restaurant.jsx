@@ -45,21 +45,21 @@ function Restaurant() {
       setPage((prevPage) => prevPage + 1);
     }; */
   const handlePagination = (pageNumber) => {
-    setCurrentPage(pageNumber);
+    setPage(pageNumber);
   };
   return (
     <div className="flex flex-col justify-start items-center p-4 md:p-8 lg:p-12 w-full">
       <h1 className="flex justify-center font-bold text-5xl w-full">
         Restaurants
       </h1>
-      <div className="flex justify-center p-7 w-full">
+      <div className="flex flex-wrap justify-center p-7 w-full">
         <Search
           value={searchTxt}
           onChange={handleSearchValue}
           onSubmit={handleSearchSubmit}
         />
       </div>
-      <div className="relative w-full flex flex-col md:flex-row md:justify-center md:p-8">
+      <div className="relative w-full flex flex-wrap md:flex-row md:justify-center md:p-8">
         {loading ? (
           <p className="font-bold text-2xl">Loading...</p>
         ) : restaurants.length > 0 ? (
@@ -70,12 +70,10 @@ function Restaurant() {
           <p className="font-bold text-2xl">No restaurants found</p>
         )}
       </div>
-
-      <Pagination
-        length={restaurants.length}
-        limit={limit}
-        handlePagination={handlePagination}
-      />
+      <div className="flex justify-center items-center mt-8">
+        length={restaurants.length} limit={limit} page={page} handlePagination=
+        {handlePagination}
+      </div>
     </div>
   );
 }
