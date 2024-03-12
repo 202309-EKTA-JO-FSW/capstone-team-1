@@ -76,7 +76,8 @@ router.get(
 
     const userInfo = {
       email: user.email,
-      name: `${user.firstName} ${user.lastName}`,
+      firstName: user.firstName,
+      lastName: user.lastName,
       avatar: user.avatar,
       isAdmin: user.isAdmin,
     };

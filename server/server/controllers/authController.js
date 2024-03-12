@@ -35,7 +35,8 @@ const login = async (req, res) => {
     return res.status(201).json({
       user: {
         email: user.email,
-        name: `${user.firstName} ${user.lastName}`,
+        firstName: user.firstName,
+        lastName: user.lastName,
         avatar: user.avatar,
         isAdmin: user.isAdmin,
       },
@@ -114,7 +115,8 @@ const signup = async (req, res) => {
     return res.status(201).json({
       user: {
         email: user.email,
-        name: `${user.firstName} ${user.lastName}`,
+        firstName: user.firstName,
+        lastName: user.lastName,
         avatar: user.avatar,
         isAdmin: user.isAdmin,
       },
