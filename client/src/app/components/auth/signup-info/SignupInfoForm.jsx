@@ -1,16 +1,11 @@
 "use client";
-import { fetchSignup } from "@/app/lib/data";
+
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Btn from "../../Btn";
 
-const SignupForm = ({ onSignup }) => {
+const SignupInfoForm = () => {
   const formData = {
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
     phoneNumber: "",
     country: "",
     city: "",
@@ -20,27 +15,7 @@ const SignupForm = ({ onSignup }) => {
   };
   const router = useRouter();
   const [form, setForm] = useState(formData);
-  const [signupRes, setSignupRes] = useState({});
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    // save the user in database
-    const signup = await fetchSignup(form);
-    setSignupRes(signup);
-
-    // send the signup message to parent component
-    onSignup(signup.message);
-
-    // check if there is a user to refresh the page
-    if (signup.user) {
-      setForm(formData);
-
-      // redirect the user to home page after signup
-      router.push("/");
-    }
-  };
-
+  const handleSubmit = () => {};
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
 
@@ -56,69 +31,13 @@ const SignupForm = ({ onSignup }) => {
       }));
     }
   };
-
-  // check if the user signed up succefully to store the details in local storage
-  useEffect(() => {
-    if (signupRes.user) {
-      localStorage.setItem("user", JSON.stringify(signupRes.user));
-    }
-  }, [signupRes]);
-
   return (
     <div className="flex flex-col justify-start items-center w-full sm:w-[600px] p-7">
-      <h1 className="text-4xl font-bold my-10">Create an account</h1>
+      <h1 className="text-4xl font-bold my-10">Continue Sign Up</h1>
       <form
         className="flex flex-col justify-center items-center w-full"
         onSubmit={handleSubmit}
       >
-        {/* name */}
-        <div className="flex justify-between w-full">
-          <input
-            type="text"
-            name="firstName"
-            placeholder="First Name"
-            className="w-full mr-4 field"
-            value={form.firstName}
-            onChange={handleChange}
-          />
-          <input
-            type="text"
-            name="lastName"
-            placeholder="Last Name"
-            className="w-full ml-4 field"
-            value={form.lastName}
-            onChange={handleChange}
-          />
-        </div>
-
-        {/* email */}
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          className="w-full field"
-          value={form.email}
-          onChange={handleChange}
-        />
-
-        {/* password */}
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          className="w-full field"
-          value={form.password}
-          onChange={handleChange}
-        />
-        <input
-          type="password"
-          name="confirmPassword"
-          placeholder="Confirm Password"
-          className="w-full field"
-          value={form.confirmPassword}
-          onChange={handleChange}
-        />
-
         {/* phone number */}
         <input
           type="number"
@@ -128,7 +47,6 @@ const SignupForm = ({ onSignup }) => {
           value={form.phoneNumber}
           onChange={handleChange}
         />
-
         {/* address */}
         <div className="flex justify-between w-full">
           <input
@@ -178,10 +96,10 @@ const SignupForm = ({ onSignup }) => {
             Sign up as an owner of the restaurant
           </label>
         </div>
-        <Btn type="submit" text={"Sign up"} />
+        <Btn type="submit" text={"Done"} />
       </form>
     </div>
   );
 };
 
-export default SignupForm;
+export default SignupInfoForm;

@@ -1,33 +1,11 @@
 "use client";
-import { fetchGoogleAuth } from "@/app/lib/data";
-import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import { googleLoginUrl } from "@/app/lib/utils";
 import { FcGoogle } from "react-icons/fc";
-import Cookies from "js-cookie";
 
 const GoogleAuth = () => {
-  const router = useRouter();
-  const [googleLogin, setGoogleLogin] = useState({});
-  const [token, setToken] = useState("");
   const handleGoogleLogin = async () => {
-    window.location.href = "http://localhost:3001/api/auth/google";
-
-    const googleLoginRef = await fetchGoogleAuth();
-
-    if (googleLoginRef.user) {
-      console.log("TOKEN: ", Cookies.get("token"));
-      setToken(Cookies.get("token"));
-      setGoogleLogin(googleLoginRef.user);
-      router.push("/");
-    }
+    window.location.href = googleLoginUrl;
   };
-
-  // check if the user login succefully to store the details in local storage
-  useEffect(() => {
-    if (googleLogin.user) {
-      localStorage.setItem("user", JSON.stringify(googleLogin.user));
-    }
-  }, [googleLogin]);
 
   return (
     <div className="my-5">

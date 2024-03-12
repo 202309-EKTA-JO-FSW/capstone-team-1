@@ -4,6 +4,7 @@ const User = require("../models/userModel");
 const passport = require("passport");
 const { createToken } = require("./authController");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
+const jwt = require("jsonwebtoken");
 
 passport.use(
   new GoogleStrategy(
@@ -74,8 +75,62 @@ router.get(
       maxAge: 1000 * 60 * 60 * 24,
     });
 
-    return res.status(200).redirect("http://localhost:3000");
+    const userInfo = {
+      email: user.email,
+      name: `${user.firstName} ${user.lastName}`,
+      avatar: user.avatar,
+      isAdmin: user.isAdmin,
+    };
+
+    const userInfoToken = jwt.sign(userInfo, process.env.SECRET_KEY);
+    res.cookie("user", userInfoToken, {
+      maxAge: 1000 * 60 * 60 * 24,
+    });
+
+    if (user.phoneNumber === "0") {
+      return res.status(200).redirect("http://localhost:3000/signup-info");
+    } else {
+      return res.status(200).redirect("http://localhost:3000");
+    }
   }
 );
+
+router.get("/me", authToken, (req, res) => {
+  try {
+    const user = req.user;
+    console.log(user);
+    if (!user) return res.status(401).send("Invalid User");
+    res.status(200).json(user);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+function authToken(req, res, next) {
+  try {
+    const { authorization } = req.headers;
+
+    if (!authorization) {
+      return res.status(401).json({ message: "Please login" });
+    }
+    console.log(authorization);
+
+    // get token
+    const token = authorization.split(" ")[1];
+    // decode the token by verify it with secret key we user when token was created
+    decodedUser = jwt.verify(token, process.env.SECRET_KEY);
+
+    // send user id
+    req.user = decodedUser;
+
+    next();
+  } catch (error) {
+    console.error(error);
+    if (error.message === "invalid signature") {
+      return res.status(401).json({ message: "Please login" });
+    }
+    return res.status(401).json({ message: error.message });
+  }
+}
 
 module.exports = router;

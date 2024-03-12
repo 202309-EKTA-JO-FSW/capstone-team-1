@@ -7,4 +7,4 @@ const restaurantUrl = () => {
 export const signupUrl = main_url + "/auth/signup";
 export const loginUrl = main_url + "/auth/login";
 export const googleLoginUrl = main_url + "/auth/google";
-export const googleMeUrl = main_url + "/auth/google/callback";
+export const getGoogleUser = main_url + "/auth/me";

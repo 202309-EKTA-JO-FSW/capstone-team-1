@@ -1,4 +1,5 @@
-const { signupUrl, loginUrl, googleAuthUrl, googleMeUrl } = require("./utils");
+const Cookies = require("js-cookie");
+const { signupUrl, loginUrl, getGoogleUser, googleMeUrl } = require("./utils");
 
 const fetchResturants = async () => {
   try {
@@ -44,9 +45,18 @@ export const fetchLogin = async (form) => {
 };
 
 // google auth
-export const fetchGoogleAuth = async () => {
+export const fetchGoogleUser = async () => {
   try {
-    const res = await fetch(googleMeUrl);
+    const token = Cookies.get("user");
+    // console.log("token here");
+    // console.log(token);
+    const res = await fetch(getGoogleUser, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
 
     return res.json();
   } catch (error) {
