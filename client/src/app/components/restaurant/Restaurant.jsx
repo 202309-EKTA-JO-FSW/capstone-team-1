@@ -21,6 +21,7 @@ function Restaurant() {
       } else {
         restaurantsData = await fetchRestaurants(page, limit);
       }
+      //console.log("restaurantsData.restaurants", restaurantsData.restaurants);
       setRestaurants(restaurantsData.restaurants);
       setTotalPages(restaurantsData.totalPages);
     } catch (error) {

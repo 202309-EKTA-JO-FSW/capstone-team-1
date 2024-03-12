@@ -52,12 +52,19 @@ async function searchRestaurant(req, res) {
   const skip = (pageNum - 1) * pageSize;
 
   try {
+    const count = await Restaurant.countDocuments({
+      $or: [{ name: regex }, { cuisine: regex }],
+    });
+
+    const totalPages = Math.ceil(count / pageSize);
+
     const restaurants = await Restaurant.find({
       $or: [{ name: regex }, { cuisine: regex }],
     })
       .skip(skip)
       .limit(pageSize);
-    res.status(200).json(restaurants);
+
+    res.status(200).json({ restaurants, totalPages });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

@@ -10,6 +10,7 @@ function RestaurantCard({ restaurant }) {
           <Image
             src={restaurant.image}
             alt={restaurant.name}
+            objectFit="cover"
             className="w-full h-40 object-cover object-center rounded-full"
           />
           <div className="p-4">
