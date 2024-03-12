@@ -5,6 +5,7 @@ const apiRoutes = require("./routes");
 require("dotenv").config();
 
 const { connectToMongo } = require("./db/connection");
+const passport = require("passport");
 
 const app = express();
 
@@ -16,6 +17,7 @@ const port =
 app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.use(passport.initialize());
 
 // main route
 app.use("/api", apiRoutes);

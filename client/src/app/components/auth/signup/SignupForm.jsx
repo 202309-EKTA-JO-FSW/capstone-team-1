@@ -1,8 +1,8 @@
 "use client";
 import { fetchSignup } from "@/app/lib/data";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import Btn from "../Btn";
+import { useState } from "react";
+import Btn from "../../Btn";
 
 const SignupForm = ({ onSignup }) => {
   const formData = {
@@ -11,8 +11,6 @@ const SignupForm = ({ onSignup }) => {
     email: "",
     password: "",
     confirmPassword: "",
-    age: "",
-    gender: "",
     phoneNumber: "",
     country: "",
     city: "",
@@ -22,22 +20,21 @@ const SignupForm = ({ onSignup }) => {
   };
   const router = useRouter();
   const [form, setForm] = useState(formData);
-  const [signupRes, setSignupRes] = useState({});
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     // save the user in database
     const signup = await fetchSignup(form);
-    setSignupRes(signup);
 
     // send the signup message to parent component
     onSignup(signup.message);
 
     // check if there is a user to refresh the page
     if (signup.user) {
+      // save user info in local storage
+      localStorage.setItem("user", JSON.stringify(signup.user));
       setForm(formData);
-
       // redirect the user to home page after signup
       router.push("/");
     }
@@ -58,13 +55,6 @@ const SignupForm = ({ onSignup }) => {
       }));
     }
   };
-
-  // check if the user signed up succefully to store the details in local storage
-  useEffect(() => {
-    if (signupRes.user) {
-      localStorage.setItem("user", JSON.stringify(signupRes.user));
-    }
-  }, [signupRes]);
 
   return (
     <div className="flex flex-col justify-start items-center w-full sm:w-[600px] p-7">
@@ -120,32 +110,6 @@ const SignupForm = ({ onSignup }) => {
           value={form.confirmPassword}
           onChange={handleChange}
         />
-
-        <div className="flex justify-between w-full">
-          {/* age */}
-          <input
-            type="number"
-            name="age"
-            placeholder="Age"
-            className="w-full mr-4 field"
-            min={0}
-            value={form.age}
-            onChange={handleChange}
-          />
-
-          {/* gender */}
-          <select
-            type="text"
-            name="gender"
-            className="w-full ml-4 text-gray-700 field"
-            value={form.gender}
-            onChange={handleChange}
-          >
-            <option value="gender">Gender</option>
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-          </select>
-        </div>
 
         {/* phone number */}
         <input

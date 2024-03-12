@@ -1,10 +1,7 @@
 const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const {
-  validationSignup,
-  validateEmailAndPassword,
-} = require("../utils/validation");
+const { validationSignup } = require("../utils/validation");
 
 const login = async (req, res) => {
   const { email, password } = req.body;
@@ -30,7 +27,6 @@ const login = async (req, res) => {
 
     // store token in cookie
     res.cookie("token", token, {
-      httpOnly: true,
       secure: true,
       maxAge: 1000 * 60 * 60 * 24,
     });
@@ -77,9 +73,6 @@ const signup = async (req, res) => {
     // validate signup field
     validationSignup(req.body);
 
-    // validate email & password
-    validateEmailAndPassword(email, password);
-
     // looking up for user
     const userExist = await User.findOne({ email });
 
@@ -117,7 +110,6 @@ const signup = async (req, res) => {
 
     // store token in cookie
     res.cookie("token", token, {
-      httpOnly: true,
       secure: true,
       maxAge: 1000 * 60 * 60 * 24,
     });
