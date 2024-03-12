@@ -24,8 +24,6 @@ const updateUserProfile = async (req, res) => {
     lastName,
     email,
     password,
-    age,
-    gender,
     phoneNumber,
     isAdmin,
     country,
@@ -59,8 +57,6 @@ const updateUserProfile = async (req, res) => {
     user.email = email || user.email;
     user.password = password || user.password;
     user.avatar = imageUrl || user.avatar;
-    user.age = age || user.age;
-    user.gender = gender || user.gender;
     user.isAdmin = isAdmin !== undefined ? isAdmin : user.isAdmin;
     user.phoneNumber = phoneNumber || user.phoneNumber;
 

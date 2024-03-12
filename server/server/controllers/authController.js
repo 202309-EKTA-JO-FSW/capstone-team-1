@@ -59,8 +59,6 @@ const signup = async (req, res) => {
     email,
     password,
     confirmPassword,
-    age,
-    gender,
     phoneNumber,
     country,
     city,
@@ -93,8 +91,6 @@ const signup = async (req, res) => {
       lastName,
       email,
       password: hashedPassword,
-      age,
-      gender,
       phoneNumber,
       isAdmin,
       address: {

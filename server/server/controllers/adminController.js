@@ -46,7 +46,6 @@ const addNewItem = async (req, res) => {
     const newMenuItem = await MenuItem.create({
       name,
       description,
-      image,
       price,
       type,
       image: imageUrl,
