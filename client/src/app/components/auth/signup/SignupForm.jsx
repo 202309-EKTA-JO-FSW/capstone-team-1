@@ -1,7 +1,7 @@
 "use client";
 import { fetchSignup } from "@/app/lib/data";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Btn from "../../Btn";
 
 const SignupForm = ({ onSignup }) => {
@@ -20,22 +20,21 @@ const SignupForm = ({ onSignup }) => {
   };
   const router = useRouter();
   const [form, setForm] = useState(formData);
-  const [signupRes, setSignupRes] = useState({});
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     // save the user in database
     const signup = await fetchSignup(form);
-    setSignupRes(signup);
 
     // send the signup message to parent component
     onSignup(signup.message);
 
     // check if there is a user to refresh the page
     if (signup.user) {
+      // save user info in local storage
+      localStorage.setItem("user", JSON.stringify(signup.user));
       setForm(formData);
-
       // redirect the user to home page after signup
       router.push("/");
     }
@@ -56,13 +55,6 @@ const SignupForm = ({ onSignup }) => {
       }));
     }
   };
-
-  // check if the user signed up succefully to store the details in local storage
-  useEffect(() => {
-    if (signupRes.user) {
-      localStorage.setItem("user", JSON.stringify(signupRes.user));
-    }
-  }, [signupRes]);
 
   return (
     <div className="flex flex-col justify-start items-center w-full sm:w-[600px] p-7">

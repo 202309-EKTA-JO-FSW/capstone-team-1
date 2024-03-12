@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 const GoogleUser = () => {
-  const router = useRouter;
+  const router = useRouter();
   useEffect(() => {
     const getData = async () => {
       const user = await fetchGoogleUser();

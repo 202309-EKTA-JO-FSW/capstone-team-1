@@ -1,9 +1,9 @@
 "use client";
 import { useState } from "react";
 import SignupForm from "./SignupForm";
-import SignupMessage from "./SignupMessage";
 import Link from "next/link";
 import GoogleAuth from "../GoogleAuth";
+import AuthMessage from "../AuthMessage";
 
 const Signup = () => {
   const [signupRes, setSignupRes] = useState("");
@@ -29,7 +29,7 @@ const Signup = () => {
         </span>
         {/* login messages comes from backend */}
       </p>
-      <SignupMessage signupRes={signupRes} className="static" />
+      <AuthMessage resMsg={signupRes} msg={"Signup successful"} />
     </div>
   );
 };

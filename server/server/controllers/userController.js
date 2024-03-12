@@ -27,6 +27,7 @@ const updateUserProfile = async (req, res) => {
     age,
     gender,
     phoneNumber,
+    isAdmin,
     country,
     city,
     street,
@@ -50,6 +51,8 @@ const updateUserProfile = async (req, res) => {
         return res.status(500).json({ message: "Failed to upload image" });
       }
     }
+    console.log(user.isAdmin, isAdmin);
+
     // update user
     user.firstName = firstName || user.firstName;
     user.lastName = lastName || user.lastName;
@@ -58,7 +61,9 @@ const updateUserProfile = async (req, res) => {
     user.avatar = imageUrl || user.avatar;
     user.age = age || user.age;
     user.gender = gender || user.gender;
-    user.phone_number = phoneNumber || user.phone_number;
+    user.isAdmin = isAdmin !== undefined ? isAdmin : user.isAdmin;
+    user.phoneNumber = phoneNumber || user.phoneNumber;
+
     if (user.address) {
       user.address = {
         country: country || user.address.country,

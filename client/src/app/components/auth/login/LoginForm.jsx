@@ -1,6 +1,5 @@
 "use client";
-
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Btn from "../../Btn";
 import { fetchLogin } from "@/app/lib/data";
 import { useRouter } from "next/navigation";
@@ -12,7 +11,6 @@ const LoginForm = ({ onLogin }) => {
   };
   const router = useRouter();
   const [form, setForm] = useState(formData);
-  const [login, setLogin] = useState({});
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,7 +23,7 @@ const LoginForm = ({ onLogin }) => {
 
     // if it loged in succeccfully refresh the form and redirect to home page
     if (loginRef.user) {
-      setLogin(loginRef);
+      localStorage.setItem("user", JSON.stringify(loginRef.user));
       setForm(formData);
       router.push("/");
     }
@@ -39,13 +37,6 @@ const LoginForm = ({ onLogin }) => {
       [name]: value,
     }));
   };
-
-  // check if the user login succefully to store the details in local storage
-  useEffect(() => {
-    if (login.user) {
-      localStorage.setItem("user", JSON.stringify(login.user));
-    }
-  }, [login]);
 
   return (
     <div className="flex flex-col justify-center items-center w-full sm:w-[500px] p-10">

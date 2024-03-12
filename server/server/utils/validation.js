@@ -6,12 +6,20 @@ const validationSignup = (body) => {
     throw Error("First Name is required");
   } else if (!body.lastName) {
     throw Error("Last Name is required");
-  } else if (!validator.isEmail(email)) {
+  } else if (!validator.isEmail(body.email)) {
     throw new Error("Invalid Email");
-  } else if (!validator.isStrongPassword(password)) {
+  } else if (!validator.isStrongPassword(body.password)) {
     throw new Error("Password is not strong enough");
   } else if (!body.phoneNumber) {
     throw Error("Phone Number is required");
+  } else if (!body.country) {
+    throw Error("Country is required");
+  } else if (!body.city) {
+    throw Error("City is required");
+  } else if (!body.street) {
+    throw Error("Street is required");
+  } else if (!body.zipcode) {
+    throw Error("Zipcode is required");
   }
 };
 

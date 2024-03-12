@@ -2,8 +2,8 @@
 import React, { useState } from "react";
 import LoginForm from "./LoginForm";
 import Link from "next/link";
-import LoginMessage from "./LoginMessage";
 import GoogleAuth from "../GoogleAuth";
+import AuthMessage from "../AuthMessage";
 
 const Login = () => {
   const [loginRes, setLoginRes] = useState("");
@@ -30,7 +30,7 @@ const Login = () => {
         </span>
         {/* login messages comes from backend */}
       </p>
-      <LoginMessage loginRes={loginRes} />
+      <AuthMessage resMsg={loginRes} msg={"Login successful"} />
     </div>
   );
 };

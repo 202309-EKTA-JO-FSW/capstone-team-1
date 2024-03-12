@@ -3,8 +3,9 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Btn from "../../Btn";
+import { fetchUserUpdate } from "@/app/lib/data";
 
-const SignupInfoForm = () => {
+const SignupInfoForm = ({ onSignup }) => {
   const formData = {
     phoneNumber: "",
     country: "",
@@ -15,7 +16,26 @@ const SignupInfoForm = () => {
   };
   const router = useRouter();
   const [form, setForm] = useState(formData);
-  const handleSubmit = () => {};
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    let signup;
+    if (form.phoneNumber && form.country && form.street && form.zipcode) {
+      signup = await fetchUserUpdate(form);
+      // send the signup message to parent component
+      onSignup(signup.message);
+    } else {
+      onSignup("All field must be filled");
+    }
+
+    // check if there is a user to refresh the page
+    if (signup) {
+      setForm(formData);
+      // redirect the user to home page after signup
+      router.push("/auth-user");
+    }
+  };
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
 
