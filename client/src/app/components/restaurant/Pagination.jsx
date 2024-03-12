@@ -1,17 +1,25 @@
 import React from "react";
 
-function Pagination({ limit, length }) {
+function Pagination({ totalPages, currentPage, handlePagination }) {
   const paginationNumbers = [];
-  console.log("limit", limit);
-  console.log("length", length);
-  for (let i = 1; i <= Math.ceil(length / limit); i++) {
+  for (let i = 1; i <= totalPages; i++) {
     paginationNumbers.push(i);
-    console.log("pagination", paginationNumbers);
   }
+
   return (
-    <div className="pagination">
+    <div className="pagination flex justify-center items-center space-x-2 mt-8">
       {paginationNumbers.map((pageNumber) => (
-        <button key={pageNumber}>{pageNumber}</button>
+        <button
+          key={pageNumber}
+          onClick={() => handlePagination(pageNumber)}
+          className={`px-3 py-1 rounded-md focus:outline-none ${
+            currentPage === pageNumber
+              ? "bg-main-green text-white"
+              : "bg-white text-bg-main-green hover:bg-opacity-75"
+          }`}
+        >
+          {pageNumber}
+        </button>
       ))}
     </div>
   );

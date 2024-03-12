@@ -4,49 +4,45 @@ import { fetchRestaurants, searchRestaurant } from "@/app/lib/data";
 import Pagination from "./Pagination";
 import RestaurantCard from "./RestaurantCard";
 import Search from "./Search";
+
 function Restaurant() {
   const [restaurants, setRestaurants] = useState([]);
   const [searchTxt, setSearchTxt] = useState("");
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [loading, setLoading] = useState(true);
-  // const [hasMore, setHasMore] = useState(true);
+  const [totalPages, setTotalPages] = useState(1);
 
   const getRestaurants = async () => {
     try {
       let restaurantsData = [];
-      console.log(searchTxt);
       if (searchTxt) {
         restaurantsData = await searchRestaurant(searchTxt, page, limit);
       } else {
         restaurantsData = await fetchRestaurants(page, limit);
-        console.log(restaurantsData);
       }
-      setRestaurants(restaurantsData);
+      setRestaurants(restaurantsData.restaurants);
+      setTotalPages(restaurantsData.totalPages);
     } catch (error) {
       console.error("Error getting restaurants:", error.message);
     } finally {
-      setLoading(false); // Update loading state when data fetching is completed
+      setLoading(false);
     }
   };
+
   useEffect(() => {
     getRestaurants();
   }, [searchTxt, page, limit]);
 
   const handleSearchValue = (event) => {
     setSearchTxt(event.target.value);
-    console.log(searchTxt);
     setPage(1);
   };
-  const handleSearchSubmit = () => {
-    getRestaurants();
-  };
-  /* const handleNextPage = () => {
-      setPage((prevPage) => prevPage + 1);
-    }; */
+
   const handlePagination = (pageNumber) => {
     setPage(pageNumber);
   };
+
   return (
     <div className="flex flex-col justify-start items-center p-4 md:p-8 lg:p-12 w-full">
       <h1 className="flex justify-center font-bold text-5xl w-full">
@@ -56,23 +52,28 @@ function Restaurant() {
         <Search
           value={searchTxt}
           onChange={handleSearchValue}
-          onSubmit={handleSearchSubmit}
+          onSubmit={getRestaurants}
         />
       </div>
-      <div className="relative w-full flex flex-wrap md:flex-row md:justify-center md:p-8">
-        {loading ? (
-          <p className="font-bold text-2xl">Loading...</p>
-        ) : restaurants.length > 0 ? (
-          restaurants.map((restaurant) => (
-            <RestaurantCard key={restaurant._id} restaurant={restaurant} />
-          ))
-        ) : (
-          <p className="font-bold text-2xl">No restaurants found</p>
-        )}
-      </div>
-      <div className="flex justify-center items-center mt-8">
-        length={restaurants.length} limit={limit} page={page} handlePagination=
-        {handlePagination}
+      <div className="flex-grow w-full relative">
+        <div className="relative w-full flex flex-wrap md:flex-row md:justify-start md:p-8">
+          {loading ? (
+            <p className="font-bold text-2xl">Loading...</p>
+          ) : restaurants.length > 0 ? (
+            restaurants.map((restaurant) => (
+              <RestaurantCard key={restaurant._id} restaurant={restaurant} />
+            ))
+          ) : (
+            <p className="font-bold text-2xl">No restaurants found</p>
+          )}
+        </div>
+        <div className="w-full flex justify-center items-center mt-8 fixed bottom-0">
+          <Pagination
+            totalPages={totalPages}
+            currentPage={page}
+            handlePagination={handlePagination}
+          />
+        </div>
       </div>
     </div>
   );
