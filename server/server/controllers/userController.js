@@ -43,13 +43,12 @@ const updateUserProfile = async (req, res) => {
     let imageUrl;
     if (req.file) {
       // delete the old image and then update the new one
-      deleteImage(user.avatar);
+      if (user.avatar) deleteImage(user.avatar);
       imageUrl = await uploadImage(req.file, "userProfileAvatar");
       if (!imageUrl) {
         return res.status(500).json({ message: "Failed to upload image" });
       }
     }
-    console.log(user.isAdmin, isAdmin);
 
     // update user
     user.firstName = firstName || user.firstName;
@@ -59,15 +58,10 @@ const updateUserProfile = async (req, res) => {
     user.avatar = imageUrl || user.avatar;
     user.isAdmin = isAdmin !== undefined ? isAdmin : user.isAdmin;
     user.phoneNumber = phoneNumber || user.phoneNumber;
-
-    if (user.address) {
-      user.address = {
-        country: country || user.address.country,
-        city: city || user.address.city,
-        street: street || user.address.street,
-        zipcode: zipcode || user.address.zipcode,
-      };
-    }
+    user.address.country = country || user.address.country;
+    user.address.city = city || user.address.city;
+    user.address.street = street || user.address.street;
+    user.address.zipcode = zipcode || user.address.zipcode;
 
     await user.save();
 
