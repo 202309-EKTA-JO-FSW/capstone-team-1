@@ -90,7 +90,7 @@ router.get(
     if (user.phoneNumber === "0") {
       return res.status(200).redirect("http://localhost:3000/signup-info");
     } else {
-      return res.status(200).redirect("http://localhost:3000");
+      return res.status(200).redirect("http://localhost:3000/auth-user");
     }
   }
 );
