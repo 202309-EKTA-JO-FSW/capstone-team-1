@@ -32,7 +32,7 @@ useEffect(() => {
           
           {/* conditional rendering of My Restaurants if admin is logged in */}
           {(user && user.isAdmin) &&
-           <Link href="/myrestaurant" className= "md:ml-3  text-black hover:text-main-green">My Restaurants</Link>
+           <Link href="/myrestaurant" className= "md:ml-3  text-black hover:text-main-green">My Restaurant</Link>
           }
           
         </section>
