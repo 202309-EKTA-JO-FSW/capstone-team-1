@@ -4,7 +4,6 @@ import Logo from "./navbar/Logo";
 import Btn from "./navbar/Btn";
 import NavLinks from "./navbar/NavLinks";
 import {GiShoppingCart} from "react-icons/gi"
-import { RxAvatar } from "react-icons/rx";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -12,7 +11,10 @@ import Image from "next/image";
 
 const NavBar = () => {
 
-  const [user, setUser] = useState({name: "Hala", avatar:"https://illustoon.com/photo/dl/7257.png", isAdmin:true}) 
+  const [user, setUser] = useState(()=>{
+    const storedUser = JSON.parse(localStorage.getItem('user'))
+    return storedUser || {firstname: "Hala", isAdmin:true}
+  });
 
 useEffect(() => {
   const user = JSON.parse(localStorage.getItem('user'));
@@ -22,7 +24,7 @@ useEffect(() => {
 }, []);
 
 
-
+const placeholderImage = "https://www.pngall.com/wp-content/uploads/12/Avatar-Profile-PNG-Image.png"
   return (
     
     <nav className="flex justify-between  w-full sticky top-0 text-black">
@@ -41,18 +43,17 @@ useEffect(() => {
            <GiShoppingCart className="text-3xl  hover:text-main-green"/>
           </Link>
           {/* condtional rendering of Login button or name of user if logged in */}
-          {user.name
+          {user.firstname
           ? <div className= "flex flex-wrap items-center justify-between " >
             <Link href={"/profile"}>
             {/* conditional rendering of avatar */}
-            {user.avatar
-            ? <div
-            className='border border-indigo-200 rounded-full overflow-clip w-[30px] h-[30px]'
-          ><Image src={user.avatar} alt="User Avatar" width={30} height={30}/></div>
-            : <RxAvatar className="text-3xl pr-2"/>}
+            <Image style={{borderRadius: "30px"}} src={user.avatar|| placeholderImage} alt="User Avatar" width={30} height={30}/>
             </Link>
             <Link href={"/profile"}>
-            <p className="hover:text-main-green pr-2 pl-2">Hello, {user.name}</p>
+            <p className="hover:text-main-green pr-2 pl-2">Hello, {user.firstname}</p>
+            </Link>
+            <Link href={"/logout"}>
+              <Btn text={"LOGOUT"}/>
             </Link>
             </div>
           : <Link href="/login">
