@@ -171,7 +171,7 @@ const deleteItem = async (req, res) => {
 
     if (menuItem.image) {
       // delete image from firebase storage
-      deleteImage(menuItem.image);
+      if (menuItem.image) deleteImage(menuItem.image);
     }
 
     // delete item by id
@@ -211,8 +211,17 @@ const createRestaurant = async (req, res) => {
     if (!user || !user.isAdmin) {
       return res.status(401).json({ message: "Unauthorized" });
     }
-    if (!name || !description || !cuisine) {
-      return res.status(400).json({ message: "Missing required fields" });
+    if (
+      !name ||
+      !description ||
+      !cuisine ||
+      !phoneNumber ||
+      !country ||
+      !city ||
+      !street ||
+      !zipcode
+    ) {
+      return res.status(400).json({ message: "All fields are required" });
     }
 
     let imageUrl;
