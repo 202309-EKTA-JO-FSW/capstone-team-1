@@ -46,7 +46,6 @@ const addNewItem = async (req, res) => {
     const newMenuItem = await MenuItem.create({
       name,
       description,
-      image,
       price,
       type,
       image: imageUrl,
@@ -105,7 +104,7 @@ const updateItem = async (req, res) => {
     let imageUrl;
     if (req.file) {
       // delete the old image and then update the new one
-      deleteImage(menuItem.image);
+      if (menuItem.image) deleteImage(menuItem.image);
       imageUrl = await uploadImage(req.file, "menuItemImages");
       if (!imageUrl) {
         return res.status(500).json({ message: "Failed to upload image" });
@@ -172,7 +171,7 @@ const deleteItem = async (req, res) => {
 
     if (menuItem.image) {
       // delete image from firebase storage
-      deleteImage(menuItem.image);
+      if (menuItem.image) deleteImage(menuItem.image);
     }
 
     // delete item by id
@@ -194,7 +193,16 @@ const deleteItem = async (req, res) => {
 //create restaurant
 const createRestaurant = async (req, res) => {
   const adminId = req.userId;
-  const { name, description, cuisine, contact, image, address } = req.body;
+  const {
+    name,
+    description,
+    cuisine,
+    phoneNumber,
+    country,
+    city,
+    street,
+    zipcode,
+  } = req.body;
   try {
     // validate restaurant feilds
     validateRestaurant(req.body);
@@ -203,17 +211,40 @@ const createRestaurant = async (req, res) => {
     if (!user || !user.isAdmin) {
       return res.status(401).json({ message: "Unauthorized" });
     }
-    if (!name || !description || !cuisine) {
-      return res.status(400).json({ message: "Missing required fields" });
+    if (
+      !name ||
+      !description ||
+      !cuisine ||
+      !phoneNumber ||
+      !country ||
+      !city ||
+      !street ||
+      !zipcode
+    ) {
+      return res.status(400).json({ message: "All fields are required" });
     }
+
+    let imageUrl;
+    if (req.file) {
+      imageUrl = await uploadImage(req.file, "restaurantImage");
+      if (!imageUrl) {
+        return res.status(500).json({ message: "Failed to upload image" });
+      }
+    }
+
     const newRestaurant = await Restaurant.create({
       name,
       description,
       cuisine,
-      contact,
-      image,
-      address,
+      contact: { phoneNumber },
+      image: imageUrl,
       owner: adminId,
+      address: {
+        country,
+        city,
+        street,
+        zipcode,
+      },
     });
     user.restaurant = newRestaurant._id;
     await user.save();
@@ -247,6 +278,18 @@ const getAdminRestaurant = async (req, res) => {
 //update restaurant
 const updateAdminRestaurant = async (req, res) => {
   const adminId = req.userId;
+  const {
+    name,
+    description,
+    cuisine,
+    phoneNumber,
+    email,
+    country,
+    city,
+    street,
+    zipcode,
+  } = req.body;
+
   try {
     const user = await User.findById(adminId);
     if (!user || !user.isAdmin) {
@@ -258,17 +301,42 @@ const updateAdminRestaurant = async (req, res) => {
         .status(404)
         .json({ message: "Restaurant not found, should create a restaurant" });
     }
-    const updatedRestaurant = await Restaurant.findByIdAndUpdate(
-      restaurantId,
-      { $set: req.body },
-      { new: true }
-    );
-    if (!updatedRestaurant) {
+
+    const restaurant = await Restaurant.findById(restaurantId);
+    if (!restaurant) {
       return res.status(404).json({ message: "Restaurant not found" });
     }
+
+    // get image url
+    // uploadImage arguments uploadImage(imagefile, imageFolder in firebase storage)
+    let imageUrl;
+    if (req.file) {
+      // delete the old image and then update the new one
+      if (restaurant.image) deleteImage(restaurant.image);
+      imageUrl = await uploadImage(req.file, "menuItemImages");
+      if (!imageUrl) {
+        return res.status(500).json({ message: "Failed to upload image" });
+      }
+    }
+
+    // update restaurant
+    restaurant.name = name || restaurant.name;
+    restaurant.description = description || restaurant.description;
+    restaurant.cuisine = cuisine || restaurant.cuisine;
+    restaurant.contact.phoneNumber =
+      phoneNumber || restaurant.contact.phoneNumber;
+    restaurant.contact.email = email || restaurant.contact.email;
+    restaurant.image = imageUrl || restaurant.image;
+    restaurant.address.country = country || restaurant.address.country;
+    restaurant.address.city = city || restaurant.address.city;
+    restaurant.address.street = street || restaurant.address.street;
+    restaurant.address.zipcode = zipcode || restaurant.address.zipcode;
+
+    await restaurant.save();
+
     res.status(200).json({
       message: "Update restaurant successful",
-      results: updatedRestaurant,
+      results: restaurant,
     });
   } catch (error) {
     return res.status(500).json({ message: error.message });

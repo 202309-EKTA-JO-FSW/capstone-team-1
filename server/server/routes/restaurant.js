@@ -4,9 +4,9 @@ const restaurantController = require("../controllers/restaurantController");
 
 // restaurant
 router.get("/", restaurantController.getAllRestaurants);
-router.get("/:resId", restaurantController.getOneRestaurant);
 router.get("/search", restaurantController.searchRestaurant);
 router.get("/filter", restaurantController.filterRestaurant);
+router.get("/:resId", restaurantController.getOneRestaurant);
 
 // menuItems
 router.get("/:resId/menuItems", restaurantController.getAllRestaurantMenuItems);

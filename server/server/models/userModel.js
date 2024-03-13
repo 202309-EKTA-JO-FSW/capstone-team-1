@@ -68,13 +68,6 @@ const userSchema = new Schema(
     providerId: {
       type: String,
     },
-    age: {
-      type: Number,
-    },
-    gender: {
-      type: String,
-      enum: ["male", "female"],
-    },
     avatar: {
       type: String,
     },
