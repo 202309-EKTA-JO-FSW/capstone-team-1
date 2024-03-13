@@ -71,6 +71,7 @@ router.get(
     // store token in cookie
     res.cookie("token", token, {
       secure: true,
+      httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24,
     });
 
@@ -84,6 +85,8 @@ router.get(
 
     const userInfoToken = jwt.sign(userInfo, process.env.SECRET_KEY);
     res.cookie("user", userInfoToken, {
+      secure: true,
+      httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24,
     });
 
@@ -95,7 +98,7 @@ router.get(
   }
 );
 
-router.get("/me", authToken, (req, res) => {
+router.get("/me", (req, res) => {
   try {
     const user = req.user;
     console.log(user);
@@ -108,15 +111,13 @@ router.get("/me", authToken, (req, res) => {
 
 function authToken(req, res, next) {
   try {
-    const { authorization } = req.headers;
+    const token = req.cookies.user;
 
-    if (!authorization) {
+    // Check if token exists
+    if (!token) {
       return res.status(401).json({ message: "Please login" });
     }
-    console.log(authorization);
 
-    // get token
-    const token = authorization.split(" ")[1];
     // decode the token by verify it with secret key we user when token was created
     decodedUser = jwt.verify(token, process.env.SECRET_KEY);
 
