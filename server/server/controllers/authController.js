@@ -28,6 +28,7 @@ const login = async (req, res) => {
     // store token in cookie
     res.cookie("token", token, {
       secure: true,
+      httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24,
     });
 
@@ -108,6 +109,7 @@ const signup = async (req, res) => {
     // store token in cookie
     res.cookie("token", token, {
       secure: true,
+      httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24,
     });
 
@@ -136,7 +138,8 @@ const signup = async (req, res) => {
 // logout
 const logout = (req, res) => {
   try {
-    res.clearCookie("jwt");
+    res.clearCookie("token");
+    res.clearCookie("user");
     return res.status(200).json({ message: "Logout successful" });
   } catch (error) {
     // checking if the it's validation error

@@ -58,6 +58,11 @@ const updateUserProfile = async (req, res) => {
     user.avatar = imageUrl || user.avatar;
     user.isAdmin = isAdmin !== undefined ? isAdmin : user.isAdmin;
     user.phoneNumber = phoneNumber || user.phoneNumber;
+
+    if (!user.address) {
+      user.address = {};
+    }
+
     user.address.country = country || user.address.country;
     user.address.city = city || user.address.city;
     user.address.street = street || user.address.street;

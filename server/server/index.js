@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const apiRoutes = require("./routes");
+const cookieParser = require("cookie-parser");
 
 require("dotenv").config();
 
@@ -14,9 +15,15 @@ const port =
     ? process.env.NODE_LOCAL_TEST_PORT
     : process.env.NODE_LOCAL_PORT;
 
-app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.use(cookieParser());
 app.use(passport.initialize());
 
 // main route
