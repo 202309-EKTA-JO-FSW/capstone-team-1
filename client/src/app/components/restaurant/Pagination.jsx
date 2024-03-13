@@ -1,6 +1,9 @@
 import React from "react";
 
 function Pagination({ totalPages, currentPage, handlePagination }) {
+  if (totalPages <= 1) {
+    return null; // Don't render pagination if there's only one page or less
+  }
   const paginationNumbers = [];
   for (let i = 1; i <= totalPages; i++) {
     paginationNumbers.push(i);

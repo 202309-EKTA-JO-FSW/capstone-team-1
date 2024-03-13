@@ -18,7 +18,7 @@ function RestaurantCard({ restaurant }) {
             <p className="text-gray-600 mb-2">{restaurant.cuisine}</p>
             <div className="flex items-center">
               <svg
-                className="w-4 h-4 text-yellow-500 mr-1"
+                className="w-9 h-5 text-yellow-500 mr-1"
                 fill="currentColor"
                 viewBox="0 0 20 20"
               >
