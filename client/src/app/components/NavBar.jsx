@@ -27,7 +27,7 @@ useEffect(() => {
 const placeholderImage = "https://www.pngall.com/wp-content/uploads/12/Avatar-Profile-PNG-Image.png"
   return (
     
-    <nav className="flex justify-between  w-full sticky top-0 text-black">
+    <nav className="flex justify-between  w-full sticky top-0 text-black [font-family:'Inter-Medium',Helvetica] text-lg">
         <section className="flex items-center gap-2 flex-wrap  justify-between pl-3 pt-2 py-2">
           <Logo />
           <NavLinks/>
@@ -38,7 +38,7 @@ const placeholderImage = "https://www.pngall.com/wp-content/uploads/12/Avatar-Pr
           }
           
         </section>
-        <section className="flex items-center gap-4 flex-wrap  justify-between pr-3 pt-2 py-2">
+        <section className="flex items-center gap-2 flex-wrap pr-3 pt-2 py-2">
           <Link href="/checkout">
            <GiShoppingCart className="text-3xl  hover:text-main-green"/>
           </Link>
@@ -51,9 +51,6 @@ const placeholderImage = "https://www.pngall.com/wp-content/uploads/12/Avatar-Pr
             </Link>
             <Link href={"/profile"}>
             <p className="hover:text-main-green pr-2 pl-2">Hello, {user.firstname}</p>
-            </Link>
-            <Link href={"/logout"}>
-              <Btn text={"LOGOUT"}/>
             </Link>
             </div>
           : <Link href="/login">
