@@ -43,7 +43,7 @@ const placeholderImage = "https://www.pngall.com/wp-content/uploads/12/Avatar-Pr
            <GiShoppingCart className="text-3xl  hover:text-main-green"/>
           </Link>
           {/* condtional rendering of Login button or name of user if logged in */}
-          {user.firstname
+          {user
           ? <div className= "flex flex-wrap items-center justify-between " >
             <Link href={"/profile"}>
             {/* conditional rendering of avatar */}
