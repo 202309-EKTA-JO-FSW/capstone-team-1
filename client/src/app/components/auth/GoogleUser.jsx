@@ -8,7 +8,6 @@ const GoogleUser = () => {
   useEffect(() => {
     const getData = async () => {
       const user = await fetchGoogleUser();
-      console.log(user);
       if (user) {
         localStorage.setItem("user", JSON.stringify(user));
         router.push("/");

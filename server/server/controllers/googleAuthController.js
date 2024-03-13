@@ -98,10 +98,10 @@ router.get(
   }
 );
 
-router.get("/me", (req, res) => {
+router.get("/me", authToken, (req, res) => {
   try {
     const user = req.user;
-    console.log(user);
+
     if (!user) return res.status(401).send("Invalid User");
     res.status(200).json(user);
   } catch (err) {
@@ -112,7 +112,6 @@ router.get("/me", (req, res) => {
 function authToken(req, res, next) {
   try {
     const token = req.cookies.user;
-
     // Check if token exists
     if (!token) {
       return res.status(401).json({ message: "Please login" });

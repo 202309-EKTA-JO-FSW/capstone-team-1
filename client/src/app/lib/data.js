@@ -1,4 +1,3 @@
-const Cookies = require("js-cookie");
 const {
   signupUrl,
   loginUrl,
@@ -47,16 +46,7 @@ export const fetchLogin = async (form) => {
 // google auth
 export const fetchGoogleUser = async () => {
   try {
-    const token = Cookies.get("user");
-
-    const res = await fetch(getGoogleUser, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-    });
-
+    const res = await fetch(getGoogleUser, { credentials: "include" });
     return res.json();
   } catch (error) {
     console.error(error.message);
@@ -67,12 +57,9 @@ export const fetchGoogleUser = async () => {
 // update user profile
 export const fetchUserUpdate = async (form) => {
   try {
-    const token = Cookies.get("token");
-
     const res = await fetch(userProfileUrl, {
       method: "PUT",
       headers: {
-        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(form),
