@@ -2,13 +2,15 @@ import React from "react";
 import Card from "../Card";
 import Link from "next/link";
 import Image from "next/image";
+import restaurantPlateSVG from "../../../../public/image/restaurant-plate-svg.svg";
+import restaurantImg from "../../../../public/image/restaurantImg.jpg";
 function RestaurantCard({ restaurant }) {
   return (
-    <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/5 p-3 ">
+    <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/5 p-6 ">
       <Link href={`/restaurant/${restaurant._id}`}>
         <Card>
           <Image
-            src={restaurant.image}
+            src={restaurant.image || restaurantPlateSVG}
             alt={restaurant.name}
             objectFit="cover"
             className="w-full h-40 object-cover object-center rounded-full"
