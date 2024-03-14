@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import Logo from "./navbar/Logo";
 import Btn from "./navbar/Btn";
-import NavLinks from "./navbar/NavLinks";
 import { GiShoppingCart } from "react-icons/gi";
 import Link from "next/link";
 import Image from "next/image";
