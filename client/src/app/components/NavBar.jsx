@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Logo from "./navbar/Logo";
 import Btn from "./navbar/Btn";
 import { GiShoppingCart } from "react-icons/gi";
@@ -9,10 +9,11 @@ import purplesqr from "../../../public/7257.png";
 import placeholderImage from "../../../public/Avatar-Profile-Image.png";
 
 const NavBar = () => {
-  const [user, setUser] = useState(() => {
-    const storedUser = JSON.parse(localStorage.getItem("user"));
-    return storedUser || { firstName: "Hala", isAdmin: true };
-  });
+  const [user, setUser] = useState({});
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    setUser(user);
+  }, []);
 
   return (
     <nav className="flex justify-between  w-full sticky top-0 text-black [font-family:'Inter-Medium',Helvetica] text-lg">
