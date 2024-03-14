@@ -1,59 +1,77 @@
-'use client'
-import React, {useState} from "react";
+"use client";
+import React, { useState } from "react";
 import Logo from "./navbar/Logo";
 import Btn from "./navbar/Btn";
 import NavLinks from "./navbar/NavLinks";
-import {GiShoppingCart} from "react-icons/gi"
+import { GiShoppingCart } from "react-icons/gi";
 import Link from "next/link";
 import Image from "next/image";
-import purplesqr from "../../../public/7257.png"
-import placeholderImage from "../../../public/Avatar-Profile-Image.png"
+import purplesqr from "../../../public/7257.png";
+import placeholderImage from "../../../public/Avatar-Profile-Image.png";
 
 const NavBar = () => {
-
-  const [user, setUser] = useState(()=>{
-    const storedUser = JSON.parse(localStorage.getItem('user'))
-    return storedUser || {firstName: "Hala", isAdmin:true}
+  const [user, setUser] = useState(() => {
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    return storedUser || { firstName: "Hala", isAdmin: true };
   });
 
-
- 
-
   return (
-    
     <nav className="flex justify-between  w-full sticky top-0 text-black [font-family:'Inter-Medium',Helvetica] text-lg">
-        <section className="flex items-center gap-2 flex-wrap  justify-between pl-3 pt-2 py-2">
-          <Logo />
-          <NavLinks/>
-          {/* conditional rendering of My Restaurants if admin is logged in */}
-          {(user && user.isAdmin) &&
-           <Link href="/myrestaurant" className= "md:ml-3  text-black hover:text-main-green">My Restaurant</Link>
-          }
-        </section>
+      <section className="flex items-center gap-2 flex-wrap  justify-between pl-3 pt-2 py-2">
+        <Logo />
 
-        <section className="flex items-center gap-2 flex-wrap pr-3 pt-2 py-2">
-          <Link href="/checkout">
-           <GiShoppingCart className="text-3xl  hover:text-main-green"/>
-          </Link>
-          {/* condtional rendering of Login button or name of user if logged in */}
-          {user
-          ? <div className= "flex flex-wrap items-center justify-between " >
-              <Link href={"/profile"}>
+        {/* List of Links */}
+        <ul className=" md:flex gap-x-3  justify-evenly md:items-center pl-10">
+          <li className="md:ml-3  text-black hover:text-main-green">
+            <Link href={"/"}>Home</Link>
+          </li>
+          <li className="md:ml-3  text-black hover:text-main-green">
+            <Link href={"/restaurants"}>Restaurants</Link>
+          </li>
+          <li className="md:ml-3  text-black hover:text-main-green">
+            <Link href={"/about"}>About Us</Link>
+          </li>
+          {/* conditional rendering of My Restaurants if admin is logged in */}
+          {user && user.isAdmin && (
+            <li className="md:ml-3  text-black hover:text-main-green">
+              <Link href={"/myrestaurant"}>My Restaurant</Link>
+            </li>
+          )}
+        </ul>
+      </section>
+
+      <section className="flex items-center gap-2 flex-wrap pr-3 pt-2 py-2">
+        <Link href="/checkout">
+          <GiShoppingCart className="text-3xl  hover:text-main-green" />
+        </Link>
+        {/* condtional rendering of Login button or name of user if logged in */}
+        {user ? (
+          <div className="flex flex-wrap items-center justify-between ">
+            <Link href={"/profile"}>
               {/* conditional rendering of avatar */}
-                <Image  src={user.avatar|| placeholderImage} alt="User Avatar" width={30} height={30}  className="rounded-full" priority="true"/>
-              </Link>
-              <Link href={"/profile"}>
-                <p className="hover:text-main-green pr-2 pl-2">Hello, {user.firstName}</p>
-              </Link>
-            </div>
-          : <Link href="/login">
-              <Btn text={'LOGIN'}/>
+              <Image
+                src={user.avatar || placeholderImage}
+                alt="User Avatar"
+                width={35}
+                height={35}
+                className="rounded-full"
+                priority="true"
+              />
             </Link>
-          }
-        </section>
-       
+            <Link href={"/profile"}>
+              <p className="hover:text-main-green pr-2 pl-2">
+                Hello, {user.firstName}
+              </p>
+            </Link>
+          </div>
+        ) : (
+          <Link href="/login">
+            <Btn text={"LOGIN"} />
+          </Link>
+        )}
+      </section>
     </nav>
-  )
+  );
 };
 
- export default NavBar;
+export default NavBar;
