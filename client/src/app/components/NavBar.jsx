@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from "react";
+import React, {useState} from "react";
 import Logo from "./navbar/Logo";
 import Btn from "./navbar/Btn";
 import NavLinks from "./navbar/NavLinks";
@@ -16,14 +16,8 @@ const NavBar = () => {
     return storedUser || {firstName: "Hala", isAdmin:true}
   });
 
-useEffect(() => {
-  const user = JSON.parse(localStorage.getItem('user'));
-  if (user) {
-   setUser(user);
-  }
-}, []);
 
-
+ 
 
   return (
     
@@ -46,7 +40,7 @@ useEffect(() => {
           ? <div className= "flex flex-wrap items-center justify-between " >
               <Link href={"/profile"}>
               {/* conditional rendering of avatar */}
-                <Image  src={user.avatar|| placeholderImage} alt="User Avatar" width={30} height={30}  className="rounded-full"/>
+                <Image  src={user.avatar|| placeholderImage} alt="User Avatar" width={30} height={30}  className="rounded-full" priority="true"/>
               </Link>
               <Link href={"/profile"}>
                 <p className="hover:text-main-green pr-2 pl-2">Hello, {user.firstName}</p>
