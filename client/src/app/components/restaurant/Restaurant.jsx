@@ -6,7 +6,7 @@ import RestaurantCard from "./RestaurantCard";
 import Search from "./Search";
 
 function Restaurant() {
-  const [restaurants, setRestaurants] = useState([]);
+  const [restaurants, setRestaurants] = useState([]); // Initialize with an empty array
   const [searchTxt, setSearchTxt] = useState("");
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
@@ -21,7 +21,6 @@ function Restaurant() {
       } else {
         restaurantsData = await fetchRestaurants(page, limit);
       }
-      //console.log("restaurantsData.restaurants", restaurantsData.restaurants);
       setRestaurants(restaurantsData.restaurants);
       setTotalPages(restaurantsData.totalPages);
     } catch (error) {
@@ -60,21 +59,26 @@ function Restaurant() {
         <div className="relative w-full flex flex-wrap md:flex-row md:justify-start md:p-8">
           {loading ? (
             <p className="font-bold text-2xl">Loading...</p>
-          ) : restaurants.length > 0 ? (
+          ) : restaurants && restaurants.length > 0 ? ( // Check if restaurants is not null or undefined
             restaurants.map((restaurant) => (
               <RestaurantCard key={restaurant._id} restaurant={restaurant} />
             ))
           ) : (
-            <p className="font-bold text-2xl">No restaurants found</p>
+            <div className="flex items-center justify-center w-full h-64">
+              <p className="font-bold text-2xl">No restaurants found</p>
+            </div>
           )}
         </div>
-        <div className="w-full flex justify-center items-center mt-8 fixed bottom-0">
-          <Pagination
-            totalPages={totalPages}
-            currentPage={page}
-            handlePagination={handlePagination}
-          />
-        </div>
+        {restaurants &&
+          restaurants.length > 0 && ( // Check if restaurants is not null or undefined
+            <div className="w-full flex justify-center items-center mt-8 fixed bottom-0">
+              <Pagination
+                totalPages={totalPages}
+                currentPage={page}
+                handlePagination={handlePagination}
+              />
+            </div>
+          )}
       </div>
     </div>
   );

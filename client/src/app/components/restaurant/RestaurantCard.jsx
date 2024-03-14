@@ -2,8 +2,8 @@ import React from "react";
 import Card from "../Card";
 import Link from "next/link";
 import Image from "next/image";
-import restaurantPlateSVG from "../../../../public/image/restaurant-plate-svg.svg";
-import restaurantImg from "../../../../public/image/restaurantImg.jpg";
+import restaurantPlateSVG from "../../../../public/image/restaurant-svg.svg";
+
 function RestaurantCard({ restaurant }) {
   return (
     <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/5 p-6 ">
@@ -12,8 +12,8 @@ function RestaurantCard({ restaurant }) {
           <Image
             src={restaurant.image || restaurantPlateSVG}
             alt={restaurant.name}
-            objectFit="cover"
-            className="w-full h-40 object-cover object-center rounded-full"
+            className="w-80 h-50 object-cover object-center rounded-full p-2 "
+            priority="true"
           />
           <div className="p-4">
             <h2 className="text-xl font-semibold mb-2">{restaurant.name}</h2>
