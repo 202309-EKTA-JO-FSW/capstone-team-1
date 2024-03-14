@@ -1,10 +1,7 @@
 const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const {
-  validationSignup,
-  validateEmailAndPassword,
-} = require("../utils/validation");
+const { validationSignup } = require("../utils/validation");
 
 const login = async (req, res) => {
   const { email, password } = req.body;
@@ -29,9 +26,9 @@ const login = async (req, res) => {
     const token = createToken(user._id);
 
     // store token in cookie
-    res.cookie("jwt", token, {
-      httpOnly: true,
+    res.cookie("token", token, {
       secure: true,
+      httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24,
     });
 
@@ -39,8 +36,10 @@ const login = async (req, res) => {
     return res.status(201).json({
       user: {
         email: user.email,
-        name: `${user.first_name} ${user.last_name}`,
+        firstName: user.firstName,
+        lastName: user.lastName,
         avatar: user.avatar,
+        isAdmin: user.isAdmin,
       },
       message: "Login successful",
     });
@@ -62,8 +61,6 @@ const signup = async (req, res) => {
     email,
     password,
     confirmPassword,
-    age,
-    gender,
     phoneNumber,
     country,
     city,
@@ -73,9 +70,6 @@ const signup = async (req, res) => {
   } = req.body;
 
   try {
-    // validate email & password
-    validateEmailAndPassword(email, password);
-
     // validate signup field
     validationSignup(req.body);
 
@@ -99,8 +93,6 @@ const signup = async (req, res) => {
       lastName,
       email,
       password: hashedPassword,
-      age,
-      gender,
       phoneNumber,
       isAdmin,
       address: {
@@ -115,9 +107,9 @@ const signup = async (req, res) => {
     const token = createToken(user._id);
 
     // store token in cookie
-    res.cookie("jwt", token, {
-      httpOnly: true,
+    res.cookie("token", token, {
       secure: true,
+      httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24,
     });
 
@@ -125,10 +117,12 @@ const signup = async (req, res) => {
     return res.status(201).json({
       user: {
         email: user.email,
-        name: `${user.firstName} ${user.lastName}`,
+        firstName: user.firstName,
+        lastName: user.lastName,
         avatar: user.avatar,
+        isAdmin: user.isAdmin,
       },
-      message: "Login successful",
+      message: "Signup successful",
     });
   } catch (error) {
     // checking if the it's validation error
@@ -144,7 +138,8 @@ const signup = async (req, res) => {
 // logout
 const logout = (req, res) => {
   try {
-    res.clearCookie("jwt");
+    res.clearCookie("token");
+    res.clearCookie("user");
     return res.status(200).json({ message: "Logout successful" });
   } catch (error) {
     // checking if the it's validation error

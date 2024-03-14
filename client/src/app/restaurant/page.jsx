@@ -1,7 +1,12 @@
 import React from "react";
+import Restaurant from "../components/restaurant/Restaurant";
 
-const Restaurant = () => {
-  return <div>Restaurant</div>;
+const RestaurantList = () => {
+  return (
+    <section>
+      <Restaurant />
+    </section>
+  );
 };
 
-export default Restaurant;
+export default RestaurantList;

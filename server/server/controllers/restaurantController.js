@@ -1,7 +1,6 @@
 const Restaurant = require("../models/restaurantModel");
 const menuItemModel = require("../models/menuItemModel");
 
-
 // Get all restaurants with pagination
 async function getAllRestaurants(req, res) {
   const page = parseInt(req.query.page) || 1;
@@ -9,13 +8,21 @@ async function getAllRestaurants(req, res) {
   const skip = (page - 1) * limit;
 
   try {
-    const restaurants = await Restaurant.find()
-      .skip(skip)
-      .limit(limit);
+    const totalRestaurants = await Restaurant.countDocuments();
+    const totalPages = Math.ceil(totalRestaurants / limit);
+
+    const restaurants = await Restaurant.find().skip(skip).limit(limit);
+
     if (restaurants.length === 0) {
       return res.status(404).json({ message: "No restaurants found" });
     }
-    res.status(200).json(restaurants);
+
+    res.status(200).json({
+      restaurants,
+      totalRestaurants,
+      totalPages,
+      currentPage: page,
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -45,12 +52,19 @@ async function searchRestaurant(req, res) {
   const skip = (pageNum - 1) * pageSize;
 
   try {
+    const count = await Restaurant.countDocuments({
+      $or: [{ name: regex }, { cuisine: regex }],
+    });
+
+    const totalPages = Math.ceil(count / pageSize);
+
     const restaurants = await Restaurant.find({
       $or: [{ name: regex }, { cuisine: regex }],
     })
       .skip(skip)
       .limit(pageSize);
-    res.status(200).json(restaurants);
+
+    res.status(200).json({ restaurants, totalPages });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -72,8 +86,6 @@ async function filterRestaurant(req, res) {
     res.status(500).json({ message: error.message });
   }
 }
-
-
 
 // get all MenuItems for chosen restaurant w/ pagination
 const getAllRestaurantMenuItems = async (req, res) => {
@@ -140,13 +152,12 @@ const searchRestaurantMenuItems = async (req, res) => {
   const page = parseInt(pageNum) || 0;
   const itemsPerPage = parseInt(offset) || 10;
   try {
-
     const searchResult = await menuItemModel
       .find({
         $or: [
           { type: { $regex: search.toString(), $options: "i" } },
-          { name: { $regex: search.toString(), $options: "i" } }
-        ]
+          { name: { $regex: search.toString(), $options: "i" } },
+        ],
       })
       .skip(page * itemsPerPage)
       .limit(itemsPerPage);
@@ -164,5 +175,5 @@ module.exports = {
   getAllRestaurantMenuItems,
   getOneRestaurantMenuItem,
   filterRestaurantMenuItems,
-  searchRestaurantMenuItems
+  searchRestaurantMenuItems,
 };
