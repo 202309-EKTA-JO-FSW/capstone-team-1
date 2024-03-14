@@ -3,6 +3,7 @@ const {
   loginUrl,
   getGoogleUser,
   userProfileUrl,
+  restaurantUrl,
 } = require("./utils");
 
 // signup
@@ -70,5 +71,31 @@ export const fetchUserUpdate = async (form) => {
   } catch (error) {
     console.error(error.message);
     return error.message;
+  }
+};
+
+// fetch restaurant
+export const fetchRestaurants = async (page, limit) => {
+  try {
+    const url = `${restaurantUrl}?page=${page}&limit=${limit}`;
+    const response = await fetch(url);
+    const restaurants = await response.json();
+    return restaurants;
+  } catch (error) {
+    console.error("Error getting restaurants:", error.message);
+    throw error;
+  }
+};
+
+// search restaurant
+export const searchRestaurant = async (search, page, limit) => {
+  try {
+    const url = `${restaurantUrl}/search?search=${search}&page=${page}&limit=${limit}`;
+    const response = await fetch(url);
+    const restaurants = await response.json();
+    return restaurants;
+  } catch (error) {
+    console.error("Error searching restaurants:", error.message);
+    throw error;
   }
 };
