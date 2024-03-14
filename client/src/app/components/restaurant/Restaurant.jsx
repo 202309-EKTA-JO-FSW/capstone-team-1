@@ -71,7 +71,7 @@ function Restaurant() {
         </div>
         {restaurants &&
           restaurants.length > 0 && ( // Check if restaurants is not null or undefined
-            <div className="w-full flex justify-center items-center mt-8 fixed bottom-0">
+            <div className="w-full flex justify-center items-center mt-8 ">
               <Pagination
                 totalPages={totalPages}
                 currentPage={page}
