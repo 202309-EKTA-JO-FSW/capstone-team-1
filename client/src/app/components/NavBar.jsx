@@ -1,18 +1,18 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Logo from "./navbar/Logo";
-import Btn from "./navbar/Btn";
 import { GiShoppingCart } from "react-icons/gi";
 import Link from "next/link";
-import Image from "next/image";
-import purplesqr from "../../../public/7257.png";
-import placeholderImage from "../../../public/Avatar-Profile-Image.png";
+import User from "./navbar/User";
 
 const NavBar = () => {
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    setUser(user);
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    setUser(storedUser);
+    setLoading(false);
   }, []);
 
   return (
@@ -26,7 +26,7 @@ const NavBar = () => {
             <Link href={"/"}>Home</Link>
           </li>
           <li className="md:ml-3  text-black hover:text-main-green">
-            <Link href={"/restaurants"}>Restaurants</Link>
+            <Link href={"/restaurant"}>Restaurants</Link>
           </li>
           <li className="md:ml-3  text-black hover:text-main-green">
             <Link href={"/about"}>About Us</Link>
@@ -34,42 +34,23 @@ const NavBar = () => {
           {/* conditional rendering of My Restaurants if admin is logged in */}
           {user && user.isAdmin && (
             <li className="md:ml-3  text-black hover:text-main-green">
-              <Link href={"/myrestaurant"}>My Restaurant</Link>
+              <Link href={"/my-restaurant"}>My Restaurant</Link>
             </li>
           )}
         </ul>
       </section>
 
-      <section className="flex items-center gap-2 flex-wrap pr-3 pt-2 py-2">
-        <Link href="/checkout">
-          <GiShoppingCart className="text-3xl  hover:text-main-green" />
-        </Link>
-        {/* condtional rendering of Login button or name of user if logged in */}
-        {user ? (
-          <div className="flex flex-wrap items-center justify-between ">
-            <Link href={"/profile"}>
-              {/* conditional rendering of avatar */}
-              <Image
-                src={user.avatar || placeholderImage}
-                alt="User Avatar"
-                width={35}
-                height={35}
-                className="rounded-full"
-                priority="true"
-              />
-            </Link>
-            <Link href={"/profile"}>
-              <p className="hover:text-main-green pr-2 pl-2">
-                Hello, {user.firstName}
-              </p>
-            </Link>
-          </div>
-        ) : (
-          <Link href="/login">
-            <Btn text={"LOGIN"} />
+      {loading ? (
+        <div></div>
+      ) : (
+        <section className="flex items-center gap-2 flex-wrap pr-3 pt-2 py-2">
+          {/* condtional rendering of Login button or name of user if logged in */}
+          <Link href="/checkout">
+            <GiShoppingCart className="text-3xl  hover:text-main-green" />
           </Link>
-        )}
-      </section>
+          <User user={user} />
+        </section>
+      )}
     </nav>
   );
 };
