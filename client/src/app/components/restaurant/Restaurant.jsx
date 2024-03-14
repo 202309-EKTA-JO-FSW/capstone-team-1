@@ -4,6 +4,7 @@ import { fetchRestaurants, searchRestaurant } from "@/app/lib/data";
 import Pagination from "./Pagination";
 import RestaurantCard from "./RestaurantCard";
 import Search from "./Search";
+import Link from "next/link";
 
 function Restaurant() {
   const [restaurants, setRestaurants] = useState([]); // Initialize with an empty array
@@ -61,7 +62,9 @@ function Restaurant() {
             <p className="font-bold text-2xl">Loading...</p>
           ) : restaurants && restaurants.length > 0 ? ( // Check if restaurants is not null or undefined
             restaurants.map((restaurant) => (
-              <RestaurantCard key={restaurant._id} restaurant={restaurant} />
+              <Link href={`/restaurant/${restaurant._id}`}>
+                <RestaurantCard key={restaurant._id} restaurant={restaurant} />
+              </Link>
             ))
           ) : (
             <div className="flex items-center justify-center w-full h-64">

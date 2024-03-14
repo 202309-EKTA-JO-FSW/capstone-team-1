@@ -3,7 +3,7 @@ const {
   loginUrl,
   getGoogleUser,
   userProfileUrl,
-  restaurantUrl
+  restaurantUrl,
 } = require("./utils");
 
 // signup
@@ -71,7 +71,6 @@ export const fetchUserUpdate = async (form) => {
   } catch (error) {
     console.error(error.message);
     return error.message;
-
   }
 };
 
@@ -99,3 +98,4 @@ export const searchRestaurant = async (search, page, limit) => {
     console.error("Error searching restaurants:", error.message);
     throw error;
   }
+};
