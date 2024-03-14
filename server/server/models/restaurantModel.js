@@ -35,6 +35,7 @@ const restaurantSchema = new Schema(
       required: true,
     },
     contact: {
+      phoneNumber: String,
       email: String,
       ig: String,
       facebook: String,

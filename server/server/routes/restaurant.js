@@ -23,9 +23,4 @@ router.get(
   restaurantController.searchRestaurantMenuItems
 );
 
-router.get("/", async (req, res) => {
-  const restaurant = await Restuarnat.find();
-  return res.json(restaurant);
-});
-
 module.exports = router;
