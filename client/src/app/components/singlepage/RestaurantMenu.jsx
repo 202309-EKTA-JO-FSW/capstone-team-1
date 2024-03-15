@@ -5,14 +5,18 @@ import { fetchMenuItem } from "@/app/lib/data";
 
 const RestaurantMenu = ({ id }) => {
   const [menuItems, setMenuItems] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true);
         const items = await fetchMenuItem(id);
         setMenuItems(items);
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching menu items:', error);
+        setLoading(false);
       }
     };
 
@@ -23,7 +27,7 @@ const RestaurantMenu = ({ id }) => {
     { id: 1, name: 'Burger', price: 10 },
     { id: 2, name: 'Pizza', price: 12 },
     { id: 3, name: 'Salad', price: 8 }, 
-    { id:3, name: 'Pasta', price: 13 }
+    { id: 4, name: 'Pasta', price: 13 }
   ];
 
   const renderMenuItems = (items) => (
@@ -35,6 +39,14 @@ const RestaurantMenu = ({ id }) => {
       </div>
     </div>
   );
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-40">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gray-900"></div>
+      </div>
+    );
+  }
 
   if (menuItems.message) {
     return (
