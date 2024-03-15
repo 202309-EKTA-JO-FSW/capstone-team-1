@@ -68,19 +68,8 @@ const userSchema = new Schema(
     providerId: {
       type: String,
     },
-    age: {
-      type: Number,
-      required: true,
-    },
-    gender: {
-      type: String,
-      required: true,
-      enum: ["male", "female"],
-    },
     avatar: {
       type: String,
-      default:
-        "https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI=",
     },
     phoneNumber: {
       type: String,

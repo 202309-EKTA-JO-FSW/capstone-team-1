@@ -7,10 +7,11 @@ const DB_URI = `mongodb://${DB_USER}:${DB_PASSWORD}@${
   process.env.NODE_ENV === "test" ? TEST_DB_HOST : DB_HOST
 }:${DB_PORT}/${DB_NAME}?authSource=admin`;
 
-const url = DB_URI;
+// const url = DB_URI;
+const url = process.env.DB_URL;
 
 const connectToMongo = () => {
-  mongoose.connect(url, { useNewUrlParser: true });
+  mongoose.connect(url, { useNewUrlParser: true, dbName: "restaurant" });
 
   db = mongoose.connection;
 

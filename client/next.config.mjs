@@ -1,9 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    reactStrictMode: true,
-    images: {
-      domains: ['dummyimage.com'],
-    },
-  }
+  images: {
+    domains: [
+      "firebasestorage.googleapis.com",
+      "illustoon.com",
+      "www.pngall.com",
+      "lh3.googleusercontent.com"
+    ],
+  },
+};
 
 export default nextConfig;

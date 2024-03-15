@@ -1,9 +1,15 @@
-const main_url = `http://localhost:3001/api`;
+const main_url = "http://localhost:3001/api";
 
-export const restaurantUrl = () => {
-  return main_url + "/restaurant";
-};
+// auth url
+export const signupUrl = main_url + "/auth/signup";
+export const loginUrl = main_url + "/auth/login";
+export const googleLoginUrl = main_url + "/auth/google";
+export const getGoogleUser = main_url + "/auth/me";
+export const userProfileUrl = main_url + "/user/profile";
 
-export const menuItemsUrl = (resId) => {
-  return main_url + `/restaurant/${resId}/menuItems`;
-};
+// restaurant url
+export const restaurantUrl = main_url + `/restaurant`;
+
+// menu items 
+export const menuItemsUrl = (resId) => main_url + `/restaurant/${resId}/menuItems`;
+
