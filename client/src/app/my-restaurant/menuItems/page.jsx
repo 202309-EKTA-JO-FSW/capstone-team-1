@@ -1,7 +1,10 @@
+import MenuItems from "@/app/components/my-restaurant/menuitems/MenuItems";
 import React from "react";
 
 const MyRestaurantMenuItemsPage = () => {
-  return <div>My Restaurant Menu Items Page</div>;
+  return <div>
+    <MenuItems/>
+  </div>;
 };
 
 export default MyRestaurantMenuItemsPage;
