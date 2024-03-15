@@ -1,5 +1,5 @@
 import React from "react";
-import RestaurantMenu from "@/app/components/restaurant/restaurant-single-page/RestaurantMenu";
+import RestaurantMenu from "@/app/components/restaurant/single-restaurant/RestaurantMenu";
 
 const MenuItemsPage = ({ params }) => {
   const id = params.id;
