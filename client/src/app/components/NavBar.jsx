@@ -31,7 +31,7 @@ const NavBar = () => {
   }, []);
 
   return (
-    <nav className="flex justify-between  w-full sticky top-0 text-black [font-family:'Inter-Medium',Helvetica] text-base">
+    <nav className="flex justify-between w-full bg-white sticky top-0 text-black [font-family:'Inter-Medium',Helvetica] text-base">
       <section className="flex items-center gap-2 flex-wrap  justify-between pl-3 pt-2 py-2">
         <Logo />
 
