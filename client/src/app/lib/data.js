@@ -1,6 +1,11 @@
-const fetchResturants = async () => {
+import { menuItemsUrl } from './utils';
+
+const fetchRestaurants = async () => {
   try {
-  } catch (error) {}
+  } catch (error) {
+    console.error('Error fetching restaurants:', error);
+    throw error;
+  }
 };
 
 const fetchMenuItem = async (resId) => {
@@ -12,3 +17,5 @@ const fetchMenuItem = async (resId) => {
     throw error; 
   }
 };
+
+export { fetchRestaurants, fetchMenuItem };

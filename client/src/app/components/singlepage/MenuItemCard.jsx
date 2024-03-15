@@ -1,38 +1,34 @@
 'use client';
 import Image from 'next/image';
-import { useState } from 'react';
 
 const MenuItemCard = ({ menuItem }) => {
-  const [quantity, setQuantity] = useState(0);
+  if (!menuItem) {
+    return <div className="text-center">No items available</div>;
+  }
 
-  const handleIncrement = () => {
-    setQuantity(quantity + 1);
-  };
-
-  const handleDecrement = () => {
-    if (quantity > 0) {
-      setQuantity(quantity - 1);
-    }
-  };
-
-  
   return (
-    <div className="bg-white shadow-md rounded-md p-4 flex flex-col items-center" style={{ width: 250, height: 300 }}>
-      <div className="relative h-32 w-full mb-2">
-        <Image
-          src={menuItem.image}
-          alt={menuItem.name}
-          layout="fill"
-          objectFit="cover"
-        />
+    <div className="bg-white shadow-md rounded-md p-4 flex flex-col items-center mx-4" style={{ width: 250, height: 300 }}>
+      <div className="relative h-48 w-full mb-2">
+        {menuItem.image ? (
+          <Image
+            src={menuItem.image}
+            alt={menuItem.name}
+            layout="fill"
+            objectFit="cover"
+          />
+        ) : (
+          <div className="h-full w-full bg-gray-200 flex items-center justify-center">
+            <span className="text-gray-500">No Image</span>
+          </div>
+        )}
       </div>
       <h3 className="text-lg font-bold text-center mb-6">{menuItem.name}</h3>
       <div className="flex justify-between w-full">
         <div>
-          <p className="text-lg font-semibold">{`${menuItem.price}}`}</p>
+          <p className="text-lg font-semibold">{`${menuItem.price} ${menuItem.currency || 'JOD'}`}</p>
         </div>
         <div className="flex items-center">
-          <span className="mr-1">{menuItem.rating || 'No Rating'}</span>
+          <span className="mr-1">{menuItem.rating || 4.5}</span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-4 w-4 text-yellow-400"
@@ -48,22 +44,7 @@ const MenuItemCard = ({ menuItem }) => {
         </div>
       </div>
       <div className="flex justify-between w-full mt-2">
-        <button className="text-lg font-bold">Add to cart</button>
-        <div className="flex items-center">
-          <button
-            onClick={handleDecrement}
-            className="bg-green-500 text-white px-2 py-0.5 rounded-l-md border border-green-500"
-          >
-            -
-          </button>
-          <span className="px-2 py-0.5 border border-green-500">{quantity}</span>
-          <button
-            onClick={handleIncrement}
-            className="bg-green-500 text-white px-2 py-0.5 rounded-r-md border border-green-500"
-          >
-            +
-          </button>
-        </div>
+        <button className="bg-green-500 text-white px-4 py-2 rounded-md">Add to Cart</button>
       </div>
     </div>
   );

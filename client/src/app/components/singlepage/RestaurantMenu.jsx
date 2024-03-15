@@ -1,7 +1,7 @@
 "use client"
 import { useEffect, useState } from 'react';
 import MenuItemCard from './MenuItemCard';
-import { fetchMenuItem } from "@/app/lib/data" ; 
+import { fetchMenuItem } from "@/app/lib/data";
 
 const RestaurantMenu = ({ id }) => {
   const [menuItems, setMenuItems] = useState([]);
@@ -19,19 +19,40 @@ const RestaurantMenu = ({ id }) => {
     fetchData();
   }, [id]);
 
-  return (
-    <div className="flex flex-col items-center">
-      <div className="max-w-3xl mx-auto">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-6">
-          {menuItems.map((item) => (
-            <MenuItemCard key={item.id} menuItem={item} />
-          ))}
-        </div>
-        {menuItems.length === 0 && <p>No menu items available.</p>}
+  const defaultMenuItems = [
+    { id: 1, name: 'Burger', price: 10 },
+    { id: 2, name: 'Pizza', price: 12 },
+    { id: 3, name: 'Salad', price: 8 }, 
+    { id:3, name: 'Pasta', price: 13 }
+  ];
+
+  const renderMenuItems = (items) => (
+    <div className="flex justify-center">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {items.map((item) => (
+          <MenuItemCard key={item.id} menuItem={item} />
+        ))}
       </div>
+    </div>
+  );
+
+  if (menuItems.message) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        {renderMenuItems(defaultMenuItems)}
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex justify-center items-center h-screen">
+      {menuItems.length > 0 ? (
+        renderMenuItems(menuItems)
+      ) : (
+        <p>{menuItems.message}</p>
+      )}
     </div>
   );
 };
 
 export default RestaurantMenu;
-
