@@ -12,8 +12,8 @@ const SideBar = () => {
   // sidebar contents
   const contents = [
     { name: "profile", icon: <IoRestaurant />, path: "" },
-    { name: "menu items", icon: <IoFastFoodSharp />, path: "/menuItem" },
-    { name: "orders", icon: <IoReceipt />, path: "/order" },
+    { name: "menu items", icon: <IoFastFoodSharp />, path: "/menuItems" },
+    { name: "orders", icon: <IoReceipt />, path: "/orders" },
   ];
 
   return (
