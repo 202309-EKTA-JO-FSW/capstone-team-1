@@ -4,6 +4,7 @@ const {
   getGoogleUser,
   userProfileUrl,
   restaurantUrl,
+  createRestaurant,
 } = require("./utils");
 
 // signup
@@ -97,5 +98,23 @@ export const searchRestaurant = async (search, page, limit) => {
   } catch (error) {
     console.error("Error searching restaurants:", error.message);
     throw error;
+  }
+};
+
+// create restaurant
+export const createRestaurant = async (form) => {
+  try {
+    const res = await fetch(createRestaurant, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(form),
+      credentials: "include",
+    });
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
   }
 };

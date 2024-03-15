@@ -9,3 +9,6 @@ export const userProfileUrl = main_url + "/user/profile";
 
 // restaurant url
 export const restaurantUrl = main_url + `/restaurant`;
+
+//admin url
+export const createRestaurant = main_url + `/restaurant/new`;
