@@ -103,9 +103,9 @@ export const searchRestaurant = async (search, page, limit) => {
 
 // fetch menuItems
 
-export const fetchMenuItems = async (page, limit) => {
+export const fetchMenuItems = async (params,page, limit) => {
   try {
-    const url = `http://localhost:3001/api/restaurant/65f26376c19b6626f8883dfc/menuItems?page=${page}&limit=${limit}`;
+    const url = `http://localhost:3001/api/restaurant/${params}/menuItems?page=${page}&limit=${limit}`;
     const response = await fetch(url);
     const menuItems = await response.json();
     return menuItems;

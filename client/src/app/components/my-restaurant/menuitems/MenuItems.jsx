@@ -1,24 +1,22 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { fetchMenuItems} from "@/app/lib/data";
+import { fetchMenuItems } from "@/app/lib/data";
 
 import MenuItemCard from "./MenuItemCard";
 import Link from "next/link";
 
-function MenuItems() {
-  const [menuItems, setMenuItems] = useState([]); 
-  
+function MenuItems({ params }) {
+  const [menuItems, setMenuItems] = useState([]);
+
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
   const [totalPages, setTotalPages] = useState(1);
-  
-
+  const resId = params;
   const getMenuItems = async () => {
     try {
-      
-     const menuItemsData = await fetchMenuItems( page, limit);
-      
+      const menuItemsData = await fetchMenuItems(resId, page, limit);
+
       setMenuItems(menuItemsData.menuItems);
       setTotalPages(menuItemsData.totalPages);
     } catch (error) {
@@ -32,14 +30,12 @@ function MenuItems() {
     getMenuItems();
   }, []);
 
-  
-
   return (
     <div className="flex flex-col justify-start items-center p-4 md:p-8 lg:p-12 w-full">
       <h1 className="flex justify-center font-bold text-5xl w-full">
         Menu Items
       </h1>
-      
+
       <div className="flex-grow w-full relative">
         <div className="relative w-full flex flex-wrap md:flex-row md:justify-start md:p-8">
           {loading ? (
@@ -56,7 +52,6 @@ function MenuItems() {
             </div>
           )}
         </div>
-       
       </div>
     </div>
   );
