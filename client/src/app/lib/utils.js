@@ -10,6 +10,9 @@ export const userProfileUrl = main_url + "/user/profile";
 // restaurant url
 export const restaurantUrl = main_url + `/restaurant`;
 
-// menu items 
-export const menuItemsUrl = (resId) => main_url + `/restaurant/${resId}/menuItems`;
+// menu items
+export const menuItemsUrl = (resId) =>
+  main_url + `/restaurant/${resId}/menuItems`;
 
+// cart
+export const cartUrl = main_url + "/customer/cart";

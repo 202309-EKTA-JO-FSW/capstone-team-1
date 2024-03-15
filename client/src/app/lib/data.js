@@ -1,11 +1,11 @@
-
 const {
   signupUrl,
   loginUrl,
   getGoogleUser,
   userProfileUrl,
   restaurantUrl,
-  menuItemsUrl
+  menuItemsUrl,
+  cartUrl,
 } = require("./utils");
 
 // signup
@@ -104,13 +104,30 @@ export const searchRestaurant = async (search, page, limit) => {
 
 // fetch menu items
 export const fetchMenuItem = async (resId) => {
-  try { 
+  try {
     const res = await fetch(menuItemsUrl(resId));
     return await res.json();
   } catch (error) {
-    console.error('Error fetching menu item:', error);
-    throw error; 
+    console.error("Error fetching menu item:", error);
+    throw error;
   }
 };
 
+// post cart
+export const fetchPostCart = async (menuItemId) => {
+  try {
+    const res = await fetch(cartUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(menuItemId),
+      credentials: "include",
+    });
 
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
