@@ -35,6 +35,7 @@ const SignupForm = ({ onSignup }) => {
       // save user info in local storage
       localStorage.setItem("user", JSON.stringify(signup.user));
       setForm(formData);
+      window.dispatchEvent(new Event("storage"));
       // redirect the user to home page after signup
       router.push("/");
     }

@@ -7,7 +7,7 @@ const AuthMessage = ({ resMsg, msg }) => {
   return (
     resMsg !== "" && (
       <div
-        className={`absolute top-10 left-8 text-white px-4 py-2 rounded ${msgColor}`}
+        className={`absolute top-15 left-8 text-white px-4 py-2 rounded ${msgColor}`}
       >
         <h1>{resMsg}</h1>
       </div>

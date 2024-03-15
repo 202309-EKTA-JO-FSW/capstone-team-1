@@ -10,9 +10,24 @@ const NavBar = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Function to handle local storage change event
+    const handleStorageChange = () => {
+      const storedUser = JSON.parse(localStorage.getItem("user"));
+      setUser(storedUser);
+    };
+
+    // Add event listener for storage change
+    window.addEventListener("storage", handleStorageChange);
+
+    // Initial setup
     const storedUser = JSON.parse(localStorage.getItem("user"));
     setUser(storedUser);
     setLoading(false);
+
+    // Cleanup function
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
   }, []);
 
   return (
