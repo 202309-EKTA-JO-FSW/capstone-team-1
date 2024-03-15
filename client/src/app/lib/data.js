@@ -4,6 +4,7 @@ const {
   getGoogleUser,
   userProfileUrl,
   restaurantUrl,
+  menuItemsUrl,
 } = require("./utils");
 
 // signup
@@ -96,6 +97,20 @@ export const searchRestaurant = async (search, page, limit) => {
     return restaurants;
   } catch (error) {
     console.error("Error searching restaurants:", error.message);
+    throw error;
+  }
+};
+
+// fetch menuItems
+
+export const fetchMenuItems = async (page, limit) => {
+  try {
+    const url = `http://localhost:3001/api/restaurant/65f26376c19b6626f8883dfc/menuItems?page=${page}&limit=${limit}`;
+    const response = await fetch(url);
+    const menuItems = await response.json();
+    return menuItems;
+  } catch (error) {
+    console.error("Error getting Menu Items:", error.message);
     throw error;
   }
 };
