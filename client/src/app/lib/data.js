@@ -1,9 +1,11 @@
+
 const {
   signupUrl,
   loginUrl,
   getGoogleUser,
   userProfileUrl,
   restaurantUrl,
+  menuItemsUrl
 } = require("./utils");
 
 // signup
@@ -99,3 +101,16 @@ export const searchRestaurant = async (search, page, limit) => {
     throw error;
   }
 };
+
+// fetch menu items
+export const fetchMenuItem = async (resId) => {
+  try { 
+    const res = await fetch(menuItemsUrl(resId));
+    return await res.json();
+  } catch (error) {
+    console.error('Error fetching menu item:', error);
+    throw error; 
+  }
+};
+
+
