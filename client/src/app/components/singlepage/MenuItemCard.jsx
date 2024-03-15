@@ -29,18 +29,7 @@ const MenuItemCard = ({ menuItem }) => {
         </div>
         <div className="flex items-center">
           <span className="mr-1">{menuItem.rating || 4.5}</span>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-4 w-4 text-yellow-400"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path
-              fillRule="evenodd"
-              d="M17.707 9.793a1 1 0 00-1.32-.083l-3.097 2.053-1.438-4.319a1 1 0 00-1.896 0l-1.438 4.319-3.097-2.053a1 1 0 00-1.32.083 1 1 0 00.203 1.32l3.5 2.333-1.438 4.319a1 1 0 001.454 1.104l3.417-2.26 3.417 2.26a1 1 0 001.454-1.104l-1.438-4.319 3.5-2.333a1 1 0 00.203-1.32z"
-              clipRule="evenodd"
-            />
-          </svg>
+          &#9733; 
         </div>
       </div>
       <div className="flex justify-between w-full mt-2">

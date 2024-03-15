@@ -38,14 +38,14 @@ const RestaurantMenu = ({ id }) => {
 
   if (menuItems.message) {
     return (
-      <div className="flex justify-center items-center h-screen">
+      <div className="flex justify-center">
         {renderMenuItems(defaultMenuItems)}
       </div>
     );
   }
 
   return (
-    <div className="flex justify-center items-center h-screen">
+    <div className="flex justify-center">
       {menuItems.length > 0 ? (
         renderMenuItems(menuItems)
       ) : (
