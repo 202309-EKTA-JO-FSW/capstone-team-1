@@ -1,6 +1,6 @@
-"use client"
-import { useEffect, useState } from 'react';
-import MenuItemCard from './MenuItemCard';
+"use client";
+import { useEffect, useState } from "react";
+import MenuItemCard from "./MenuItemCard";
 import { fetchMenuItem } from "@/app/lib/data";
 
 const RestaurantMenu = ({ id }) => {
@@ -15,7 +15,7 @@ const RestaurantMenu = ({ id }) => {
         setMenuItems(items);
         setLoading(false);
       } catch (error) {
-        console.error('Error fetching menu items:', error);
+        console.error("Error fetching menu items:", error);
         setLoading(false);
       }
     };
@@ -23,12 +23,13 @@ const RestaurantMenu = ({ id }) => {
     fetchData();
   }, [id]);
 
-  const defaultMenuItems = [
-    { id: 1, name: 'Burger', price: 10 },
-    { id: 2, name: 'Pizza', price: 12 },
-    { id: 3, name: 'Salad', price: 8 }, 
-    { id: 4, name: 'Pasta', price: 13 }
-  ];
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-40">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gray-900"></div>
+      </div>
+    );
+  }
 
   const renderMenuItems = (items) => (
     <div className="flex justify-center">
@@ -40,28 +41,14 @@ const RestaurantMenu = ({ id }) => {
     </div>
   );
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-40">
-        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gray-900"></div>
-      </div>
-    );
-  }
-
-  if (menuItems.message) {
-    return (
-      <div className="flex justify-center">
-        {renderMenuItems(defaultMenuItems)}
-      </div>
-    );
-  }
-
   return (
     <div className="flex justify-center">
       {menuItems.length > 0 ? (
         renderMenuItems(menuItems)
       ) : (
-        <p>{menuItems.message}</p>
+        <div className="h-[500px] flex items-center justify-center text-xl text-main-green">
+          <p>{menuItems.message}</p>
+        </div>
       )}
     </div>
   );

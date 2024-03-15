@@ -1,18 +1,17 @@
-import React from 'react';
-import RestaurantMenu from '@/app/components/singlepage/RestaurantMenu';
+import React from "react";
+import RestaurantMenu from "@/app/components/restaurant/menuItems/RestaurantMenu";
 
-  const RestaurantPage = ({ params }) => {
-    const id = params.id;
-    return (
-      <div>
-        <RestaurantMenu id= {id} />
-        <div className="p-6">
-          <h2 className="text-xl font-semibold mb-4">Reviews</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          </div>
-        </div>
+const MenuItemsPage = ({ params }) => {
+  const id = params.id;
+  return (
+    <div className="flex flex-col items-center">
+      <h1 className="text-3xl font-bold m-10">Menu Items</h1>
+      <RestaurantMenu id={id} />
+      <div className="m-12">
+        <h2 className="text-xl font-semibold mb-4">Reviews</h2>
       </div>
-    );
-  };
-  
-  export default RestaurantPage;
+    </div>
+  );
+};
+
+export default MenuItemsPage;
