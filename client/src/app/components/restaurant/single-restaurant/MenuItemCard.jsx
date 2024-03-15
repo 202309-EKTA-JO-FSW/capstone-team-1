@@ -1,8 +1,14 @@
 "use client";
 import Image from "next/image";
 import menuItemImage from "../../../../../public/image/menuItem-image-placeholder.png";
+import { fetchPostCart } from "@/app/lib/data";
 
 const MenuItemCard = ({ menuItem }) => {
+  const handleAddToCart = async () => {
+    const cart = await fetchPostCart(menuItem._id);
+    console.log(cart);
+  };
+
   if (!menuItem) {
     return <div className="text-center">No items available</div>;
   }
@@ -12,12 +18,14 @@ const MenuItemCard = ({ menuItem }) => {
       className="bg-white shadow-md rounded-md p-4 flex flex-col items-center mx-4"
       style={{ width: 250, height: 300 }}
     >
-      <div className="relative h-48 w-full mb-2">
+      <div className="relative w-[200px] h-[192px] mb-2">
         <Image
           src={menuItem.image || menuItemImage}
           alt={menuItem.name}
-          layout="fill"
-          objectFit="cover"
+          fill
+          sizes="200vw"
+          priority={true}
+          className=" object-cover"
         />
       </div>
       <h3 className="text-lg font-bold text-center mb-6">{menuItem.name}</h3>
@@ -33,7 +41,10 @@ const MenuItemCard = ({ menuItem }) => {
         </div>
       </div>
       <div className="flex justify-center w-full mt-2">
-        <button className="bg-green-500 text-white px-4 py-2 rounded-md">
+        <button
+          className="bg-green-500 text-white px-4 py-2 rounded-md"
+          onClick={handleAddToCart}
+        >
           Add to Cart
         </button>
       </div>

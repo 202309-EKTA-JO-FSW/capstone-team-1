@@ -121,7 +121,7 @@ export const fetchPostCart = async (menuItemId) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(menuItemId),
+      body: JSON.stringify({ menuItemId: menuItemId }),
       credentials: "include",
     });
 
