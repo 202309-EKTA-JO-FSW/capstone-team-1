@@ -25,6 +25,7 @@ const LoginForm = ({ onLogin }) => {
     if (loginRef.user) {
       localStorage.setItem("user", JSON.stringify(loginRef.user));
       setForm(formData);
+      window.dispatchEvent(new Event("storage"));
       router.push("/");
     }
   };
