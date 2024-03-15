@@ -131,3 +131,17 @@ export const fetchPostCart = async (menuItemId) => {
     return error.message;
   }
 };
+
+// get cart info
+export const fetchCart = async (menuItemId) => {
+  try {
+    const res = await fetch(userProfileUrl, {
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};

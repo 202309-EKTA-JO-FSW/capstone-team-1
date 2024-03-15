@@ -8,6 +8,7 @@ const authUser = require("../middleware/authUser");
 router.use(authUser);
 
 // cart
+router.get("/cart", customerController.getCart);
 router.post("/cart", customerController.newCart);
 router.put("/cart/:itemId", customerController.updateCart);
 router.delete("/cart", customerController.cancelCart);

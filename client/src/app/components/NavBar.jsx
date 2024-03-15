@@ -60,7 +60,7 @@ const NavBar = () => {
       ) : (
         <section className="flex items-center gap-2 flex-wrap pr-3 pt-2 py-2">
           {/* condtional rendering of Login button or name of user if logged in */}
-          <Link href="/checkout">
+          <Link href="/cart">
             <GiShoppingCart className="text-3xl  hover:text-main-green" />
           </Link>
           <User user={user} />
