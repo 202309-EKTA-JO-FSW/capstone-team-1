@@ -135,7 +135,7 @@ export const fetchPostCart = async (menuItemId) => {
 // get cart info
 export const fetchCart = async (menuItemId) => {
   try {
-    const res = await fetch(userProfileUrl, {
+    const res = await fetch(cartUrl, {
       credentials: "include",
     });
 

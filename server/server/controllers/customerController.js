@@ -80,7 +80,7 @@ const getCart = async (req, res) => {
       restaurant: user.cart.restaurant.name,
       menuItems: user.cart.menuItems,
     };
-    return returnres.status(200).json(cart);
+    return res.status(200).json(cart);
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: error.message });
