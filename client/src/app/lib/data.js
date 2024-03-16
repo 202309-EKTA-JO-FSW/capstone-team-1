@@ -4,7 +4,7 @@ const {
   getGoogleUser,
   userProfileUrl,
   restaurantUrl,
-  createRestaurant,
+  adminNewRestaurantUrl,
 } = require("./utils");
 
 // signup
@@ -104,7 +104,8 @@ export const searchRestaurant = async (search, page, limit) => {
 // create restaurant
 export const createRestaurant = async (form) => {
   try {
-    const res = await fetch(createRestaurant, {
+    console.log(form);
+    const res = await fetch(adminNewRestaurantUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

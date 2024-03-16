@@ -11,4 +11,4 @@ export const userProfileUrl = main_url + "/user/profile";
 export const restaurantUrl = main_url + `/restaurant`;
 
 //admin url
-export const createRestaurant = main_url + `/restaurant/new`;
+export const adminNewRestaurantUrl = main_url + `/admin/restaurant/new`;
