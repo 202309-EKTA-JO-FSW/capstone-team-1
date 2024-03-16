@@ -104,9 +104,9 @@ export const searchRestaurant = async (search, page, limit) => {
 
 // fetch menuItems
 
-export const fetchMenuItems = async () => {
+export const fetchMenuItems = async (resId) => {
   try {
-    const res = await fetch("http://localhost:3001/api/restaurant/65f4f81a030431d98422a4c4/menuItems");
+    const res = await fetch(menuItemsUrl(resId));
     return await res.json();
   } catch (error) {
     console.error("Error fetching menu item:", error);
@@ -116,15 +116,12 @@ export const fetchMenuItems = async () => {
 
 
 // post new MenuItem
-export const postItem = async (form) => {
+export const postItem = async (formData) => {
   try {
     const res = await fetch(newMenuItemUrl, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: form,
-      file: form.image,
+      
+      body:formData,
       credentials: "include",
     });
 

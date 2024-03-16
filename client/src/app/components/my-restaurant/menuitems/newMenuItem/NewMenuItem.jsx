@@ -14,22 +14,26 @@ const NewMenuItem = () => {
     image: "",
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [file, setFile] = useState();
 
   const handleChange = (e) => {
-    const { name, value, type, checked, files } = e.target;
-    const newValue =
-      type === "checkbox"
-        ? checked
-        : type === "file"
-        ? URL.createObjectURL(files[0])
-        : value;
+    const { name, value, type, checked } = e.target;
+    const newValue = type === "checkbox" ? checked : value; // Store file object
     setForm({ ...form, [name]: newValue });
     setIsSubmitted(false);
   };
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const newMenuItem = await postItem(form);
+    const formData = new FormData();
+    formData.append("name", form.name);
+    formData.append("price", form.price);
+    formData.append("type", form.type);
+    formData.append("description", form.description);
+    formData.append("available", form.available);
+    formData.append("image", file); // Append image file to FormData
+
+    const newMenuItem = await postItem(formData); // Send FormData
 
     if (newMenuItem) {
       setIsSubmitted(true);
@@ -39,11 +43,11 @@ const NewMenuItem = () => {
         type: "",
         description: "",
         available: false,
-        image: "",
+        image: null, // Reset image
       });
     }
   };
-  
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2">
       <div className="px-4 py-15">
@@ -112,7 +116,12 @@ const NewMenuItem = () => {
               {/* Image */}
               <div className="flex items-center">
                 <label className="p-2">Image: </label>
-                <input type="file" name="image" onChange={handleChange} />
+                <input
+                  filename={file}
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => setFile(e.target.files[0])}
+                />
               </div>
             </div>
 
@@ -122,10 +131,10 @@ const NewMenuItem = () => {
           </form>
         </div>
       </div>
-      {form.image && (
+      {file && (
         <div className="md:flex items-center justify-center">
-          <Image
-            src={form.image}
+          <img
+            src={URL.createObjectURL(file)}
             alt="Selected Image"
             height={350}
             width={350}
