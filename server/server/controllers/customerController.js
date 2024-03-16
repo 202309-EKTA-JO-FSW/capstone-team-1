@@ -50,6 +50,11 @@ const newCart = async (req, res) => {
       user.cart.menuItems.push({ menuItem: menuItemId, total: menuItem.price });
     }
 
+    user.cart.subtotal = user.cart.menuItems.reduce(
+      (total, item) => total + item.total,
+      0
+    );
+
     await user.save();
 
     return res
@@ -76,9 +81,12 @@ const getCart = async (req, res) => {
     if (!user)
       return res.status(401).json({ message: "User not found, Please login" });
 
+    if (!user.cart) return res.status(404).json({ message: "Cart is empty" });
+
     const cart = {
       restaurant: user.cart.restaurant.name,
       menuItems: user.cart.menuItems,
+      subtotal: user.cart.subtotal,
     };
     return res.status(200).json(cart);
   } catch (error) {
@@ -176,10 +184,6 @@ const checkout = async (req, res) => {
     }
     const { cart } = userCart;
     //Calculate subtotal, delivery fees, and total based on cart items
-    let subtotal = 0;
-    cart.menuItems.forEach((item) => {
-      subtotal += item.quantity * item.total;
-    });
     const deliveryFee = 2.5;
     // Calculate total including delivery fees
     const total = subtotal + deliveryFee;
@@ -188,7 +192,7 @@ const checkout = async (req, res) => {
       restaurant: cart.restaurant,
       cartItems: cart.menuItems,
       deliveryFees: deliveryFee,
-      subtotal: subtotal,
+      subtotal: cart.subtotal,
       total: total,
     };
 
