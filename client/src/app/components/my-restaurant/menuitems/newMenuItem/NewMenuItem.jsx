@@ -9,17 +9,22 @@ const NewMenuItem = () => {
     type: "",
     description: "",
     available: false,
-    
+    image: null,
   });
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    const newValue = type === "checkbox" ? checked : value;
+    const { name, value, type, checked, files } = e.target;
+    const newValue =
+      type === "checkbox"
+        ? checked
+        : type === "file"
+        ? URL.createObjectURL(files[0])
+        : value;
     setForm({ ...form, [name]: newValue });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+    console.log(form);
   };
 
   return (
@@ -83,19 +88,13 @@ const NewMenuItem = () => {
                   className="px-2"
                   checked={form.available}
                   onChange={handleChange}
-                  required
                 />
                 <label className="p-2">Available</label>
               </div>
               {/* Image */}
               <div className="flex items-center">
                 <label className="p-2">Image: </label>
-                <input
-                  type="file"
-                  name="image"
-                  value={form.image}
-                  onChange={handleChange}
-                />
+                <input type="file" name="image" onChange={handleChange} />
               </div>
             </div>
 
@@ -106,15 +105,7 @@ const NewMenuItem = () => {
         </div>
       </div>
       <div className=" md:block">
-        <div className="px-4 py-2">
-          {form.image && (
-            <img
-              src={URL.createObjectURL(form.image)}
-              alt="Selected Image"
-              style={{ maxWidth: "100%", maxHeight: "200px" }}
-            />
-          )}
-        </div>
+        {form.image && <img src={form.image} alt="Selected Image" />}
       </div>
     </div>
   );
