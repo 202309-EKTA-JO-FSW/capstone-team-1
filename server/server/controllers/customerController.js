@@ -81,13 +81,17 @@ const getCart = async (req, res) => {
     if (!user)
       return res.status(401).json({ message: "User not found, Please login" });
 
-    if (!user.cart) return res.status(404).json({ message: "Cart is empty" });
-
-    const cart = {
-      restaurant: user.cart.restaurant.name,
-      menuItems: user.cart.menuItems,
-      subtotal: user.cart.subtotal,
-    };
+    // if (!user.cart) return res.status(404).json({ message: "Cart is empty" });
+    let cart;
+    if (user.cart) {
+      cart = {
+        restaurant: user.cart.restaurant.name,
+        menuItems: user.cart.menuItems,
+        subtotal: user.cart.subtotal,
+      };
+    } else {
+      cart = [];
+    }
     return res.status(200).json(cart);
   } catch (error) {
     console.error(error);

@@ -165,3 +165,18 @@ export const fetchUpdateCart = async (itemId, statusRes) => {
     return error.message;
   }
 };
+
+// cancel cart
+export const fetchCancelCart = async () => {
+  try {
+    const res = await fetch(cartUrl, {
+      method: "delete",
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
