@@ -6,6 +6,7 @@ const {
   restaurantUrl,
   menuItemsUrl,
   cartUrl,
+  updateCartUrl,
 } = require("./utils");
 
 // signup
@@ -136,6 +137,25 @@ export const fetchPostCart = async (menuItemId) => {
 export const fetchCart = async (menuItemId) => {
   try {
     const res = await fetch(cartUrl, {
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+// update cart info
+export const fetchUpdateCart = async (itemId, statusRes) => {
+  try {
+    const res = await fetch(updateCartUrl(itemId), {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ status: statusRes }),
       credentials: "include",
     });
 

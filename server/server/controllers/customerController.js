@@ -134,11 +134,20 @@ const updateCart = async (req, res) => {
         .json({ message: "Status should be either add or remove" });
     }
 
+    user.cart.subtotal = user.cart.menuItems.reduce(
+      (total, item) => total + item.total,
+      0
+    );
+    if (user.cart.subtotal === 0) {
+      user.cart = null;
+    }
+
     await user.save();
 
-    res
-      .status(200)
-      .json({ message: "cart updated successfully", results: user });
+    return res.status(200).json({
+      message: "cart updated successfully",
+      results: user,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: error.message });
