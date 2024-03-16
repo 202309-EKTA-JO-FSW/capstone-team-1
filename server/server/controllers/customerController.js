@@ -50,10 +50,19 @@ const newCart = async (req, res) => {
       user.cart.menuItems.push({ menuItem: menuItemId, total: menuItem.price });
     }
 
+    // add subtotal
     user.cart.subtotal = user.cart.menuItems.reduce(
       (total, item) => total + item.total,
       0
     );
+
+    // add menuitems count
+    const menuItemCount = user.cart.menuItems.reduce(
+      (total, item) => total + item.quantity,
+      0
+    );
+
+    user.cart.itemsCount = menuItemCount;
 
     await user.save();
 
@@ -87,6 +96,7 @@ const getCart = async (req, res) => {
       cart = {
         restaurant: user.cart.restaurant.name,
         menuItems: user.cart.menuItems,
+        itemsCount: user.cart.itemsCount,
         subtotal: user.cart.subtotal,
       };
     } else {
@@ -142,6 +152,13 @@ const updateCart = async (req, res) => {
       (total, item) => total + item.total,
       0
     );
+
+    // add menuitems count
+    user.cart.itemsCount = user.cart.menuItems.reduce(
+      (total, item) => total + item.quantity,
+      0
+    );
+
     if (user.cart.subtotal === 0) {
       user.cart = null;
     }

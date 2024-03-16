@@ -6,7 +6,11 @@ import { fetchPostCart } from "@/app/lib/data";
 const MenuItemCard = ({ menuItem }) => {
   const handleAddToCart = async () => {
     const cart = await fetchPostCart(menuItem._id);
+    const itemsCount = cart.results.cart.itemsCount;
     console.log(cart);
+    // add items count to the local storage to track the adding items
+    localStorage.setItem("cart", JSON.stringify({ length: itemsCount }));
+    window.dispatchEvent(new Event("storage"));
   };
 
   if (!menuItem) {

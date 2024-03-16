@@ -14,8 +14,8 @@ const Cart = () => {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
+
       const data = await fetchCart();
-      console.log(data);
       setCart(data);
       setLoading(false);
     };
@@ -31,22 +31,20 @@ const Cart = () => {
           clickedItem.status
         );
 
-        // const updatedMenuItems = cart.menuItems.map((item) => {
-        //   if (item.menuItem._id === clickedItem.id) {
-        //     console.log("here");
-        //     if (clickedItem.status === "add") {
-        //       item.quantity = item.quantity + 1;
-        //     } else {
-        //       item.quantity = item.quantity - 1;
-        //     }
-        //     return item;
-        //   } else {
-        //     return item;
-        //   }
-        // });
         if (update) {
           // setCart({ ...cart, menuItems: updatedMenuItems });
           const data = await fetchCart();
+          console.log(data);
+          let cartLength = data.itemsCount;
+          if (!data.menuItems) {
+            localStorage.removeItem("cart");
+          } else if (data.menuItems) {
+            localStorage.setItem(
+              "cart",
+              JSON.stringify({ length: cartLength })
+            );
+          }
+          window.dispatchEvent(new Event("storage"));
 
           setCart(data);
         }
@@ -62,6 +60,9 @@ const Cart = () => {
     console.log(cancelCart);
     if (cancelCart.message === "Cart deleted successfully") {
       const data = await fetchCart();
+      // remove the cart from local host to not show the length on navbar
+      localStorage.removeItem("cart");
+      window.dispatchEvent(new Event("storage"));
       setCancelLoadingBtn(false);
       setCart(data);
     }
@@ -73,11 +74,13 @@ const Cart = () => {
   if (cart.length === 0)
     return <p className="text-2xl font-bold">Cart Empty</p>;
 
+  if (cart.message) {
+    return <p>{cart.message}</p>;
+  }
   // console.log(menuItems);
   return (
     <div className="flex flex-col items-center w-full p-2 rounded-xl bg-slate-100 bg-opacity-20 shadow-[0_5px_10px_5px_rgba(0,0,0,0.1)] sm:p-5 md:w-[450px]">
       <h1 className="text-xl font-bold mb-5">{cart.restaurant}</h1>
-
       <div className="w-full">
         {cart.menuItems &&
           cart.menuItems.map((cart) => (

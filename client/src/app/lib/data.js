@@ -58,25 +58,6 @@ export const fetchGoogleUser = async () => {
   }
 };
 
-// update user profile
-export const fetchUserUpdate = async (form) => {
-  try {
-    const res = await fetch(userProfileUrl, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(form),
-      credentials: "include",
-    });
-
-    return res.json();
-  } catch (error) {
-    console.error(error.message);
-    return error.message;
-  }
-};
-
 // fetch restaurant
 export const fetchRestaurants = async (page, limit) => {
   try {
@@ -147,6 +128,41 @@ export const fetchCart = async (menuItemId) => {
   }
 };
 
+// USER
+// update user profile
+export const fetchUserUpdate = async (form) => {
+  try {
+    const res = await fetch(userProfileUrl, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(form),
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+// get user profile
+export const fetchUser = async (form) => {
+  try {
+    const res = await fetch(userProfileUrl, {
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+// CART
 // update cart info
 export const fetchUpdateCart = async (itemId, statusRes) => {
   try {
