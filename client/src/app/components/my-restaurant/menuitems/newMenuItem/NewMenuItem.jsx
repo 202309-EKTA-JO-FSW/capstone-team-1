@@ -133,7 +133,7 @@ const NewMenuItem = () => {
       </div>
       {file && (
         <div className="md:flex items-center justify-center">
-          <img
+          <Image
             src={URL.createObjectURL(file)}
             alt="Selected Image"
             height={350}

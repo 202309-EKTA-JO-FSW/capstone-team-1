@@ -6,17 +6,23 @@ import MenuItemCard from "./MenuItemCard";
 import Link from "next/link";
 import Btn from "../../Btn";
 
-function MenuItems({}) {
+function MenuItems() {
   const [menuItems, setMenuItems] = useState([]);
 
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    console.log(storedUser);
+
+    const restaurantId = storedUser.restaurant;
+    console.log(restaurantId);
     const getMenuItems = async () => {
       try {
-        setLoading(false);
-        const menuItemsData = await fetchMenuItems();
+       setLoading(false)
+        const menuItemsData = await fetchMenuItems(restaurantId);
         setMenuItems(menuItemsData);
+        console.log(menuItemsData);
       } catch (error) {
         console.error("Error fetching Menu Items:", error.message);
         setLoading(false);
@@ -25,35 +31,28 @@ function MenuItems({}) {
     getMenuItems();
   }, []);
 
-  console.log(menuItems);
   return (
-    <div className="flex flex-col justify-start items-center p-4 md:p-8 lg:p-12 w-full">
-      <h1 className="flex justify-center font-bold text-5xl w-full">
-        Menu Items
-      </h1>
+    <div className="p-4 md:p-8 lg:p-12 w-full">
+      <h1 className="font-bold text-4xl  mb-8">Menu Items</h1>
 
-      <div className="flex-grow w-full relative">
-        <div className="relative w-full flex flex-wrap md:flex-row md:justify-start md:p-8">
-          {loading ? (
-            <p className="font-bold text-2xl">Loading...</p>
-          ) : menuItems && menuItems.length > 0 ? ( // Check if menuItems is not null or undefined
-            menuItems.map((menuItem) => (
-              <Link href={`/menuItems/${menuItem._id}`}>
-                <MenuItemCard key={menuItem._id} menuItem={menuItem} />
-              </Link>
-            ))
-          ) : (
-            <div className="flex items-center justify-center w-full h-64">
-              <p className="font-bold text-2xl">No Menu Items found</p>
-            </div>
-          )}
-          
-          <div>
-            <Link href="/my-restaurant/menuItems/newMenuItem">
-              <Btn text={"Add Item"} />
-            </Link>
+      <div className="flex flex-wrap justify-start">
+        {loading ? (
+          <p className="font-bold text-xl">Loading...</p>
+        ) : menuItems ? (
+          menuItems.map((menuItem) => (
+            <MenuItemCard key={menuItem._id} menuItem={menuItem} />
+          ))
+        ) : (
+          <div className="flex items-center justify-center w-full h-50">
+            <p className="font-bold text-2xl">No Menu Items found</p>
           </div>
-        </div>
+        )}
+      </div>
+
+      <div className="flex justify-center mt-8">
+        <Link href="/my-restaurant/menuItems/newMenuItem">
+          <Btn text="Add Item" />
+        </Link>
       </div>
     </div>
   );

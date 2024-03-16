@@ -40,6 +40,8 @@ const login = async (req, res) => {
         lastName: user.lastName,
         avatar: user.avatar,
         isAdmin: user.isAdmin,
+        restaurant: user.restaurant,
+        
       },
       message: "Login successful",
     });

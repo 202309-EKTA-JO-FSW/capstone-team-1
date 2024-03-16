@@ -106,22 +106,24 @@ export const searchRestaurant = async (search, page, limit) => {
 
 export const fetchMenuItems = async (resId) => {
   try {
-    const res = await fetch(menuItemsUrl(resId));
-    return await res.json();
+  const url= `${restaurantUrl}/${resId}/menuItems`;
+
+    const res = await fetch(url);
+    const menuItems= await  res.json();
+    return menuItems
   } catch (error) {
     console.error("Error fetching menu item:", error);
     throw error;
   }
 };
 
-
 // post new MenuItem
 export const postItem = async (formData) => {
   try {
     const res = await fetch(newMenuItemUrl, {
       method: "POST",
-      
-      body:formData,
+
+      body: formData,
       credentials: "include",
     });
 
