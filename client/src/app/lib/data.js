@@ -5,12 +5,13 @@ const {
   userProfileUrl,
   restaurantUrl,
   menuItemsUrl,
+  newMenuItemUrl,
 } = require("./utils");
 
 // signup
 export const fetchSignup = async (form) => {
   try {
-    const res = await fetch(signupUrl, {
+    const res = await fetch(signupnewUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -103,14 +104,33 @@ export const searchRestaurant = async (search, page, limit) => {
 
 // fetch menuItems
 
-export const fetchMenuItems = async (params,page, limit) => {
+export const fetchMenuItems = async () => {
   try {
-    const url = `http://localhost:3001/api/restaurant/${params}/menuItems?page=${page}&limit=${limit}`;
-    const response = await fetch(url);
-    const menuItems = await response.json();
-    return menuItems;
+    const res = await fetch("http://localhost:3001/api/restaurant/65f4f81a030431d98422a4c4/menuItems");
+    return await res.json();
   } catch (error) {
-    console.error("Error getting Menu Items:", error.message);
+    console.error("Error fetching menu item:", error);
     throw error;
+  }
+};
+
+
+// post new MenuItem
+export const postItem = async (form) => {
+  try {
+    const res = await fetch(newMenuItemUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: form,
+      file: form.image,
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
   }
 };

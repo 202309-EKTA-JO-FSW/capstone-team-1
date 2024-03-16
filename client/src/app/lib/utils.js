@@ -12,4 +12,9 @@ export const restaurantUrl = main_url + `/restaurant`;
 
 //menuItems url
 
-export const menuItemsUrl = main_url + `/:resId/menuItems`;
+export const menuItemsUrl = () => {
+  
+  main_url + `/restaurant/65f4f81a030431d98422a4c4/menuItems`;
+};
+
+export const newMenuItemUrl = main_url + "/admin/restaurant/menuItem/new";

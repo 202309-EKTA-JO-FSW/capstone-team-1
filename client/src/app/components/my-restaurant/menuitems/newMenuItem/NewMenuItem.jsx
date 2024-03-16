@@ -1,6 +1,8 @@
 "use client";
 import React, { useState } from "react";
 import Btn from "@/app/components/Btn";
+import Image from "next/image";
+import { postItem } from "@/app/lib/data";
 
 const NewMenuItem = () => {
   const [form, setForm] = useState({
@@ -9,8 +11,10 @@ const NewMenuItem = () => {
     type: "",
     description: "",
     available: false,
-    image: null,
+    image: "",
   });
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
     const newValue =
@@ -20,18 +24,32 @@ const NewMenuItem = () => {
         ? URL.createObjectURL(files[0])
         : value;
     setForm({ ...form, [name]: newValue });
+    setIsSubmitted(false);
   };
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(form);
-  };
+    const newMenuItem = await postItem(form);
 
+    if (newMenuItem) {
+      setIsSubmitted(true);
+      setForm({
+        name: "",
+        price: "",
+        type: "",
+        description: "",
+        available: false,
+        image: "",
+      });
+    }
+  };
+  
   return (
     <div className="grid grid-cols-1 md:grid-cols-2">
       <div className="px-4 py-15">
         <div className="flex flex-col items-center justify-center relative top-5 left-3">
           <h1 className="font-bold text-[24px] p-2">Add Menu Item</h1>
+          {isSubmitted && <p>Form submitted successfully!</p>}
           <form className="w-full " onSubmit={handleSubmit}>
             <div className="flex flex-col p-2">
               {/* Name */}
@@ -74,7 +92,7 @@ const NewMenuItem = () => {
                 type="description"
                 name="description"
                 placeholder="Description"
-                className="w-full p-6 field h-32"
+                className="w-full p-4 field h-32 mb-4"
                 value={form.description}
                 onChange={handleChange}
                 required
@@ -104,9 +122,16 @@ const NewMenuItem = () => {
           </form>
         </div>
       </div>
-      <div className=" md:block">
-        {form.image && <img src={form.image} alt="Selected Image" />}
-      </div>
+      {form.image && (
+        <div className="md:flex items-center justify-center">
+          <Image
+            src={form.image}
+            alt="Selected Image"
+            height={350}
+            width={350}
+          />
+        </div>
+      )}
     </div>
   );
 };

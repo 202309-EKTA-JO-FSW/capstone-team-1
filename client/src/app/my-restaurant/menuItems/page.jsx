@@ -1,9 +1,9 @@
-import MenuItems from "@/app/components/my-restaurant/menuitems/MenuItems";
 import React from "react";
-
-const MyRestaurantMenuItemsPage = () => {
+import MenuItems from "@/app/components/my-restaurant/menuitems/MenuItems";
+const MyRestaurantMenuItemsPage = ({}) => {
+  
   return <div>
-    <MenuItems/>
+    <MenuItems />
   </div>;
 };
 

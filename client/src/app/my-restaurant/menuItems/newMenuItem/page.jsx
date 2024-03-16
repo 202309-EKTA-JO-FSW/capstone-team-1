@@ -1,7 +1,7 @@
 import NewMenuItem from "@/app/components/my-restaurant/menuitems/newMenuItem/NewMenuItem";
 import React from "react";
 
-const SingleMenuItemPage = () => {
+const NewMenuItemPage = () => {
   return (
     <div>
       <NewMenuItem />
@@ -9,4 +9,4 @@ const SingleMenuItemPage = () => {
   );
 };
 
-export default SingleMenuItemPage;
+export default NewMenuItemPage;

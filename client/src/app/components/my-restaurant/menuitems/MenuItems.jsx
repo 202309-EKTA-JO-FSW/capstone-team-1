@@ -4,32 +4,28 @@ import { fetchMenuItems } from "@/app/lib/data";
 
 import MenuItemCard from "./MenuItemCard";
 import Link from "next/link";
+import Btn from "../../Btn";
 
-function MenuItems({ params }) {
+function MenuItems({}) {
   const [menuItems, setMenuItems] = useState([]);
 
   const [loading, setLoading] = useState(true);
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(5);
-  const [totalPages, setTotalPages] = useState(1);
-  const resId = params;
-  const getMenuItems = async () => {
-    try {
-      const menuItemsData = await fetchMenuItems(resId, page, limit);
-
-      setMenuItems(menuItemsData.menuItems);
-      setTotalPages(menuItemsData.totalPages);
-    } catch (error) {
-      console.error("Error fetching Menu Items:", error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   useEffect(() => {
+    const getMenuItems = async () => {
+      try {
+        setLoading(false);
+        const menuItemsData = await fetchMenuItems();
+        setMenuItems(menuItemsData);
+      } catch (error) {
+        console.error("Error fetching Menu Items:", error.message);
+        setLoading(false);
+      }
+    };
     getMenuItems();
   }, []);
 
+  console.log(menuItems);
   return (
     <div className="flex flex-col justify-start items-center p-4 md:p-8 lg:p-12 w-full">
       <h1 className="flex justify-center font-bold text-5xl w-full">
@@ -51,6 +47,12 @@ function MenuItems({ params }) {
               <p className="font-bold text-2xl">No Menu Items found</p>
             </div>
           )}
+          
+          <div>
+            <Link href="/my-restaurant/menuItems/newMenuItem">
+              <Btn text={"Add Item"} />
+            </Link>
+          </div>
         </div>
       </div>
     </div>
