@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { MdModeEdit, MdCheck, MdClose, MdDelete } from "react-icons/md";
+
 import { fetchdeleteMenuItem, fetchUpdateMenuItem } from "@/app/lib/data";
 import menuItemImage from "../../../../../public/image/menuItem-image-placeholder.png";
 
@@ -18,14 +19,14 @@ const MenuItemCard = ({ menuItem }) => {
     setEditedMenuItem(menuItem);
   };
 
-  const handleSaveEdit = async (e) => {
-    setEditedMenuItem(editedMenuItem);
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setEditedMenuItem(editedMenuItem);
+    setIsEditing(false);
     const updatedMenuItem = await fetchUpdateMenuItem(
       menuItem._id,
       editedMenuItem
     );
-    setIsEditing(false);
   };
 
   const handleChange = (e) => {
@@ -35,7 +36,7 @@ const MenuItemCard = ({ menuItem }) => {
 
   const handleDelete = async (e) => {
     const confirmDelete = window.confirm(
-      "Are you sure you want to delete this menu item?"
+      "Are you sure you want to delete this item?"
     );
     if (confirmDelete) {
       await fetchdeleteMenuItem(menuItem._id);
@@ -133,32 +134,29 @@ const MenuItemCard = ({ menuItem }) => {
         )}
         {isEditing ? (
           <div className="flex justify-between">
-            <button
-              onClick={handleSaveEdit}
-              className="text-green-500 focus:outline-none"
-            >
-              <MdCheck />
+            <button onClick={handleSubmit} className="text-xl ">
+              <MdCheck className="text-xl" />
             </button>
             <button
               onClick={handleCancelEdit}
-              className="text-red-500 focus:outline-none"
+              className=" rounded-2xl px-3 py-1 bg-main-green text-white "
             >
-              <MdClose />
+              <MdClose className="text-xl" />
             </button>
           </div>
         ) : (
           <div className="flex flex-row justify-start">
             <button
               onClick={handleEdit}
-              className="text-gray-500  hover:text-black px-2"
+              className="text-gray-500  hover:text-black px-1"
             >
-              <MdModeEdit className="text-xl " />
+              <MdModeEdit className="text-2xl " />
             </button>
             <button
               onClick={handleDelete}
               className="text-gray-500 hover:text-black  px-1"
             >
-              <MdDelete className="text-xl " />
+              <MdDelete className="text-2xl " />
             </button>
           </div>
         )}
