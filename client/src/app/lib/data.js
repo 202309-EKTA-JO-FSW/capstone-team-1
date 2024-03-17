@@ -5,7 +5,8 @@ const {
   getGoogleUser,
   userProfileUrl,
   restaurantUrl,
-  menuItemsUrl
+  menuItemsUrl,
+  singleRestaurantUrl
 } = require("./utils");
 
 // signup
@@ -112,5 +113,18 @@ export const fetchMenuItem = async (resId) => {
     throw error; 
   }
 };
+
+// fetch single restaurant
+export const fetchSingleRestaurant = async (resId) => {
+  try { 
+    const res = await fetch(singleRestaurantUrl(resId));
+    return await res.json();
+  } catch (error) {
+    console.error('Error fetching restaurant', error);
+    throw error; 
+  }
+};
+
+
 
 

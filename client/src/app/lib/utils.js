@@ -13,3 +13,6 @@ export const restaurantUrl = main_url + `/restaurant`;
 // menu items 
 export const menuItemsUrl = (resId) => main_url + `/restaurant/${resId}/menuItems`;
 
+// single restaurant url
+export const singleRestaurantUrl = (resId) => main_url + `/restaurant/${resId}`;
+
