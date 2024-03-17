@@ -1,10 +1,11 @@
 import React from "react";
-import RestaurantForm from "../components/my-restaurant/RestaurantForm";
+
+import RestaurantFormContainer from "../components/my-restaurant/RestaurantFormContainer";
 
 const MyRestaurantPage = () => {
   return (
     <section>
-      <RestaurantForm />
+      <RestaurantFormContainer />
     </section>
   );
 };

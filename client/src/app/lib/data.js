@@ -5,6 +5,8 @@ const {
   userProfileUrl,
   restaurantUrl,
   adminNewRestaurantUrl,
+  adminGetRestaurantUrl,
+  adminUpdateRestaurantUrl,
 } = require("./utils");
 
 // signup
@@ -102,17 +104,46 @@ export const searchRestaurant = async (search, page, limit) => {
 };
 
 // create restaurant
-export const createRestaurant = async (form) => {
+export const createRestaurant = async (formData) => {
   try {
-    console.log(form);
+    console.log(formData);
     const res = await fetch(adminNewRestaurantUrl, {
       method: "POST",
+      body: formData,
+      credentials: "include",
+    });
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+//get admin restaurant
+
+export const getAdminRestaurant = async () => {
+  try {
+    const res = await fetch(adminGetRestaurantUrl, { credentials: "include" });
+    const restaurant = res.json();
+    return restaurant;
+  } catch (error) {
+    console.error("Error getting restaurant", error.message);
+    throw error;
+  }
+};
+
+//update admin restaurant
+export const updateAdminRestaurant = async (form) => {
+  try {
+    const res = await fetch(adminUpdateRestaurantUrl, {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(form),
       credentials: "include",
     });
+
     return res.json();
   } catch (error) {
     console.error(error.message);

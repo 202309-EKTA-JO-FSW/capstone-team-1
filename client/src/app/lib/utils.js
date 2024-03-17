@@ -12,3 +12,5 @@ export const restaurantUrl = main_url + `/restaurant`;
 
 //admin url
 export const adminNewRestaurantUrl = main_url + `/admin/restaurant/new`;
+export const adminGetRestaurantUrl = main_url + `/admin/restaurant`;
+export const adminUpdateRestaurantUrl = main_url + `/admin/restaurant`;
