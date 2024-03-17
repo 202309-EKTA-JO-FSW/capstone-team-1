@@ -1,11 +1,12 @@
-
 const {
   signupUrl,
   loginUrl,
   getGoogleUser,
   userProfileUrl,
   restaurantUrl,
-  menuItemsUrl
+  menuItemsUrl,
+  cartUrl,
+  updateCartUrl,
 } = require("./utils");
 
 // signup
@@ -57,25 +58,6 @@ export const fetchGoogleUser = async () => {
   }
 };
 
-// update user profile
-export const fetchUserUpdate = async (form) => {
-  try {
-    const res = await fetch(userProfileUrl, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(form),
-      credentials: "include",
-    });
-
-    return res.json();
-  } catch (error) {
-    console.error(error.message);
-    return error.message;
-  }
-};
-
 // fetch restaurant
 export const fetchRestaurants = async (page, limit) => {
   try {
@@ -104,13 +86,113 @@ export const searchRestaurant = async (search, page, limit) => {
 
 // fetch menu items
 export const fetchMenuItem = async (resId) => {
-  try { 
+  try {
     const res = await fetch(menuItemsUrl(resId));
     return await res.json();
   } catch (error) {
-    console.error('Error fetching menu item:', error);
-    throw error; 
+    console.error("Error fetching menu item:", error);
+    throw error;
   }
 };
 
+// post cart
+export const fetchPostCart = async (menuItemId) => {
+  try {
+    const res = await fetch(cartUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ menuItemId: menuItemId }),
+      credentials: "include",
+    });
 
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+// get cart info
+export const fetchCart = async (menuItemId) => {
+  try {
+    const res = await fetch(cartUrl, {
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+// USER
+// update user profile
+export const fetchUserUpdate = async (form) => {
+  try {
+    const res = await fetch(userProfileUrl, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(form),
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+// get user profile
+export const fetchUser = async () => {
+  try {
+    const res = await fetch(userProfileUrl, {
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+// CART
+// update cart info
+export const fetchUpdateCart = async (itemId, statusRes) => {
+  try {
+    const res = await fetch(updateCartUrl(itemId), {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ status: statusRes }),
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+// cancel cart
+export const fetchCancelCart = async () => {
+  try {
+    const res = await fetch(cartUrl, {
+      method: "delete",
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
