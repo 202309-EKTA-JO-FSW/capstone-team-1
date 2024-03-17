@@ -2,15 +2,15 @@
 import { fetchUser } from "@/app/lib/data";
 import React, { useEffect, useState } from "react";
 
-const UserInfo = ({ loading, cart }) => {
+const UserInfo = ({ loading, cart, form, setForm }) => {
   // form data
-  const [form, setForm] = useState({
-    phoneNumber: "",
-    country: "",
-    city: "",
-    street: "",
-    zipcode: "",
-  });
+  // const [form, setForm] = useState({
+  //   phoneNumber: "",
+  //   country: "",
+  //   city: "",
+  //   street: "",
+  //   zipcode: "",
+  // });
 
   useEffect(() => {
     // Function to fetch user data and update the form state

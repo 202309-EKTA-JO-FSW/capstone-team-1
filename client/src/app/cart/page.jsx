@@ -6,17 +6,31 @@ import UserInfo from "../components/cart/UserInfo";
 const CartPage = () => {
   const [cart, setCart] = useState({});
   const [loading, setLoading] = useState(true);
-  const [cartEmpty, setCartEmpty] = useState(false);
+  // form data
+  const [form, setForm] = useState({
+    phoneNumber: "",
+    country: "",
+    city: "",
+    street: "",
+    zipcode: "",
+  });
 
   return (
-    <div className="flex flex-col lg:flex-row justify-around items-center w-full mt-24 px-7">
+    <div className="flex flex-col lg:flex-row justify-around items-center w-full mt-10 px-7">
       <Cart
+        form={form}
         loading={loading}
         setLoading={setLoading}
         cart={cart}
         setCart={setCart}
       />
-      <UserInfo loading={loading} setLoading={setLoading} cart={cart} />
+      <UserInfo
+        form={form}
+        setForm={setForm}
+        loading={loading}
+        setLoading={setLoading}
+        cart={cart}
+      />
     </div>
   );
 };

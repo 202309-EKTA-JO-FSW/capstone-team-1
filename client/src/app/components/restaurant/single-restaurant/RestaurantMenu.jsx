@@ -35,7 +35,7 @@ const RestaurantMenu = ({ id }) => {
     <div className="flex justify-center">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         {items.map((item) => (
-          <div key={item._id}>
+          <div key={item.name}>
             <MenuItemCard menuItem={item} />
           </div>
         ))}
