@@ -1,7 +1,8 @@
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
-import { MdModeEdit, MdCheck, MdClose } from "react-icons/md";
+import { MdModeEdit, MdCheck, MdClose, MdDelete } from "react-icons/md";
+import { updateMenuItem, deleteMenuItemfetch } from "@/app/lib/data";
 
 const MenuItemCard = ({ menuItem }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -16,8 +17,10 @@ const MenuItemCard = ({ menuItem }) => {
     setEditedMenuItem(menuItem);
   };
 
-  const handleSaveEdit = () => {
-    // You can implement the functionality to save the edited menu item here
+  const handleSaveEdit = async (e) => {
+    setEditedMenuItem(editedMenuItem);
+    e.preventDefault();
+    const updatedMenuItem = await updateMenuItem(menuItem._id, editedMenuItem); // You can implement the functionality to save the edited menu item here
     console.log("Edited menu item:", editedMenuItem);
     setIsEditing(false);
   };
@@ -27,9 +30,12 @@ const MenuItemCard = ({ menuItem }) => {
     setEditedMenuItem({ ...editedMenuItem, [name]: value });
   };
 
+  const handleDelete = async (e) => {
+    const deleteMenuItem = await deleteMenuItemfetch(menuItem._id);
+  };
   return (
-    <div className="h-[400px] w-full sm:w-[250px] m-1 sm:m-6 flex flex-col justify-center bg-white shadow-md rounded-lg overflow-hidden border border-gray-100 hover:bg-violet-100">
-      <div className="h-[350px] flex justify-center items-center p-1 rounded">
+    <div className="h-auto w-full sm:w-[250px] m-1 sm:m-6 flex flex-col justify-center bg-white shadow-md rounded-lg overflow-hidden border border-gray-100 hover:bg-violet-100">
+      <div className="h-auto flex justify-center items-center p-1 rounded">
         <Image
           src={editedMenuItem.image}
           alt={editedMenuItem.name}
@@ -122,9 +128,14 @@ const MenuItemCard = ({ menuItem }) => {
             </button>
           </div>
         ) : (
-          <button onClick={handleEdit} className="text-gray-600">
-            <MdModeEdit />
-          </button>
+          <>
+            <button onClick={handleEdit} className="text-gray-600">
+              <MdModeEdit />
+            </button>
+            <button onClick={handleDelete} className="text-gray-600">
+              <MdDelete />
+            </button>
+          </>
         )}
       </div>
     </div>

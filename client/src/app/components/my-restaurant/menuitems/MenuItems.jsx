@@ -19,7 +19,7 @@ function MenuItems() {
     console.log(restaurantId);
     const getMenuItems = async () => {
       try {
-       setLoading(false)
+        setLoading(false);
         const menuItemsData = await fetchMenuItems(restaurantId);
         setMenuItems(menuItemsData);
         console.log(menuItemsData);
@@ -38,7 +38,7 @@ function MenuItems() {
       <div className="flex flex-wrap justify-start">
         {loading ? (
           <p className="font-bold text-xl">Loading...</p>
-        ) : menuItems ? (
+        ) : menuItems && menuItems.length > 0 ? (
           menuItems.map((menuItem) => (
             <MenuItemCard key={menuItem._id} menuItem={menuItem} />
           ))

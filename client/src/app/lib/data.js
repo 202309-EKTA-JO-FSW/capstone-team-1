@@ -4,11 +4,11 @@ const {
   getGoogleUser,
   userProfileUrl,
   restaurantUrl,
-  menuItemsUrl,
   newMenuItemUrl,
   menuItemsUrl,
   cartUrl,
   updateCartUrl,
+  updateMenuItemUrl,
 } = require("./utils");
 
 // signup
@@ -108,6 +108,42 @@ export const postItem = async (formData) => {
       method: "POST",
 
       body: formData,
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+// update menu Items
+export const updateMenuItem = async (menuItemId, menuItem) => {
+  const url = `${updateMenuItemUrl}/${menuItemId}`;
+  try {
+    const res = await fetch(url, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(menuItem),
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+
+// delete menuItem
+export const deleteMenuItemfetch = async (menuItemId) => {
+  try {
+    const res = await fetch(`${updateMenuItemUrl}/${menuItemId}`, {
+      method: "delete",
       credentials: "include",
     });
 
