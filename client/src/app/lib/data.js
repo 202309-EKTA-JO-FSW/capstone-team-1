@@ -86,15 +86,11 @@ export const searchRestaurant = async (search, page, limit) => {
   }
 };
 
-// fetch menuItems
-
-export const fetchMenuItems = async (resId) => {
+// fetch menu items
+export const fetchMenuItem = async (resId) => {
   try {
-    const url = `${restaurantUrl}/${resId}/menuItems`;
-
-    const res = await fetch(url);
-    const menuItems = await res.json();
-    return menuItems;
+    const res = await fetch(menuItemsUrl(resId));
+    return await res.json();
   } catch (error) {
     console.error("Error fetching menu item:", error);
     throw error;
@@ -119,7 +115,7 @@ export const postItem = async (formData) => {
 };
 
 // update menu Items
-export const updateMenuItem = async (menuItemId, menuItem) => {
+export const fetchUpdateMenuItem = async (menuItemId, menuItem) => {
   const url = `${updateMenuItemUrl}/${menuItemId}`;
   try {
     const res = await fetch(url, {
@@ -138,9 +134,8 @@ export const updateMenuItem = async (menuItemId, menuItem) => {
   }
 };
 
-
 // delete menuItem
-export const deleteMenuItemfetch = async (menuItemId) => {
+export const fetchdeleteMenuItem = async (menuItemId) => {
   try {
     const res = await fetch(`${updateMenuItemUrl}/${menuItemId}`, {
       method: "delete",

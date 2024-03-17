@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { MdModeEdit, MdCheck, MdClose, MdDelete } from "react-icons/md";
-import { updateMenuItem, deleteMenuItemfetch } from "@/app/lib/data";
+import { fetchdeleteMenuItem, fetchUpdateMenuItem } from "@/app/lib/data";
 
 const MenuItemCard = ({ menuItem }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -20,8 +20,10 @@ const MenuItemCard = ({ menuItem }) => {
   const handleSaveEdit = async (e) => {
     setEditedMenuItem(editedMenuItem);
     e.preventDefault();
-    const updatedMenuItem = await updateMenuItem(menuItem._id, editedMenuItem); // You can implement the functionality to save the edited menu item here
-    console.log("Edited menu item:", editedMenuItem);
+    const updatedMenuItem = await fetchUpdateMenuItem(
+      menuItem._id,
+      editedMenuItem
+    );
     setIsEditing(false);
   };
 
@@ -31,24 +33,29 @@ const MenuItemCard = ({ menuItem }) => {
   };
 
   const handleDelete = async (e) => {
-    const deleteMenuItem = await deleteMenuItemfetch(menuItem._id);
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this menu item?"
+    );
+    if (confirmDelete) {
+      await fetchdeleteMenuItem(menuItem._id);
+      router.push("/menuItems");
+    }
   };
   return (
-    <div className="h-auto w-full sm:w-[250px] m-1 sm:m-6 flex flex-col justify-center bg-white shadow-md rounded-lg overflow-hidden border border-gray-100 hover:bg-violet-100">
+    <div className="h-auto w-full sm:w-[250px] m-1 sm:m-6 flex flex-col justify-center bg-white shadow-md rounded-lg overflow-hidden border border-gray-100 hover:bg-green-100">
       <div className="h-auto flex justify-center items-center p-1 rounded">
         <Image
           src={editedMenuItem.image}
           alt={editedMenuItem.name}
-          width={300}
-          height={300}
-          className="rounded"
+          width={250}
+          height={250}
           priority="true"
         />
       </div>
       <div className="p-4">
         {isEditing ? (
           <label>
-            Name
+            Name:
             <input
               type="text"
               name="name"
@@ -62,25 +69,46 @@ const MenuItemCard = ({ menuItem }) => {
         )}
 
         {isEditing ? (
-          <input
-            type="text"
-            name="type"
-            value={editedMenuItem.type}
-            onChange={handleChange}
-            className="text-gray-600 mb-2 focus:outline-none"
-          />
+          <label>
+            Type:
+            <input
+              type="text"
+              name="type"
+              value={editedMenuItem.type}
+              onChange={handleChange}
+              className="text-gray-600 mb-2 focus:outline-none"
+            />
+          </label>
         ) : (
           <p className="text-gray-600 mb-2">Type: {editedMenuItem.type}</p>
         )}
 
         {isEditing ? (
-          <input
-            type="text"
-            name="description"
-            value={editedMenuItem.description}
-            onChange={handleChange}
-            className="text-gray-600 mb-2 focus:outline-none"
-          />
+          <label>
+            Price:
+            <input
+              type="number"
+              name="price"
+              value={editedMenuItem.price}
+              onChange={handleChange}
+              className="text-gray-600 mb-2 focus:outline-none"
+            />
+          </label>
+        ) : (
+          <p className="text-gray-600 mb-2">Price: {editedMenuItem.price}</p>
+        )}
+
+        {isEditing ? (
+          <label>
+            Description:
+            <input
+              type="text"
+              name="description"
+              value={editedMenuItem.description}
+              onChange={handleChange}
+              className="text-gray-600 mb-2 focus:outline-none"
+            />
+          </label>
         ) : (
           <p className="text-gray-600 mb-2">
             Description: {editedMenuItem.description}
@@ -88,28 +116,19 @@ const MenuItemCard = ({ menuItem }) => {
         )}
 
         {isEditing ? (
-          <input
-            type="number"
-            name="price"
-            value={editedMenuItem.price}
-            onChange={handleChange}
-            className="text-gray-600 mb-2 focus:outline-none"
-          />
-        ) : (
-          <p className="text-gray-600 mb-2">Price: {editedMenuItem.price}</p>
-        )}
-
-        {isEditing ? (
-          <input
-            type="checkbox"
-            name="available"
-            value={editedMenuItem.available}
-            onChange={handleChange}
-            className="text-gray-600 mb-2 focus:outline-none"
-          />
+          <label>
+            Available:
+            <input
+              type="checkbox"
+              name="available"
+              checked={editedMenuItem.available}
+              onChange={handleChange}
+              className="text-gray-600 mb-2 focus:outline-none"
+            />
+          </label>
         ) : (
           <p className="text-gray-600 mb-2">
-            Availability: {editedMenuItem.available}
+            Available: {editedMenuItem.available}
           </p>
         )}
         {isEditing ? (

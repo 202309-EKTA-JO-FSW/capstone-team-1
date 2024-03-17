@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { fetchMenuItems } from "@/app/lib/data";
+import { fetchMenuItem } from "@/app/lib/data";
 
 import MenuItemCard from "./MenuItemCard";
 import Link from "next/link";
@@ -20,7 +20,7 @@ function MenuItems() {
     const getMenuItems = async () => {
       try {
         setLoading(false);
-        const menuItemsData = await fetchMenuItems(restaurantId);
+        const menuItemsData = await fetchMenuItem(restaurantId);
         setMenuItems(menuItemsData);
         console.log(menuItemsData);
       } catch (error) {
@@ -32,19 +32,19 @@ function MenuItems() {
   }, []);
 
   return (
-    <div className="p-4 md:p-8 lg:p-12 w-full">
-      <h1 className="font-bold text-4xl  mb-8">Menu Items</h1>
+    <div className="p-2 md:p-5 lg:p-8 w-full">
+      <h1 className="font-bold text-3xl  mb-4">Menu Items</h1>
 
       <div className="flex flex-wrap justify-start">
         {loading ? (
-          <p className="font-bold text-xl">Loading...</p>
+          <p className="font-bold text-base">Loading...</p>
         ) : menuItems && menuItems.length > 0 ? (
           menuItems.map((menuItem) => (
             <MenuItemCard key={menuItem._id} menuItem={menuItem} />
           ))
         ) : (
           <div className="flex items-center justify-center w-full h-50">
-            <p className="font-bold text-2xl">No Menu Items found</p>
+            <p className="font-bold text-xl">No Menu Items found</p>
           </div>
         )}
       </div>
