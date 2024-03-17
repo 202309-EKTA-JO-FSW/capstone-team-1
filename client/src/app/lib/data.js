@@ -90,11 +90,11 @@ export const searchRestaurant = async (search, page, limit) => {
 
 export const fetchMenuItems = async (resId) => {
   try {
-  const url= `${restaurantUrl}/${resId}/menuItems`;
+    const url = `${restaurantUrl}/${resId}/menuItems`;
 
     const res = await fetch(url);
-    const menuItems= await  res.json();
-    return menuItems
+    const menuItems = await res.json();
+    return menuItems;
   } catch (error) {
     console.error("Error fetching menu item:", error);
     throw error;
@@ -115,17 +115,6 @@ export const postItem = async (formData) => {
   } catch (error) {
     console.error(error.message);
     return error.message;
-  }
-};
-
-// fetch menu items
-export const fetchMenuItem = async (resId) => {
-  try {
-    const res = await fetch(menuItemsUrl(resId));
-    return await res.json();
-  } catch (error) {
-    console.error("Error fetching menu item:", error);
-    throw error;
   }
 };
 
