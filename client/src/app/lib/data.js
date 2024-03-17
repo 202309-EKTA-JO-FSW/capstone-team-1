@@ -199,7 +199,7 @@ export const fetchCancelCart = async () => {
 };
 
 // checkout
-// createorder
+// create order
 export const fetchCreateOrder = async () => {
   try {
     const res = await fetch(checkoutUrl, {
