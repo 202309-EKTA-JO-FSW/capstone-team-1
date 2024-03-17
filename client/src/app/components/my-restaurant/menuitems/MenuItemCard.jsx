@@ -128,7 +128,7 @@ const MenuItemCard = ({ menuItem }) => {
           </label>
         ) : (
           <p className="text-gray-600 mb-2">
-            Available: {editedMenuItem.available}
+            Available: {editedMenuItem.available ? "Yes" : "No"}
           </p>
         )}
         {isEditing ? (
