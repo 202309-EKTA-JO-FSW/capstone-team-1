@@ -54,7 +54,7 @@ const NewMenuItem = () => {
         <div className="px-4 py-15">
           <div className="flex flex-col items-center justify-center relative top-5 left-3">
             <h1 className="font-bold text-[24px] p-2">Add Menu Item</h1>
-            {isSubmitted && <p>Form submitted successfully!</p>}
+            {isSubmitted && <p>Item added successfully!</p>}
             <form className="w-full " onSubmit={handleSubmit}>
               <div className="flex flex-col p-2">
                 {/* Name */}

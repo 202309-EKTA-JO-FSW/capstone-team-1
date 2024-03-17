@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { MdModeEdit, MdCheck, MdClose, MdDelete } from "react-icons/md";
 import { fetchdeleteMenuItem, fetchUpdateMenuItem } from "@/app/lib/data";
+import menuItemImage from "../../../../../public/image/menuItem-image-placeholder.png";
 
 const MenuItemCard = ({ menuItem }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -38,14 +39,13 @@ const MenuItemCard = ({ menuItem }) => {
     );
     if (confirmDelete) {
       await fetchdeleteMenuItem(menuItem._id);
-      router.push("/menuItems");
     }
   };
   return (
     <div className="h-auto w-full sm:w-[250px] m-1 sm:m-6 flex flex-col justify-center bg-white shadow-md rounded-lg overflow-hidden border border-gray-100 hover:bg-green-100">
       <div className="h-auto flex justify-center items-center p-1 rounded">
         <Image
-          src={editedMenuItem.image}
+          src={editedMenuItem.image || menuItemImage}
           alt={editedMenuItem.name}
           width={250}
           height={250}
