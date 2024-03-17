@@ -3,6 +3,7 @@ import { fetchUserOrders } from "@/app/lib/data";
 import { useEffect, useState } from "react";
 import Loading from "../../loading/Loading";
 import OrderCard from "./OrderCard";
+import Link from "next/link";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
@@ -33,7 +34,9 @@ const Orders = () => {
       <h1 className="text-4xl mb-8 font-bold">Orders</h1>
       {orders.map((order) => (
         <div key={order._id}>
-          <OrderCard order={order} />
+          <Link href={`/profile/orders/${order._id}`}>
+            <OrderCard order={order} />
+          </Link>
         </div>
       ))}
     </div>

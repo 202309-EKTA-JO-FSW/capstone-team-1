@@ -375,7 +375,8 @@ const getOrders = async (req, res) => {
     const orders = await Order.find({ customer: user._id })
       .populate("customer")
       .populate("restaurant")
-      .populate("cartItems.menuItem");
+      .populate("cartItems.menuItem")
+      .sort({ createdAt: -1 });
 
     if (!orders) return res.status(404).json({ message: "No orders found" });
 
