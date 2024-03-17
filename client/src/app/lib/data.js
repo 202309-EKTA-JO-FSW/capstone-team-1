@@ -8,6 +8,7 @@ const {
   cartUrl,
   updateCartUrl,
   checkoutUrl,
+  logoutUrl,
 } = require("./utils");
 
 // signup
@@ -40,6 +41,18 @@ export const fetchLogin = async (form) => {
       body: JSON.stringify(form),
       credentials: "include",
     });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+// login
+export const fetchLogout = async () => {
+  try {
+    const res = await fetch(logoutUrl, { credentials: "include" });
 
     return res.json();
   } catch (error) {
