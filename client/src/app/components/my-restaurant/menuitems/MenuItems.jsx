@@ -8,21 +8,18 @@ import Btn from "../../Btn";
 
 function MenuItems() {
   const [menuItems, setMenuItems] = useState([]);
-
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
-    console.log(storedUser);
 
     const restaurantId = storedUser.restaurant;
-    console.log(restaurantId);
+
     const getMenuItems = async () => {
       try {
         setLoading(false);
         const menuItemsData = await fetchMenuItem(restaurantId);
         setMenuItems(menuItemsData);
-        console.log(menuItemsData);
       } catch (error) {
         console.error("Error fetching Menu Items:", error.message);
         setLoading(false);

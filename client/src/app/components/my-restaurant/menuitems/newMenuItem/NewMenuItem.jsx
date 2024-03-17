@@ -33,9 +33,9 @@ const NewMenuItem = () => {
     formData.append("description", form.description);
     formData.append("available", form.available);
     formData.append("image", file);
-    console.log(form);
+
     const newMenuItem = await postItem(formData);
-    console.log(newMenuItem);
+
     if (newMenuItem) {
       setIsSubmitted(true);
       setForm({

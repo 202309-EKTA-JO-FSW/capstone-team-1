@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { MdModeEdit, MdCheck, MdClose, MdDelete } from "react-icons/md";
-
 import { fetchdeleteMenuItem, fetchUpdateMenuItem } from "@/app/lib/data";
 import menuItemImage from "../../../../../public/image/menuItem-image-placeholder.png";
 
@@ -135,14 +134,11 @@ const MenuItemCard = ({ menuItem }) => {
         )}
         {isEditing ? (
           <div className="flex justify-between">
-            <button onClick={handleSubmit} className="text-xl ">
-              <MdCheck className="text-xl" />
+            <button onClick={handleSubmit}>
+              <MdCheck className="text-2xl text-main-green" />
             </button>
-            <button
-              onClick={handleCancelEdit}
-              className=" rounded-2xl px-3 py-1 bg-main-green text-white "
-            >
-              <MdClose className="text-xl" />
+            <button onClick={handleCancelEdit}>
+              <MdClose className="text-2xl text-red-500" />
             </button>
           </div>
         ) : (
