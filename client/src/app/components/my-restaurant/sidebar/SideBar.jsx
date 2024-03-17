@@ -5,6 +5,7 @@ import { IoReceipt } from "react-icons/io5";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import SidebarBtn from "../../SidebarBtn";
+import LogoutBtn from "../../LogoutBtn";
 const SideBar = () => {
   // get url path
   const pathname = usePathname();
@@ -18,7 +19,7 @@ const SideBar = () => {
   console.log(pathname);
   return (
     <div className="sidebar">
-      <div>
+      <div className="flex md:flex-col">
         {contents.map((content) => (
           <div key={content.name}>
             <Link href={`/${mainPath}/${content.path}`}>
@@ -31,6 +32,7 @@ const SideBar = () => {
           </div>
         ))}
       </div>
+      <LogoutBtn />
     </div>
   );
 };

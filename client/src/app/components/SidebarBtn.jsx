@@ -3,7 +3,7 @@ import React from "react";
 const SidebarBtn = ({ content, pathname, mainPath }) => {
   let active;
   if (pathname === `/${mainPath + content.path}`) {
-    active = "bg-white";
+    active = "bg-white rounded-lg";
   } else {
     active = "bg-transparent";
   }
