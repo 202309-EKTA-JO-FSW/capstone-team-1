@@ -6,7 +6,7 @@ const { validateRestaurant } = require("../utils/validation");
 
 // add a new menuItem
 const addNewItem = async (req, res) => {
-  const { name, description, price, type } = req.body;
+  const { name, description, price, type, available } = req.body;
   try {
     // valdite menuItem fields
     if (!name || !description || !price || !type) {
@@ -48,6 +48,7 @@ const addNewItem = async (req, res) => {
       description,
       price,
       type,
+      available,
       image: imageUrl,
       restaurant: user.restaurant._id,
     });

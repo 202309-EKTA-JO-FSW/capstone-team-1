@@ -30,8 +30,9 @@ const MenuItemCard = ({ menuItem }) => {
   };
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setEditedMenuItem({ ...editedMenuItem, [name]: value });
+    const { name, value, type, checked } = e.target;
+    const newValue = type === "checkbox" ? checked : value;
+    setEditedMenuItem({ ...editedMenuItem, [name]: newValue });
   };
 
   const handleDelete = async (e) => {

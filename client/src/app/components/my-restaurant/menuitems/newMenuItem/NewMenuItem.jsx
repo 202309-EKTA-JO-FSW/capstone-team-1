@@ -19,6 +19,7 @@ const NewMenuItem = () => {
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     const newValue = type === "checkbox" ? checked : value;
+
     setForm({ ...form, [name]: newValue });
     setIsSubmitted(false);
   };
@@ -32,9 +33,9 @@ const NewMenuItem = () => {
     formData.append("description", form.description);
     formData.append("available", form.available);
     formData.append("image", file);
-
+    console.log(form);
     const newMenuItem = await postItem(formData);
-
+    console.log(newMenuItem);
     if (newMenuItem) {
       setIsSubmitted(true);
       setForm({
@@ -47,7 +48,6 @@ const NewMenuItem = () => {
       });
     }
   };
-
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-2">
