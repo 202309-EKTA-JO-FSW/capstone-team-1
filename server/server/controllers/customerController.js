@@ -363,6 +363,28 @@ const cancelCheckout = async (req, res) => {
   }
 };
 
+// Orders
+const getOrders = async (req, res) => {
+  try {
+    // find user
+    const user = await User.findById(req.userId);
+    if (!user) return res.status(403).json({ message: "Access denied" });
+
+    // find orders
+    const orders = await Order.find({ customer: user._id })
+      .populate("customer")
+      .populate("restaurant")
+      .populate("cartItems.menuItem");
+
+    if (!orders) return res.status(404).json({ message: "No orders found" });
+
+    return res.status(200).json(orders);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   newCart,
   updateCart,
@@ -372,4 +394,5 @@ module.exports = {
   cancelCheckout,
   getCheckout,
   getCart,
+  getOrders,
 };
