@@ -50,12 +50,62 @@ const newCart = async (req, res) => {
       user.cart.menuItems.push({ menuItem: menuItemId, total: menuItem.price });
     }
 
+    // add subtotal
+    user.cart.subtotal = user.cart.menuItems.reduce(
+      (total, item) => total + item.total,
+      0
+    );
+
+    // add menuitems count
+    const menuItemCount = user.cart.menuItems.reduce(
+      (total, item) => total + item.quantity,
+      0
+    );
+
+    user.cart.itemsCount = menuItemCount;
+
     await user.save();
 
-    res.status(201).json({ message: "Menu item added to cart", results: user });
+    return res
+      .status(201)
+      .json({ message: "Menu item added to cart", results: user });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+const getCart = async (req, res) => {
+  try {
+    const user = await User.findById(req.userId)
+      .populate({
+        path: "cart.restaurant",
+        model: "Restaurant",
+      })
+      .populate({
+        path: "cart.menuItems.menuItem",
+        model: "MenuItem",
+      });
+
+    if (!user)
+      return res.status(401).json({ message: "User not found, Please login" });
+
+    // if (!user.cart) return res.status(404).json({ message: "Cart is empty" });
+    let cart;
+    if (user.cart) {
+      cart = {
+        restaurant: user.cart.restaurant.name,
+        menuItems: user.cart.menuItems,
+        itemsCount: user.cart.itemsCount,
+        subtotal: user.cart.subtotal,
+      };
+    } else {
+      cart = [];
+    }
+    return res.status(200).json(cart);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: error.message });
   }
 };
 
@@ -98,11 +148,27 @@ const updateCart = async (req, res) => {
         .json({ message: "Status should be either add or remove" });
     }
 
+    user.cart.subtotal = user.cart.menuItems.reduce(
+      (total, item) => total + item.total,
+      0
+    );
+
+    // add menuitems count
+    user.cart.itemsCount = user.cart.menuItems.reduce(
+      (total, item) => total + item.quantity,
+      0
+    );
+
+    if (user.cart.subtotal === 0) {
+      user.cart = null;
+    }
+
     await user.save();
 
-    res
-      .status(200)
-      .json({ message: "cart updated successfully", results: user });
+    return res.status(200).json({
+      message: "cart updated successfully",
+      results: user,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: error.message });
@@ -126,12 +192,12 @@ const cancelCart = async (req, res) => {
 
     await user.save();
 
-    res
+    return res
       .status(200)
       .json({ message: "Cart deleted successfully", results: user });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 
@@ -148,10 +214,6 @@ const checkout = async (req, res) => {
     }
     const { cart } = userCart;
     //Calculate subtotal, delivery fees, and total based on cart items
-    let subtotal = 0;
-    cart.menuItems.forEach((item) => {
-      subtotal += item.quantity * item.total;
-    });
     const deliveryFee = 2.5;
     // Calculate total including delivery fees
     const total = subtotal + deliveryFee;
@@ -160,7 +222,7 @@ const checkout = async (req, res) => {
       restaurant: cart.restaurant,
       cartItems: cart.menuItems,
       deliveryFees: deliveryFee,
-      subtotal: subtotal,
+      subtotal: cart.subtotal,
       total: total,
     };
 
@@ -169,7 +231,7 @@ const checkout = async (req, res) => {
     return res.status(201).json({ message: "Ready for Checkout", order });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 
@@ -234,7 +296,7 @@ const processCheckout = async (req, res) => {
     return res.status(201).json({ message: "Order is proceeded successfully" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 
@@ -265,12 +327,12 @@ const cancelCheckout = async (req, res) => {
     restaurant.orders.splice(orderIndexRes, 1);
     await restaurant.save();
 
-    res
+    return res
       .status(200)
       .json({ message: "Order deleted successfully", deletedOrder });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 
@@ -295,7 +357,7 @@ const getCheckout = async (req, res) => {
     return res.status(200).json(order);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 
@@ -307,4 +369,5 @@ module.exports = {
   processCheckout,
   cancelCheckout,
   getCheckout,
+  getCart,
 };

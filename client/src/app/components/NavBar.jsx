@@ -7,6 +7,7 @@ import User from "./navbar/User";
 
 const NavBar = () => {
   const [user, setUser] = useState(null);
+  const [cart, setCart] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -14,6 +15,8 @@ const NavBar = () => {
     const handleStorageChange = () => {
       const storedUser = JSON.parse(localStorage.getItem("user"));
       setUser(storedUser);
+      const storedCart = JSON.parse(localStorage.getItem("cart"));
+      setCart(storedCart);
     };
 
     // Add event listener for storage change
@@ -21,6 +24,10 @@ const NavBar = () => {
 
     // Initial setup
     const storedUser = JSON.parse(localStorage.getItem("user"));
+    const storedCart = JSON.parse(localStorage.getItem("cart"));
+    if (storedCart) {
+      setCart(storedCart);
+    }
     setUser(storedUser);
     setLoading(false);
 
@@ -30,6 +37,7 @@ const NavBar = () => {
     };
   }, []);
 
+  // console.log(cart);
   return (
     <nav className="flex justify-between w-full bg-white sticky top-0 z-50 text-black [font-family:'Inter-Medium',Helvetica] text-base">
       <section className="flex items-center gap-2 flex-wrap  justify-between pl-3 pt-2 py-2">
@@ -60,8 +68,15 @@ const NavBar = () => {
       ) : (
         <section className="flex items-center gap-2 flex-wrap pr-3 pt-2 py-2">
           {/* condtional rendering of Login button or name of user if logged in */}
-          <Link href="/checkout">
-            <GiShoppingCart className="text-3xl  hover:text-main-green" />
+          <Link href="/cart">
+            <div className="relative w-[35px]">
+              <GiShoppingCart className="text-3xl hover:text-main-green" />
+              {cart && (
+                <div className="absolute top-0 right-0 bg-red-500 rounded-full flex justify-center items-center w-[16px] h-[16px] text-white text-[10px]">
+                  {cart.length}
+                </div>
+              )}
+            </div>
           </Link>
           <User user={user} />
         </section>

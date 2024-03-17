@@ -39,6 +39,11 @@ const cartSchema = Schema({
       },
     },
   ],
+  itemsCount: Number,
+  subtotal: {
+    type: Number,
+    required: true,
+  },
 });
 
 const userSchema = new Schema(

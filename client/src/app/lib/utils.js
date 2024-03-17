@@ -13,3 +13,12 @@ export const restaurantUrl = main_url + `/restaurant`;
 //menuItems url
 
 export const newMenuItemUrl = main_url + "/admin/restaurant/menuItem/new";
+
+
+// menu items
+export const menuItemsUrl = (resId) =>
+  main_url + `/restaurant/${resId}/menuItems`;
+
+// cart
+export const cartUrl = main_url + "/customer/cart";
+export const updateCartUrl = (resId) => main_url + `/customer/cart/${resId}`;
