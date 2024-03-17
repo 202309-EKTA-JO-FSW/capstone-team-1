@@ -149,7 +149,7 @@ export const fetchUserUpdate = async (form) => {
 };
 
 // get user profile
-export const fetchUser = async (form) => {
+export const fetchUser = async () => {
   try {
     const res = await fetch(userProfileUrl, {
       credentials: "include",

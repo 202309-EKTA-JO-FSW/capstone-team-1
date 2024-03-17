@@ -4,7 +4,6 @@ import Logo from "./navbar/Logo";
 import { GiShoppingCart } from "react-icons/gi";
 import Link from "next/link";
 import User from "./navbar/User";
-import { fetchUser } from "../lib/data";
 
 const NavBar = () => {
   const [user, setUser] = useState(null);

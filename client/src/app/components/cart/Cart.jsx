@@ -5,16 +5,14 @@ import ItemCard from "./ItemCard";
 import Btn from "../Btn";
 import LoadingBtn from "../LoadingBtn";
 
-const Cart = () => {
-  const [cart, setCart] = useState({});
-  const [loading, setLoading] = useState(true);
+const Cart = ({ loading, setLoading, cart, setCart }) => {
   const [clickedItem, setClickedItem] = useState("");
   const [cancelLoadingBtn, setCancelLoadingBtn] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-
+      // fetch cart
       const data = await fetchCart();
       setCart(data);
       setLoading(false);
@@ -32,9 +30,9 @@ const Cart = () => {
         );
 
         if (update) {
-          // setCart({ ...cart, menuItems: updatedMenuItems });
           const data = await fetchCart();
-          console.log(data);
+
+          // update the length count in local storage
           let cartLength = data.itemsCount;
           if (!data.menuItems) {
             localStorage.removeItem("cart");
@@ -54,10 +52,8 @@ const Cart = () => {
   }, [clickedItem]);
 
   const handleCancel = async () => {
-    setCancelLoadingBtn(true);
     const cancelCart = await fetchCancelCart();
 
-    console.log(cancelCart);
     if (cancelCart.message === "Cart deleted successfully") {
       const data = await fetchCart();
       // remove the cart from local host to not show the length on navbar
@@ -68,41 +64,52 @@ const Cart = () => {
     }
   };
 
-  // let menuItems = cart.menuItems;
-  if (loading) return <p>Loading.....</p>;
+  if (loading) {
+    return (
+      <div className="w-full h-screen flex justify-center">
+        <p className="text-3xl font-bold text-main-green">Loading...</p>
+      </div>
+    );
+  }
 
-  if (cart.length === 0)
-    return <p className="text-2xl font-bold">Cart Empty</p>;
-
+  if (cart.length === 0) {
+    return (
+      <div className="w-full h-screen flex justify-center">
+        <p className="text-3xl font-bold text-main-green">Cart Empty</p>
+      </div>
+    );
+  }
   if (cart.message) {
     return <p>{cart.message}</p>;
   }
-  // console.log(menuItems);
-  return (
-    <div className="flex flex-col items-center w-full p-2 rounded-xl bg-slate-100 bg-opacity-20 shadow-[0_5px_10px_5px_rgba(0,0,0,0.1)] sm:p-5 md:w-[450px]">
-      <h1 className="text-xl font-bold mb-5">{cart.restaurant}</h1>
-      <div className="w-full">
-        {cart.menuItems &&
-          cart.menuItems.map((cart) => (
-            <div key={cart.menuItem._id}>
-              <ItemCard cart={cart} setClickedItem={setClickedItem} />
-            </div>
-          ))}
-      </div>
 
-      <div className="text-xl my-5 border-b border-[#dedede] w-full">
-        <p className="text-center">
-          Total: <span className="font-bold text-2xl">{cart.subtotal} $</span>
-        </p>
-      </div>
-      <div className="w-full flex justify-around my-3">
-        <button
-          onClick={handleCancel}
-          className="bg-gray-300 w-[120px] h-[44px] text-center rounded-3xl text-white text-sm hover:bg-opacity-75"
-        >
-          {cancelLoadingBtn ? <LoadingBtn /> : "Cancel"}
-        </button>
-        <Btn text={"Checkout"} />
+  return (
+    <div className="flex flex-col justify-center items-center w-full md:p-7">
+      <h1 className="text-lg md:text-3xl font-bold m-5">Cart </h1>
+      <div className="flex flex-col items-center w-full p-5 mb-10 rounded-xl bg-slate-100 bg-opacity-20 shadow-[0_5px_10px_5px_rgba(0,0,0,0.1)]">
+        <h1 className="text-xl font-bold mb-5">{cart.restaurant}</h1>
+        <div className="w-full mb-10">
+          {cart.menuItems &&
+            cart.menuItems.map((cart) => (
+              <div key={cart.menuItem._id}>
+                <ItemCard cart={cart} setClickedItem={setClickedItem} />
+              </div>
+            ))}
+        </div>
+        <div className="text-xl my-5 border-b border-[#dedede] w-full">
+          <p className="text-center">
+            Total: <span className="font-bold text-2xl">{cart.subtotal} $</span>
+          </p>
+        </div>
+        <div className="w-full flex justify-around my-3">
+          <button
+            onClick={handleCancel}
+            className="bg-gray-300 w-[120px] h-[44px] text-center rounded-3xl text-white text-sm hover:bg-opacity-75"
+          >
+            {cancelLoadingBtn ? <LoadingBtn /> : "Cancel"}
+          </button>
+          <Btn text={"Checkout"} />
+        </div>
       </div>
     </div>
   );
