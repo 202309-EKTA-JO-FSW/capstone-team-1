@@ -1,9 +1,9 @@
 import React from "react";
 
-const SidebarBtn = ({ content, pathname }) => {
+const SidebarBtn = ({ content, pathname, mainPath }) => {
   let active;
-  if (pathname === `/my-restaurant${content.path}`) {
-    active = "bg-white";
+  if (pathname === `/${mainPath + content.path}`) {
+    active = "bg-white rounded-lg";
   } else {
     active = "bg-transparent";
   }
