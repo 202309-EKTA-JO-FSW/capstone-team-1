@@ -1,7 +1,7 @@
 import { FaPlus } from "react-icons/fa";
 import { FaMinus } from "react-icons/fa";
 
-const ItemCard = ({ cart, setClickedItem }) => {
+const ItemCart = ({ cart, setClickedItem }) => {
   return (
     <div className="flex justify-between items-center w-full p-1 mb-3 border-b border-[#dedede]">
       <div className="flex justify-between w-[55%] text-xl ">
@@ -27,4 +27,4 @@ const ItemCard = ({ cart, setClickedItem }) => {
   );
 };
 
-export default ItemCard;
+export default ItemCart;
