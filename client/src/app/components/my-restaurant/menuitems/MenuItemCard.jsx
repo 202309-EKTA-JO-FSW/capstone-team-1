@@ -42,7 +42,7 @@ const MenuItemCard = ({ menuItem }) => {
     }
   };
   return (
-    <div className="h-auto w-full sm:w-[250px] m-1 sm:m-6 flex flex-col justify-center bg-white shadow-md rounded-lg overflow-hidden border border-gray-100 hover:bg-green-100">
+    <div className="h-auto w-full sm:w-[250px] m-1 sm:m-6 flex flex-col justify-center bg-white shadow-md rounded-lg overflow-hidden border border-gray-100 hover:bg-light-green">
       <div className="h-auto flex justify-center items-center p-1 rounded">
         <Image
           src={editedMenuItem.image || menuItemImage}
@@ -147,14 +147,20 @@ const MenuItemCard = ({ menuItem }) => {
             </button>
           </div>
         ) : (
-          <>
-            <button onClick={handleEdit} className="text-gray-600">
-              <MdModeEdit />
+          <div className="flex flex-row justify-start">
+            <button
+              onClick={handleEdit}
+              className="text-gray-500  hover:text-black px-2"
+            >
+              <MdModeEdit className="text-xl " />
             </button>
-            <button onClick={handleDelete} className="text-gray-600">
-              <MdDelete />
+            <button
+              onClick={handleDelete}
+              className="text-gray-500 hover:text-black  px-1"
+            >
+              <MdDelete className="text-xl " />
             </button>
-          </>
+          </div>
         )}
       </div>
     </div>
