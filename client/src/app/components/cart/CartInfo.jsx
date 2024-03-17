@@ -8,8 +8,9 @@ import {
 } from "@/app/lib/data";
 import React, { useEffect, useState } from "react";
 import Btn from "../Btn";
-import LoadingBtn from "../LoadingBtn";
+import LoadingBtn from "../loading/LoadingBtn";
 import ItemCart from "./ItemCart";
+import Loading from "../loading/Loading";
 
 const CartInfo = ({ form, loading, setLoading, cart, setCart }) => {
   const [clickedItem, setClickedItem] = useState("");
@@ -97,11 +98,7 @@ const CartInfo = ({ form, loading, setLoading, cart, setCart }) => {
 
   // loading
   if (loading) {
-    return (
-      <div className="w-full h-screen flex justify-center">
-        <p className="text-3xl font-bold text-main-green">Loading...</p>
-      </div>
-    );
+    return <Loading />;
   }
 
   // message when cart is empty

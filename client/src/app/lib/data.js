@@ -9,6 +9,7 @@ const {
   updateCartUrl,
   checkoutUrl,
   logoutUrl,
+  userOrdersUrl,
 } = require("./utils");
 
 // signup
@@ -217,6 +218,20 @@ export const fetchCreateOrder = async () => {
   try {
     const res = await fetch(checkoutUrl, {
       method: "post",
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+// get all users orders
+export const fetchUserOrders = async () => {
+  try {
+    const res = await fetch(userOrdersUrl, {
       credentials: "include",
     });
 

@@ -29,6 +29,7 @@ const orderSchema = Schema(
         },
       },
     ],
+    itemsCount: Number,
     note: {
       type: String,
     },

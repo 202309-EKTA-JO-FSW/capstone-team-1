@@ -223,6 +223,7 @@ const checkout = async (req, res) => {
       restaurant: cart.restaurant,
       cartItems: cart.menuItems,
       deliveryFees: deliveryFee,
+      itemsCount: cart.itemsCount,
       subtotal: cart.subtotal,
       total: total,
     };
