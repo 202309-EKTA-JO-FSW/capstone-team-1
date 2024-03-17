@@ -213,10 +213,11 @@ const checkout = async (req, res) => {
       return res.status(404).json({ message: "Cart is empty" });
     }
     const { cart } = user;
+
     //Calculate subtotal, delivery fees, and total based on cart items
     const deliveryFee = 2.5;
     // Calculate total including delivery fees
-    const total = subtotal + deliveryFee;
+    const total = cart.subtotal + deliveryFee;
     const newOrder = {
       customer: userId,
       restaurant: cart.restaurant,
@@ -226,12 +227,15 @@ const checkout = async (req, res) => {
       total: total,
     };
 
-    user.orders.push(newOrder._id);
+    const order = await Order.create(newOrder);
+
+    user.orders.push(order._id);
+
+    user.cart = null;
 
     await user.save();
-    // const order = await Order.create(newOrder);
 
-    return res.status(201).json({ message: "Ready for Checkout", newOrder });
+    return res.status(201).json({ message: "Ready for Checkout", order });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: error.message });

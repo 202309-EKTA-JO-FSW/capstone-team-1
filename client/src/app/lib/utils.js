@@ -17,3 +17,6 @@ export const menuItemsUrl = (resId) =>
 // cart
 export const cartUrl = main_url + "/customer/cart";
 export const updateCartUrl = (resId) => main_url + `/customer/cart/${resId}`;
+
+// checkout
+export const checkoutUrl = main_url + "/customer/checkout";

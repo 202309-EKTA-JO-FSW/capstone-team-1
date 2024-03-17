@@ -1,5 +1,11 @@
 "use client";
-import { fetchCancelCart, fetchCart, fetchUpdateCart } from "@/app/lib/data";
+import {
+  fetchCancelCart,
+  fetchCart,
+  fetchCreateOrder,
+  fetchUpdateCart,
+  fetchUserUpdate,
+} from "@/app/lib/data";
 import React, { useEffect, useState } from "react";
 import Btn from "../Btn";
 import LoadingBtn from "../LoadingBtn";
@@ -8,6 +14,7 @@ import ItemCart from "./ItemCart";
 const CartInfo = ({ form, loading, setLoading, cart, setCart }) => {
   const [clickedItem, setClickedItem] = useState("");
   const [cancelLoadingBtn, setCancelLoadingBtn] = useState(false);
+  const [checkoutLoadingBtn, setCheckoutLoadingBtn] = useState(false);
 
   // fetch cart data
   useEffect(() => {
@@ -70,7 +77,23 @@ const CartInfo = ({ form, loading, setLoading, cart, setCart }) => {
   };
 
   // handle checkout
-  const handleCheckout = () => {};
+  const handleCheckout = async () => {
+    setCheckoutLoadingBtn(true);
+    // update user info
+    const updateUser = await fetchUserUpdate(form);
+    // create an order
+    const createOrder = await fetchCreateOrder();
+    // update the cart
+    if (updateUser && createOrder) {
+      const cart = await fetchCart();
+      setCart(cart);
+      setCheckoutLoadingBtn(false);
+      // remove the cart from local host to not show the length on navbar
+      localStorage.removeItem("cart");
+      window.dispatchEvent(new Event("storage"));
+      console.log(createOrder);
+    }
+  };
 
   // loading
   if (loading) {
@@ -119,7 +142,9 @@ const CartInfo = ({ form, loading, setLoading, cart, setCart }) => {
             >
               {cancelLoadingBtn ? <LoadingBtn /> : "Cancel"}
             </button>
-            <Btn text={"Checkout"} onClick={handleCheckout} />
+            <div onClick={handleCheckout}>
+              <Btn text={"Checkout"} loadingBtn={checkoutLoadingBtn} />
+            </div>
           </div>
         </div>
       </div>

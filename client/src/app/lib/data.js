@@ -7,6 +7,7 @@ const {
   menuItemsUrl,
   cartUrl,
   updateCartUrl,
+  checkoutUrl,
 } = require("./utils");
 
 // signup
@@ -187,6 +188,22 @@ export const fetchCancelCart = async () => {
   try {
     const res = await fetch(cartUrl, {
       method: "delete",
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+// checkout
+// createorder
+export const fetchCreateOrder = async () => {
+  try {
+    const res = await fetch(checkoutUrl, {
+      method: "post",
       credentials: "include",
     });
 
