@@ -1,6 +1,12 @@
 import React from "react";
 
-function singleSearch({ value, onChange, onSubmit }) {
+function SingleSearch({ value, onChange, onSubmit }) {
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      onSubmit();
+    }
+  };
+
   return (
     <div className="relative w-full max-w-lg">
       <input
@@ -10,9 +16,10 @@ function singleSearch({ value, onChange, onSubmit }) {
         placeholder="Search menu items"
         value={value}
         onChange={onChange}
+        onKeyDown={handleKeyDown}
       />
       <button
-        type="submit"
+        type="button"
         className="absolute top-0 right-0 h-full p-2.5 text-sm font-medium text-gray-600 rounded-lg border hover:bg-green-500 focus:outline-none focus:bg-green-500"
         onClick={onSubmit}
       >
@@ -37,4 +44,4 @@ function singleSearch({ value, onChange, onSubmit }) {
   );
 }
 
-export default singleSearch;
+export default SingleSearch;

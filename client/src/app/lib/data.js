@@ -125,6 +125,20 @@ export const fetchSingleRestaurant = async (resId) => {
   }
 };
 
+// search menu item
+export const searchMenuItem = async (search, page, limit) => {
+  try {
+    const url = `${menuItemsUrl}/search?search=${search}&page=${page}&limit=${limit}`;
+    const response = await fetch(url);
+    const restaurants = await response.json();
+    return restaurants;
+  } catch (error) {
+    console.error("Error searching menu items:", error.message);
+    throw error;
+  }
+};
+
+
 
 
 

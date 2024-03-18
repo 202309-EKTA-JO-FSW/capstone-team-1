@@ -16,3 +16,5 @@ export const menuItemsUrl = (resId) => main_url + `/restaurant/${resId}/menuItem
 // single restaurant url
 export const singleRestaurantUrl = (resId) => main_url + `/restaurant/${resId}`;
 
+
+

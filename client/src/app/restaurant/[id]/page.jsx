@@ -9,12 +9,12 @@ const MenuItemsPage = ({ params }) => {
   return (
     <div className="flex flex-col items-center">
       <Header id={id}/>
-      <div className="mt-16 flex flex-col items-center w-full"> 
+      {/* <div className="mt-16 flex flex-col items-center w-full"> 
         <div className="flex items-center w-full justify-center">
 
           <SingleSearch />
         </div>
-      </div>
+      </div> */}
       <div className="mt-20"> 
         <RestaurantMenu id={id} />
       </div>

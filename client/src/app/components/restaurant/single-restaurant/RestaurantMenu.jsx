@@ -1,32 +1,56 @@
 "use client"
 import { useEffect, useState } from "react";
 import MenuItemCard from "./MenuItemCard";
-import { fetchMenuItem } from "@/app/lib/data";
+import { fetchMenuItem, searchMenuItem } from "@/app/lib/data";
 import Pagination from "../Pagination";
+import SingleSearch from "./singleSearch";
 
 const RestaurantMenu = ({ id }) => {
   const [menuItems, setMenuItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [totalPages, setTotalPages] = useState(1);
+  const [searchTxt, setSearchTxt] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const { menuItems, totalPages, currentPage } = await fetchMenuItem(id, currentPage);
-        setMenuItems(menuItems);
-        setTotalPages(totalPages);
-        setCurrentPage(currentPage);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching menu items:", error);
-        setLoading(false);
-      }
-    };
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const { menuItems, totalPages, currentPage } = await fetchMenuItem(id, currentPage);
+      setMenuItems(menuItems);
+      setTotalPages(totalPages);
+      setCurrentPage(currentPage);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching menu items:", error);
+      setLoading(false);
+    }
+  };
 
-    fetchData();
-  }, [id, currentPage]);
+  const handleSearchValue = (event) => {
+    setSearchTxt(event.target.value);
+  };
+
+  const searchMenuItems = async () => {
+    try {
+      setLoading(true);
+      const { menuItems, totalPages, currentPage } = await searchMenuItem(searchTxt, currentPage, 10); // Assuming a limit of 10 items per page
+      setMenuItems(menuItems);
+      setTotalPages(totalPages);
+      setCurrentPage(currentPage);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error searching menu items:", error);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (searchTxt) {
+      searchMenuItems();
+    } else {
+      fetchData();
+    }
+  }, [searchTxt, currentPage]);
 
   const handlePagination = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -52,6 +76,11 @@ const RestaurantMenu = ({ id }) => {
 
   return (
     <div className="flex flex-col items-center">
+      <div className="mt-16 flex flex-col items-center w-full">
+        <div className="flex items-center w-96 justify-center">
+          <SingleSearch value={searchTxt} onChange={handleSearchValue} onSubmit={searchMenuItems} />
+        </div>
+      </div>
       {menuItems.length > 0 ? (
         <>
           {renderMenuItems(menuItems)}
@@ -71,5 +100,3 @@ const RestaurantMenu = ({ id }) => {
 };
 
 export default RestaurantMenu;
-
-
