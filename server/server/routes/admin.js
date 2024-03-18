@@ -21,4 +21,9 @@ router.post("/restaurant/menuItem/new", adminController.addNewItem);
 router.put("/restaurant/menuItem/:itemId", adminController.updateItem);
 router.delete("/restaurant/menuItem/:itemId", adminController.deleteItem);
 
+// order
+router.put("/order/:orderId", adminController.updateSingleOrder);
+router.get("/order/:orderId", adminController.getSingleOrder);
+router.get("/orders", adminController.getOrders);
+
 module.exports = router;
