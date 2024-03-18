@@ -54,6 +54,7 @@ function RestaurantForm({ restaurantData }) {
       console.log("edit not has res", edit);
     }
   }, [restaurantData]);
+
   const cancelUpdates = () => {
     if (restaurantData) {
       const {
@@ -173,13 +174,16 @@ function RestaurantForm({ restaurantData }) {
                   />
                 )}
               </span>
-              <input
-                type="file"
-                accept="image/*"
-                filename={file}
-                onChange={handleImageChange}
-                disabled={diable}
-              />
+              {edit ||
+                (!restaurantData && (
+                  <input
+                    type="file"
+                    accept="image/*"
+                    filename={file}
+                    onChange={handleImageChange}
+                    disabled={diable}
+                  />
+                ))}
             </div>
             {hasRestaurant && (
               /*  <button
@@ -187,7 +191,7 @@ function RestaurantForm({ restaurantData }) {
                 onClick={toggleFieldsDisabled}
                 type="button"
               > */
-              <section className="flex justify-end p-2 ">
+              <section className="flex justify-end p-2 cursor-pointer hover:text-main-green">
                 <FiEdit className="text-2xl " onClick={toggleFieldsDisabled} />
               </section>
               //  </button>

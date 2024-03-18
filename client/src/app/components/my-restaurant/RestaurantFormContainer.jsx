@@ -26,8 +26,12 @@ function RestaurantFormContainer() {
     }
   }, []);
 
+  if (!restaurantData) {
+    return <p className="text-center mt-10">Loading...</p>;
+  }
+
   return (
-    <div>
+    <div className="w-full flex justify-center">
       {restaurantData ? (
         <RestaurantForm restaurantData={restaurantData} />
       ) : (

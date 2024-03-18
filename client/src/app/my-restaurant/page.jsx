@@ -4,7 +4,7 @@ import RestaurantFormContainer from "../components/my-restaurant/RestaurantFormC
 
 const MyRestaurantPage = () => {
   return (
-    <section>
+    <section className="w-full">
       <RestaurantFormContainer />
     </section>
   );
