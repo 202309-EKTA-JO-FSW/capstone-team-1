@@ -3,8 +3,8 @@ import { useSelector } from "react-redux";
 import { useAppDispatch, useAppSelector } from "./redux/hooks";
 
 export default function Home() {
-  const user = useAppSelector((state) => state.authReducer.value);
+  const isLogin = useAppSelector((state) => state.authReducer.value);
   const dispatch = useAppDispatch();
-  console.log(user);
+  console.log(isLogin);
   return <main></main>;
 }

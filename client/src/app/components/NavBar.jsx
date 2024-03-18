@@ -4,9 +4,12 @@ import Logo from "./navbar/Logo";
 import { GiShoppingCart } from "react-icons/gi";
 import Link from "next/link";
 import User from "./navbar/User";
+import { useAppDispatch } from "../redux/hooks";
+import { login } from "../redux/features/auth/AuthSlice";
 
 const NavBar = () => {
   const [user, setUser] = useState(null);
+  const dispatch = useAppDispatch();
   const [cart, setCart] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -36,6 +39,13 @@ const NavBar = () => {
       window.removeEventListener("storage", handleStorageChange);
     };
   }, []);
+
+  useEffect(() => {
+    // Dispatch login action if user is logged in
+    if (user) {
+      dispatch(login());
+    }
+  }, [user, dispatch]);
 
   // console.log(cart);
   return (

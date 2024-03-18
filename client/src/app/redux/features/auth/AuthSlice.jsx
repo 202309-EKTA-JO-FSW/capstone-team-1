@@ -1,31 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  value: {
-    firstName: "",
-    lastName: "",
-    avatar: "",
-    isAdmin: false,
-    restaurant: "",
-    isLogin: false,
-  },
+  value: false,
 };
 
 export const authSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    login: (state, action) => {
-      const { firstName, lastName, avatar, isAdmin, restaurant } =
-        action.payload;
+    login: (state) => {
+      // Return a new state object with `value` set to true
       return {
         ...state,
-        firstName,
-        lastName,
-        avatar,
-        isAdmin,
-        restaurant,
-        isLogin: true,
+        value: true,
       };
     },
     logout: (state) => initialState,
