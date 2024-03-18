@@ -256,3 +256,21 @@ export const fetchSingleUserOrder = async (orderId) => {
     return error.message;
   }
 };
+// get users single order
+export const fetchPlaceOrder = async (orderId, noteValue) => {
+  try {
+    const res = await fetch(singleUserOrderUrl(orderId), {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ note: noteValue }),
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};

@@ -245,13 +245,14 @@ const checkout = async (req, res) => {
 
 // process checkout/order
 const placeOrder = async (req, res) => {
-  const { checkoutId } = req.params;
+  const { orderId } = req.params;
   const { note } = req.body;
   try {
     const user = await User.findById(req.userId);
     if (!user) return res.status(403).json({ message: "Access denied" });
     //check checkout/order id
-    const order = await Order.findById(checkoutId);
+    const order = await Order.findOne({ customer: user._id, _id: orderId });
+
     // check if the order is available
     if (!order) return res.status(404).json({ message: "Order not found" });
 

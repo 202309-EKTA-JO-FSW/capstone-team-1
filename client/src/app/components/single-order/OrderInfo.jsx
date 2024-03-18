@@ -1,5 +1,6 @@
 import React from "react";
 import ItemField from "./ItemField";
+import OrderTime from "./OrderTime";
 
 const OrderInfo = ({ order }) => {
   const cartItems = order.cartItems;
@@ -17,15 +18,15 @@ const OrderInfo = ({ order }) => {
         <div className="mt-20">
           <div className="flex justify-between items-center w-full p-1 mb-3 border-b border-[#dedede]">
             <p>Delivery fee</p>
-            <p>{order.deliveryFees}</p>
+            <p>{order.deliveryFees} JD</p>
           </div>
           <div className="flex justify-between items-center w-full p-1 mb-3 border-b border-[#dedede]">
             <p>Subtotal</p>
-            <p>{order.subtotal}</p>
+            <p>{order.subtotal} JD</p>
           </div>
           <div className="flex justify-between items-center text-black font-bold text-lg md:text-xl w-full p-1 mb-3 border-b border-[#dedede]">
             <p>Total</p>
-            <p>{order.total}</p>
+            <p>{order.total} JD</p>
           </div>
         </div>
       </div>

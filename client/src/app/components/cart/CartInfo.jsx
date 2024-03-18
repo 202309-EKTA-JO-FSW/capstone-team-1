@@ -132,7 +132,7 @@ const CartInfo = ({ form, loading, setLoading, cart, setCart }) => {
           <div className="text-xl my-5 border-b border-[#dedede] w-full">
             <p className="text-center">
               Total:{" "}
-              <span className="font-bold text-2xl">{cart.subtotal} $</span>
+              <span className="font-bold text-2xl">{cart.subtotal} JD</span>
             </p>
           </div>
           <div className="w-full flex justify-around my-3">
