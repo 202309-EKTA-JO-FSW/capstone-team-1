@@ -55,9 +55,9 @@ const NewMenuItem = () => {
   };
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-2">
-        <div className="px-4 py-15">
-          <div className="flex flex-col items-center justify-center relative top-5 left-3">
+      <div className="flex justify-center px-8">
+        <div className="px-2 py-4">
+          <div className="flex flex-col items-center justify-center  ">
             <h1 className="font-bold text-[24px] p-2">Add Menu Item</h1>
             {isSubmitted && <p>Item added successfully!</p>}
             <form className="w-full " onSubmit={handleSubmit}>
@@ -138,8 +138,8 @@ const NewMenuItem = () => {
             {isLoading && <p className="font-bold p-2">Pending...</p>}
           </div>
         </div>
-        {file && (
-          <div className="md:flex items-center justify-center">
+        {/* {file && (
+          <div className="flex justify-center items-center p-12">
             <Image
               src={URL.createObjectURL(file)}
               alt="Selected Image"
@@ -147,7 +147,7 @@ const NewMenuItem = () => {
               width={350}
             />
           </div>
-        )}
+        )} */}
       </div>
     </>
   );
