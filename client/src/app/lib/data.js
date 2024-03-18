@@ -9,6 +9,8 @@ const {
   updateCartUrl,
   checkoutUrl,
   logoutUrl,
+  userOrdersUrl,
+  singleUserOrderUrl,
 } = require("./utils");
 
 // signup
@@ -217,6 +219,68 @@ export const fetchCreateOrder = async () => {
   try {
     const res = await fetch(checkoutUrl, {
       method: "post",
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+// get all users orders
+export const fetchUserOrders = async () => {
+  try {
+    const res = await fetch(userOrdersUrl, {
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+// get users single order
+export const fetchSingleUserOrder = async (orderId) => {
+  try {
+    const res = await fetch(singleUserOrderUrl(orderId), {
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+// get users single order
+export const fetchPlaceOrder = async (orderId, noteValue) => {
+  try {
+    const res = await fetch(singleUserOrderUrl(orderId), {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ note: noteValue }),
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+// cancel order
+export const fetchUserCancelOrder = async (orderId) => {
+  try {
+    const res = await fetch(singleUserOrderUrl(orderId), {
+      method: "DELETE",
       credentials: "include",
     });
 

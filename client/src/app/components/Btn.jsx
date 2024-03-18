@@ -1,5 +1,5 @@
 import React from "react";
-import LoadingBtn from "./LoadingBtn";
+import LoadingBtn from "./loading/LoadingBtn";
 
 const Btn = ({ text, loadingBtn }) => {
   return (

@@ -12,6 +12,7 @@ const MenuItemCard = ({ menuItem }) => {
 
     // change the cart status to added items
     if (cart) dispatch(itemsCount(cart.results.cart.itemsCount));
+
   };
 
   if (!menuItem) {

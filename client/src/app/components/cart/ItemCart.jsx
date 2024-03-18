@@ -6,7 +6,7 @@ const ItemCart = ({ cart, setClickedItem }) => {
     <div className="flex justify-between items-center w-full p-1 mb-3 border-b border-[#dedede]">
       <div className="flex justify-between w-[55%] text-xl ">
         <p>{cart.menuItem.name}</p>
-        <p>{cart.total} $</p>
+        <p>{cart.total} JD</p>
       </div>
       <div className="flex items-center rounded-lg text-white text-xl">
         <FaMinus

@@ -8,13 +8,16 @@ import {
 } from "@/app/lib/data";
 import React, { useEffect, useState } from "react";
 import Btn from "../Btn";
-import LoadingBtn from "../LoadingBtn";
+import LoadingBtn from "../loading/LoadingBtn";
 import ItemCart from "./ItemCart";
+import Loading from "../loading/Loading";
+import { useRouter } from "next/navigation";
 import { useAppDispatch } from "@/app/redux/hooks";
 import { itemsCount } from "@/app/redux/features/cart/CartSlice";
 
 const CartInfo = ({ form, loading, setLoading, cart, setCart }) => {
   const dispatch = useAppDispatch();
+  const router = useRouter();
   const [clickedItem, setClickedItem] = useState("");
   const [cancelLoadingBtn, setCancelLoadingBtn] = useState(false);
   const [checkoutLoadingBtn, setCheckoutLoadingBtn] = useState(false);
@@ -88,16 +91,13 @@ const CartInfo = ({ form, loading, setLoading, cart, setCart }) => {
       setCheckoutLoadingBtn(false);
       // when checkout reset the itemCount to 0
       dispatch(itemsCount(0));
+      router.push(`/order/${createOrder.order._id}`);
     }
   };
 
   // loading
   if (loading) {
-    return (
-      <div className="w-full h-screen flex justify-center">
-        <p className="text-3xl font-bold text-main-green">Loading...</p>
-      </div>
-    );
+    return <Loading />;
   }
 
   // message when cart is empty
@@ -128,7 +128,7 @@ const CartInfo = ({ form, loading, setLoading, cart, setCart }) => {
           <div className="text-xl my-5 border-b border-[#dedede] w-full">
             <p className="text-center">
               Total:{" "}
-              <span className="font-bold text-2xl">{cart.subtotal} $</span>
+              <span className="font-bold text-2xl">{cart.subtotal} JD</span>
             </p>
           </div>
           <div className="w-full flex justify-around my-3">
