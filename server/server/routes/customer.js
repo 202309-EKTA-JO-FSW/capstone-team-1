@@ -15,11 +15,11 @@ router.delete("/cart", customerController.cancelCart);
 
 // checkout
 router.post("/checkout", customerController.checkout);
-router.get("/checkou/:checkoutId", customerController.getCheckout);
 router.put("/checkout/:checkoutId", customerController.processCheckout);
 router.delete("/checkout/:checkoutId", customerController.cancelCheckout);
 
 // order
 router.get("/orders", customerController.getOrders);
+router.get("/order/:orderId", customerController.getSingleOrder);
 
 module.exports = router;

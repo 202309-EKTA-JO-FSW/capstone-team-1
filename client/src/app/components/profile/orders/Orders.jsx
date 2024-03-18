@@ -14,10 +14,10 @@ const Orders = () => {
       const orders = await fetchUserOrders();
       setOrders(orders);
       setLoading(false);
-      console.log("Orders: ", orders);
     };
     fetchOrders();
   }, []);
+
   if (loading) {
     return <Loading />;
   }
@@ -32,13 +32,15 @@ const Orders = () => {
   return (
     <div className="w-full px-5 md:px-20 mt-5">
       <h1 className="text-4xl mb-8 font-bold">Orders</h1>
-      {orders.map((order) => (
-        <div key={order._id}>
-          <Link href={`/profile/orders/${order._id}`}>
-            <OrderCard order={order} />
-          </Link>
-        </div>
-      ))}
+      <div>
+        {orders.map((order) => (
+          <div key={order._id}>
+            <Link href={`/order/${order._id}`}>
+              <OrderCard order={order} />
+            </Link>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

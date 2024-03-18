@@ -243,29 +243,6 @@ const checkout = async (req, res) => {
   }
 };
 
-// get checkout
-const getCheckout = async (req, res) => {
-  const { checkoutId } = req.params;
-  try {
-    // find user
-    const user = await User.findById(req.userId);
-    if (!user) return res.status(403).json({ message: "Access denied" });
-
-    // find orders
-    const order = await Order.findOne({ customer: user._id, _id: checkoutId })
-      .populate("customer")
-      .populate("restaurant")
-      .populate("cartItems.menuItem");
-
-    if (!order) return res.status(404).json({ message: "No orders has made" });
-
-    return res.status(200).json(order);
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: error.message });
-  }
-};
-
 // process checkout/order
 const processCheckout = async (req, res) => {
   const { checkoutId } = req.params;
@@ -387,6 +364,30 @@ const getOrders = async (req, res) => {
   }
 };
 
+// get single order
+// get checkout
+const getSingleOrder = async (req, res) => {
+  const { orderId } = req.params;
+  try {
+    // find user
+    const user = await User.findById(req.userId);
+    if (!user) return res.status(403).json({ message: "Access denied" });
+
+    // find orders
+    const order = await Order.findOne({ customer: user._id, _id: orderId })
+      .populate("customer")
+      .populate("restaurant")
+      .populate("cartItems.menuItem");
+
+    if (!order) return res.status(404).json({ message: "Order not found" });
+
+    return res.status(200).json(order);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   newCart,
   updateCart,
@@ -394,7 +395,7 @@ module.exports = {
   checkout,
   processCheckout,
   cancelCheckout,
-  getCheckout,
+  getSingleOrder,
   getCart,
   getOrders,
 };

@@ -10,6 +10,7 @@ const {
   checkoutUrl,
   logoutUrl,
   userOrdersUrl,
+  singleUserOrderUrl,
 } = require("./utils");
 
 // signup
@@ -232,6 +233,20 @@ export const fetchCreateOrder = async () => {
 export const fetchUserOrders = async () => {
   try {
     const res = await fetch(userOrdersUrl, {
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+// get users single order
+export const fetchSingleUserOrder = async (orderId) => {
+  try {
+    const res = await fetch(singleUserOrderUrl(orderId), {
       credentials: "include",
     });
 

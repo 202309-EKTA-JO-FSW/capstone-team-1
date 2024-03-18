@@ -11,8 +11,10 @@ import Btn from "../Btn";
 import LoadingBtn from "../loading/LoadingBtn";
 import ItemCart from "./ItemCart";
 import Loading from "../loading/Loading";
+import { useRouter } from "next/navigation";
 
 const CartInfo = ({ form, loading, setLoading, cart, setCart }) => {
+  const router = useRouter();
   const [clickedItem, setClickedItem] = useState("");
   const [cancelLoadingBtn, setCancelLoadingBtn] = useState(false);
   const [checkoutLoadingBtn, setCheckoutLoadingBtn] = useState(false);
@@ -92,7 +94,8 @@ const CartInfo = ({ form, loading, setLoading, cart, setCart }) => {
       // remove the cart from local host to not show the length on navbar
       localStorage.removeItem("cart");
       window.dispatchEvent(new Event("storage"));
-      console.log(createOrder);
+
+      router.push(`/order/${createOrder.order._id}`);
     }
   };
 
