@@ -2,18 +2,17 @@
 import Image from "next/image";
 import menuItemImage from "../../../../../public/image/menuItem-image-placeholder.png";
 import { fetchPostCart } from "@/app/lib/data";
+import { useAppDispatch } from "@/app/redux/hooks";
+import { itemsCount } from "@/app/redux/features/cart/CartSlice";
 
 const MenuItemCard = ({ menuItem }) => {
+  const dispatch = useAppDispatch();
   const handleAddToCart = async () => {
     const cart = await fetchPostCart(menuItem._id);
-    if (cart) {
-      // add items count to the local storage to track the adding items
-      localStorage.setItem(
-        "cart",
-        JSON.stringify({ length: cart.results.cart.itemsCount })
-      );
-      window.dispatchEvent(new Event("storage"));
-    }
+
+    // change the cart status to added items
+    if (cart) dispatch(itemsCount(cart.results.cart.itemsCount));
+
   };
 
   if (!menuItem) {

@@ -12,8 +12,11 @@ import LoadingBtn from "../loading/LoadingBtn";
 import ItemCart from "./ItemCart";
 import Loading from "../loading/Loading";
 import { useRouter } from "next/navigation";
+import { useAppDispatch } from "@/app/redux/hooks";
+import { itemsCount } from "@/app/redux/features/cart/CartSlice";
 
 const CartInfo = ({ form, loading, setLoading, cart, setCart }) => {
+  const dispatch = useAppDispatch();
   const router = useRouter();
   const [clickedItem, setClickedItem] = useState("");
   const [cancelLoadingBtn, setCancelLoadingBtn] = useState(false);
@@ -44,17 +47,13 @@ const CartInfo = ({ form, loading, setLoading, cart, setCart }) => {
         if (update) {
           const data = await fetchCart();
 
-          // update the length count in local storage
+          // update state itemsCount when add and remove
           let cartLength = data.itemsCount;
           if (!data.menuItems) {
-            localStorage.removeItem("cart");
+            dispatch(itemsCount(0));
           } else if (data.menuItems) {
-            localStorage.setItem(
-              "cart",
-              JSON.stringify({ length: cartLength })
-            );
+            dispatch(itemsCount(cartLength));
           }
-          window.dispatchEvent(new Event("storage"));
 
           setCart(data);
         }
@@ -71,9 +70,8 @@ const CartInfo = ({ form, loading, setLoading, cart, setCart }) => {
     if (cancelCart.message === "Cart deleted successfully") {
       const data = await fetchCart();
 
-      // remove the cart from local host to not show the length on navbar
-      localStorage.removeItem("cart");
-      window.dispatchEvent(new Event("storage"));
+      // set itemsCount to zero when cancel the cart
+      dispatch(itemsCount(0));
       setCancelLoadingBtn(false);
       setCart(data);
     }
@@ -89,12 +87,10 @@ const CartInfo = ({ form, loading, setLoading, cart, setCart }) => {
     // update the cart
     if (updateUser && createOrder) {
       const cart = await fetchCart();
-
-      // remove the cart from local host to not show the length on navbar
-      localStorage.removeItem("cart");
-      window.dispatchEvent(new Event("storage"));
       setCart(cart);
       setCheckoutLoadingBtn(false);
+      // when checkout reset the itemCount to 0
+      dispatch(itemsCount(0));
       router.push(`/order/${createOrder.order._id}`);
     }
   };
