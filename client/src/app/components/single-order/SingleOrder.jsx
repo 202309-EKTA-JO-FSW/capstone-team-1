@@ -3,6 +3,8 @@ import Loading from "@/app/components/loading/Loading";
 import { fetchSingleUserOrder } from "@/app/lib/data";
 import React, { useEffect, useState } from "react";
 import OrderInfo from "./OrderInfo";
+import RestaurantInfo from "./RestaurantInfo";
+import CustomerInfo from "./CustomerInfo";
 
 const SingleOrder = ({ id }) => {
   const [order, setOrder] = useState({});
@@ -36,6 +38,10 @@ const SingleOrder = ({ id }) => {
     <div className="flex flex-col items-center w-full my-10 px-5 md:px-[60px] lg:px-[120px] xl:px-[300px]">
       <h1 className="text-3xl font-bold text-main-green mb-7">Your Order</h1>
       <OrderInfo order={order} />
+      <div className="my-8 w-full flex flex-col md:flex-row  justify-around items-center border border-gray-200 rounded-xl bg-gray-50 p-5">
+        <RestaurantInfo restaurant={order.restaurant} />
+        <CustomerInfo customer={order.customer} />
+      </div>
     </div>
   );
 };
