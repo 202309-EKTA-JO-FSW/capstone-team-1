@@ -4,8 +4,10 @@ import Image from "next/image";
 import { MdModeEdit, MdCheck, MdClose, MdDelete } from "react-icons/md";
 import { fetchdeleteMenuItem, fetchUpdateMenuItem } from "@/app/lib/data";
 import menuItemImage from "../../../../../public/image/menuItem-image-placeholder.png";
+import { useRouter } from "next/navigation";
 
-const MenuItemCard = ({ menuItem }) => {
+const MenuItemCard = ({ menuItem, onDelete }) => {
+  const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
   const [editedMenuItem, setEditedMenuItem] = useState(menuItem);
 
@@ -35,36 +37,38 @@ const MenuItemCard = ({ menuItem }) => {
   };
 
   const handleDelete = async (e) => {
+    e.preventDefault();
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this item?"
     );
     if (confirmDelete) {
       await fetchdeleteMenuItem(menuItem._id);
+      onDelete(menuItem._id);
     }
   };
   return (
-    <div className="h-auto w-full sm:w-[250px] m-1 sm:m-6 flex flex-col justify-center bg-white shadow-md rounded-lg overflow-hidden border border-gray-100 hover:bg-light-green">
-      <div className="h-auto flex justify-center items-center p-1 rounded">
+    <div className="h-[460px]  w-[200px] sm:w-[210px] md:w-[220px] lg:w-[230px] m-6 flex flex-col justify-center bg-white shadow-md rounded-lg overflow-hidden border border-gray-100 hover:bg-light-green">
+      <div className="relative h-[250px] w-[full] flex justify-center items-center rounded">
         <Image
           src={editedMenuItem.image || menuItemImage}
           alt={editedMenuItem.name}
-          width={250}
-          height={250}
+          width={180}
+          height={180}
           priority="true"
         />
       </div>
-      <div className="p-4">
+      <div className="justify-center p-2 font-normal">
         {isEditing ? (
-          <label>
-            Name:
+          <div>
+            <label>Name:</label>
             <input
               type="text"
               name="name"
               value={editedMenuItem.name}
               onChange={handleChange}
-              className="text-xl font-semibold mb-2 focus:outline-none"
+              className="text-l  mb-2 focus:outline-none"
             />
-          </label>
+          </div>
         ) : (
           <h2 className="text-xl font-semibold mb-2">{editedMenuItem.name}</h2>
         )}
@@ -111,8 +115,8 @@ const MenuItemCard = ({ menuItem }) => {
             />
           </label>
         ) : (
-          <p className="text-gray-600 mb-2">
-            Description: {editedMenuItem.description}
+          <p className="text-gray-600 mb-2 truncate">
+            Description:{editedMenuItem.description}
           </p>
         )}
 

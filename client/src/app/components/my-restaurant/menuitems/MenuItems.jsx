@@ -10,34 +10,39 @@ function MenuItems() {
   const [menuItems, setMenuItems] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const storedUser = JSON.parse(localStorage.getItem("user"));
+  const restaurantId = storedUser.restaurant;
+  const getMenuItems = async () => {
+    setLoading(true);
+    const menuItemsData = await fetchMenuItem(restaurantId);
+    setMenuItems(menuItemsData);
+    setLoading(false);
+  };
   useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem("user"));
-
-    const restaurantId = storedUser.restaurant;
-
-    const getMenuItems = async () => {
-      try {
-        setLoading(false);
-        const menuItemsData = await fetchMenuItem(restaurantId);
-        setMenuItems(menuItemsData);
-      } catch (error) {
-        console.error("Error fetching Menu Items:", error.message);
-        setLoading(false);
-      }
-    };
+    
+    
     getMenuItems();
   }, []);
 
+  const handleDelete = async (deletedItem) => {
+    const updatedMenuItems = menuItems.filter((item) => item !== deletedItem);
+    setMenuItems(updatedMenuItems);
+    getMenuItems();
+  };
   return (
-    <div className="p-2 md:p-5 lg:p-8 w-full">
-      <h1 className="font-bold text-3xl  mb-4">Menu Items</h1>
+    <div className=" flex flex-col justify-center  w-full p-5 md:mx-2 border border-white">
+      <h1 className="items-center font-bold text-3xl  mb-2  ">Menu Items</h1>
 
-      <div className="flex flex-wrap justify-start">
+      <div className="flex flex-wrap  sm:p-2 p-3">
         {loading ? (
           <p className="font-bold text-base">Loading...</p>
         ) : menuItems && menuItems.length > 0 ? (
           menuItems.map((menuItem) => (
-            <MenuItemCard key={menuItem._id} menuItem={menuItem} />
+            <MenuItemCard
+              key={menuItem._id}
+              menuItem={menuItem}
+              onDelete={handleDelete}
+            />
           ))
         ) : (
           <div className="flex items-center justify-center w-full h-50">

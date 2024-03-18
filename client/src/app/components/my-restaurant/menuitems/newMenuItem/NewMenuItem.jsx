@@ -3,8 +3,12 @@ import React, { useState } from "react";
 import Btn from "@/app/components/Btn";
 import Image from "next/image";
 import { postItem } from "@/app/lib/data";
+import { Router } from "next/router";
+import { ReadonlyURLSearchParams, useRouter } from "next/navigation";
 
 const NewMenuItem = () => {
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
   const [form, setForm] = useState({
     name: "",
     price: "",
@@ -33,7 +37,7 @@ const NewMenuItem = () => {
     formData.append("description", form.description);
     formData.append("available", form.available);
     formData.append("image", file);
-
+    setIsLoading(true);
     const newMenuItem = await postItem(formData);
 
     if (newMenuItem) {
@@ -46,6 +50,7 @@ const NewMenuItem = () => {
         available: false,
         image: null,
       });
+      router.push("/my-restaurant/menuItems"); //redirect to menuItems page after Item is successfully added
     }
   };
   return (
@@ -130,6 +135,7 @@ const NewMenuItem = () => {
                 <Btn type="submit" text={"Add Item"} />
               </div>
             </form>
+            {isLoading && <p className="font-bold p-2">Pending...</p>}
           </div>
         </div>
         {file && (
