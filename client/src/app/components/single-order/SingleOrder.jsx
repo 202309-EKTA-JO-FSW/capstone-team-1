@@ -1,6 +1,10 @@
 "use client";
 import Loading from "@/app/components/loading/Loading";
-import { fetchPlaceOrder, fetchSingleUserOrder } from "@/app/lib/data";
+import {
+  fetchPlaceOrder,
+  fetchSingleUserOrder,
+  fetchUserCancelOrder,
+} from "@/app/lib/data";
 import React, { useEffect, useState } from "react";
 import OrderInfo from "./OrderInfo";
 import RestaurantInfo from "./RestaurantInfo";
@@ -8,8 +12,10 @@ import CustomerInfo from "./CustomerInfo";
 import LoadingBtn from "../loading/LoadingBtn";
 import OrderStatus from "./OrderStatus";
 import OrderTime from "./OrderTime";
+import { useRouter } from "next/navigation";
 
 const SingleOrder = ({ id }) => {
+  const router = useRouter();
   const [order, setOrder] = useState({});
   const [loading, setLoading] = useState(true);
   const [cancelLoadingBtn, setCancelLoadingBtn] = useState(false);
@@ -27,8 +33,6 @@ const SingleOrder = ({ id }) => {
     fetchOrder();
   }, []);
 
-  console.log(order);
-
   if (loading) {
     return <Loading />;
   }
@@ -45,11 +49,21 @@ const SingleOrder = ({ id }) => {
   const handlePlaceOrder = async () => {
     setPlaceOrderlLoadingBtn(true);
     const placeOrder = await fetchPlaceOrder(order._id, note);
-    console.log(placeOrder);
-    setPlaceOrderlLoadingBtn(false);
+
     if (placeOrder) {
       const orderData = await fetchSingleUserOrder(id);
+      setPlaceOrderlLoadingBtn(false);
       if (orderData) setOrder(orderData);
+    }
+  };
+
+  // cancel order
+  const handleCancelOrder = async () => {
+    setCancelLoadingBtn(true);
+    const cancelOrder = await fetchUserCancelOrder(order._id);
+    if (cancelOrder) {
+      setCancelLoadingBtn(false);
+      router.push("/");
     }
   };
 
@@ -77,7 +91,10 @@ const SingleOrder = ({ id }) => {
       <OrderTime order={order} />
       {/* place order btns */}
       {!order.status && (
-        <div className="w-full flex justify-center items-center">
+        <div
+          onClick={handleCancelOrder}
+          className="w-full flex justify-center items-center"
+        >
           <button className="bg-gray-300 text-white w-full p-3 rounded-lg shadow-md hover:bg-opacity-75 mx-2 h-[48px]">
             {cancelLoadingBtn ? <LoadingBtn /> : "Cancel"}
           </button>

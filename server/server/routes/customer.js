@@ -20,6 +20,6 @@ router.post("/checkout", customerController.checkout);
 router.get("/orders", customerController.getOrders);
 router.get("/order/:orderId", customerController.getSingleOrder);
 router.put("/order/:orderId", customerController.placeOrder);
-router.delete("/order/:checkoutId", customerController.cancelOrder);
+router.delete("/order/:orderId", customerController.cancelOrder);
 
 module.exports = router;

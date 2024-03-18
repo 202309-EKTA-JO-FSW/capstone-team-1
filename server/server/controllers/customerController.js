@@ -285,15 +285,15 @@ const placeOrder = async (req, res) => {
 
 //cancel checkout - delete order
 const cancelOrder = async (req, res) => {
-  const { checkoutId } = req.params;
+  const { orderId } = req.params;
   try {
     const user = await User.findById(req.userId);
     if (!user) return res.status(403).json({ message: "Access denied" });
-    const order = await Order.findById(checkoutId);
-    if (!order) return res.status(404).json({ message: "Order not found" });
+    const order = await Order.findOne({ _id: orderId, customer: user._id });
 
+    if (!order) return res.status(404).json({ message: "Order not found" });
     // if order already was proceeded, just change the status to cancel
-    if (order.status !== null) {
+    if (order.status) {
       order.status = "canceled";
       await order.save();
       return res
@@ -302,11 +302,14 @@ const cancelOrder = async (req, res) => {
     }
 
     // if found, delete the order and remove it from restaurant and user models
-    const deletedOrder = await Order.deleteOne({ _id: checkoutId });
+    const deletedOrder = await Order.deleteOne({
+      _id: orderId,
+      customer: user._id,
+    });
 
     // Remove the order from the user's orders list
     const orderIndexUser = user.orders.findIndex((delOrder) =>
-      delOrder.equals(order._id)
+      delOrder.equals(orderId)
     );
     user.orders.splice(orderIndexUser, 1);
     await user.save();

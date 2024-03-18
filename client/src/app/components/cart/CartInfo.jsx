@@ -89,12 +89,12 @@ const CartInfo = ({ form, loading, setLoading, cart, setCart }) => {
     // update the cart
     if (updateUser && createOrder) {
       const cart = await fetchCart();
-      setCart(cart);
-      setCheckoutLoadingBtn(false);
+
       // remove the cart from local host to not show the length on navbar
       localStorage.removeItem("cart");
       window.dispatchEvent(new Event("storage"));
-
+      setCart(cart);
+      setCheckoutLoadingBtn(false);
       router.push(`/order/${createOrder.order._id}`);
     }
   };
