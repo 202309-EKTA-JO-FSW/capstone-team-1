@@ -14,6 +14,7 @@ const NavBar = () => {
   const [user, setUser] = useState(null);
   // const [cart, setCart] = useState(null);
   const [loading, setLoading] = useState(true);
+  const isLogin = useAppSelector((state) => state.authReducer.value);
 
   useEffect(() => {
     // Function to handle local storage change event
@@ -46,8 +47,10 @@ const NavBar = () => {
 
   useEffect(() => {
     const getCart = async () => {
-      const cart = await fetchCart();
-      dispatch(itemsCount(cart.itemsCount));
+      if (isLogin) {
+        const cart = await fetchCart();
+        dispatch(itemsCount(cart.itemsCount));
+      }
     };
     getCart();
   }, []);
