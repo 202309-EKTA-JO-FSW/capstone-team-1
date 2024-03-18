@@ -244,7 +244,7 @@ const checkout = async (req, res) => {
 };
 
 // process checkout/order
-const processCheckout = async (req, res) => {
+const placeOrder = async (req, res) => {
   const { checkoutId } = req.params;
   const { note } = req.body;
   try {
@@ -275,28 +275,6 @@ const processCheckout = async (req, res) => {
     restaurant.orders.push(order._id);
     await restaurant.save();
 
-    //customer can only add review after delivery
-    // if (req.body.review && order.status === "delivered") {
-    //   order.review = req.body.review;
-    // } else if (req.body.review && order.status !== "delivered") {
-    //   return res
-    //     .status(400)
-    //     .json({ message: "Cannot add reviews until the order is delivered" });
-    // }
-    // // Save the updated order
-    // await order.save();
-
-    //add review to the restaurant
-    // const restaurant = await Restaurant.findById(order.restaurant);
-    // if (!restaurant)
-    //   return res.status(404).json({ message: "Restaurant not found" });
-
-    // restaurant.reviews.push({
-    //   customer: req.userId,
-    //   rating: req.body.review.rating,
-    //   comment: req.body.review.comment,
-    // });
-    // await restaurant.save();
     return res.status(201).json({ message: "Order is proceeded successfully" });
   } catch (error) {
     console.error(error);
@@ -305,7 +283,7 @@ const processCheckout = async (req, res) => {
 };
 
 //cancel checkout - delete order
-const cancelCheckout = async (req, res) => {
+const cancelOrder = async (req, res) => {
   const { checkoutId } = req.params;
   try {
     const user = await User.findById(req.userId);
@@ -393,8 +371,8 @@ module.exports = {
   updateCart,
   cancelCart,
   checkout,
-  processCheckout,
-  cancelCheckout,
+  placeOrder,
+  cancelOrder,
   getSingleOrder,
   getCart,
   getOrders,
