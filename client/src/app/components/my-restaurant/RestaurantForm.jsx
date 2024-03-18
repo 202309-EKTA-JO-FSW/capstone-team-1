@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Btn from "../Btn";
+import { FiEdit } from "react-icons/fi";
 import { createRestaurant, updateAdminRestaurant } from "@/app/lib/data";
 
 function RestaurantForm({ restaurantData }) {
@@ -21,15 +22,17 @@ function RestaurantForm({ restaurantData }) {
   const [loading, setLoading] = useState(false);
   const [file, setFile] = useState();
   const [edit, setEdit] = useState(false);
+  const [diable, setDisable] = useState(false);
+  const [showUpdateButton, setShowUpdateButton] = useState(false); // State to manage the visibility of the Update button
+  const [hasRestaurant, setHasRestaurant] = useState(false);
 
   useEffect(() => {
-    console.log(restaurantData);
     if (restaurantData) {
-      setEdit(true);
       const {
         name,
         description,
         cuisine,
+        image,
         contact: { phoneNumber } = {},
         address: { country, city, street, zipcode } = {},
       } = restaurantData;
@@ -38,6 +41,35 @@ function RestaurantForm({ restaurantData }) {
         name: name || "",
         description: description || "",
         cuisine: cuisine || "",
+        imageUrl: image,
+        phoneNumber: phoneNumber || "",
+        country: country || "",
+        city: city || "",
+        street: street || "",
+        zipcode: zipcode || "",
+      });
+      setHasRestaurant(true);
+      setDisable(true);
+    } else {
+      console.log("edit not has res", edit);
+    }
+  }, [restaurantData]);
+  const cancelUpdates = () => {
+    if (restaurantData) {
+      const {
+        name,
+        description,
+        cuisine,
+        image,
+        contact: { phoneNumber } = {},
+        address: { country, city, street, zipcode } = {},
+      } = restaurantData;
+
+      setForm({
+        name: name || "",
+        description: description || "",
+        cuisine: cuisine || "",
+        imageUrl: image,
         phoneNumber: phoneNumber || "",
         country: country || "",
         city: city || "",
@@ -45,36 +77,43 @@ function RestaurantForm({ restaurantData }) {
         zipcode: zipcode || "",
       });
     }
-  }, [restaurantData]);
-
+    setEdit((prev) => !prev);
+    setShowUpdateButton((prev) => !prev);
+    setDisable(true);
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
-    if (edit === false) {
-      try {
-        console.log(form.image);
-        const formData = new FormData();
-        formData.append("name", form.name);
-        formData.append("description", form.description);
-        formData.append("cuisine", form.cuisine);
-        formData.append("phoneNumber", form.phoneNumber);
-        formData.append("country", form.country);
-        formData.append("city", form.city);
-        formData.append("street", form.street);
-        formData.append("zipcode", form.zipcode);
-        formData.append("image", file); // Append the image file to the form data
+    try {
+      const formData = new FormData();
+      formData.append("name", form.name);
+      formData.append("description", form.description);
+      formData.append("cuisine", form.cuisine);
+      formData.append("phoneNumber", form.phoneNumber);
+      formData.append("country", form.country);
+      formData.append("city", form.city);
+      formData.append("street", form.street);
+      formData.append("zipcode", form.zipcode);
+      formData.append("image", file);
 
-        console.log("Form Data:", formData);
-        console.log(form);
-        const res = await createRestaurant(formData); // Pass the formData object to your API function
+      if (!edit) {
+        const res = await createRestaurant(formData);
+
+        restaurantData = res.restaurant;
+        setHasRestaurant(true);
+      } else {
+        const res = await updateAdminRestaurant(formData);
         console.log("Response:", res.restaurant);
-      } catch (error) {
-        console.error("Error creating restaurant:", error);
-      } finally {
-        setLoading(true);
-        setEdit(true);
       }
-    } else {
+    } catch (error) {
+      console.error("Error:", error);
+    } finally {
+      setLoading(false);
+      setEdit(false);
+      setDisable(true);
+
+      setShowUpdateButton(false);
     }
   };
 
@@ -95,30 +134,40 @@ function RestaurantForm({ restaurantData }) {
       imageUrl: URL.createObjectURL(fileImg) || null, // Generate a preview URL for the selected image
     }));
   };
-  const updateRestaurant = async (e) => {
-    e.preventDefault();
+
+  const toggleFieldsDisabled = () => {
+    setEdit((prev) => !prev);
+
+    setShowUpdateButton((prev) => !prev);
+    setDisable(false);
   };
+  const getTitle = () => {
+    if (loading) {
+      return "Loading...";
+    } else if (hasRestaurant) {
+      return "Restaurant Profile";
+    } else {
+      return "Create Restaurant";
+    }
+  };
+
   return (
     <div className="flex flex-col justify-center items-center w-full sm:w-[700px] p-2">
-      <h1 className="text-4xl font-bold my-3">
-        {" "}
-        {edit ? "Restaurant Profile" : "Create Restaurant"}
-      </h1>
+      <h1 className="text-4xl font-bold my-3">{getTitle()}</h1>
       <div className="flex flex-col justify-around w-full ">
         <form
           className="flex flex-col justify-center items-center w-full "
           onSubmit={handleSubmit}
         >
           <div className="flex flex-col justify-around w-full">
-            <div className="flex flex-col  p-2">
-              <span className=" h-[150px]  w-[170px] flex justify-center rounded   border border-gray-300">
+            <div className="flex flex-col  p-1">
+              <span className=" h-[160px]  w-[200px] flex justify-center   border border-gray-300">
                 {form.imageUrl && (
                   <Image
                     src={form.imageUrl}
-                    width={100}
-                    height={100}
+                    width={200}
+                    height={160}
                     alt="Selected Image Preview"
-                    className="rounded"
                     priority="true"
                     style={{ width: "auto", height: "auto" }}
                   />
@@ -129,9 +178,20 @@ function RestaurantForm({ restaurantData }) {
                 accept="image/*"
                 filename={file}
                 onChange={handleImageChange}
-                disabled={edit} // Disable the field if not in edit mode
+                disabled={diable}
               />
             </div>
+            {hasRestaurant && (
+              /*  <button
+                className="flex justify-end p-2 "
+                onClick={toggleFieldsDisabled}
+                type="button"
+              > */
+              <section className="flex justify-end p-2 ">
+                <FiEdit className="text-2xl " onClick={toggleFieldsDisabled} />
+              </section>
+              //  </button>
+            )}
             <input
               className="w-full field mb-4"
               type="text"
@@ -139,7 +199,7 @@ function RestaurantForm({ restaurantData }) {
               value={form.name}
               onChange={handleChange}
               placeholder="Restaurant Name"
-              disabled={edit}
+              disabled={diable}
             />
             <textarea
               className="w-full field mb-4"
@@ -147,7 +207,7 @@ function RestaurantForm({ restaurantData }) {
               value={form.description}
               onChange={handleChange}
               placeholder="Description"
-              disabled={edit}
+              disabled={diable}
             />
             <input
               className="w-full field mb-4"
@@ -156,7 +216,7 @@ function RestaurantForm({ restaurantData }) {
               value={form.cuisine}
               onChange={handleChange}
               placeholder="Cuisine"
-              disabled={edit}
+              disabled={diable}
             />
             <input
               type="number"
@@ -165,47 +225,66 @@ function RestaurantForm({ restaurantData }) {
               onChange={handleChange}
               placeholder="Phone Number"
               className="w-full field mb-4"
-              disabled={edit}
+              disabled={diable}
             />
             {/* address */}
-            <input
-              type="text"
-              name="country"
-              placeholder="Country"
-              className="w-full field mb-4"
-              value={form.country}
-              onChange={handleChange}
-              disabled={edit}
-            />
-            <input
-              type="text"
-              name="city"
-              placeholder="City"
-              className="w-full field mb-4"
-              value={form.city}
-              onChange={handleChange}
-              disabled={edit}
-            />
-            <input
-              type="text"
-              name="street"
-              placeholder="Street"
-              className="w-full field mb-4"
-              value={form.street}
-              onChange={handleChange}
-              disabled={edit}
-            />
-            <input
-              type="number"
-              name="zipcode"
-              placeholder="Zip code"
-              className="w-full field"
-              value={form.zipcode}
-              onChange={handleChange}
-              disabled={edit}
-            />
+            <div className="flex justify-between w-full">
+              <input
+                type="text"
+                name="country"
+                placeholder="Country"
+                className="w-full mr-4 field"
+                value={form.country}
+                onChange={handleChange}
+                disabled={diable}
+              />
+              <input
+                type="text"
+                name="city"
+                placeholder="City"
+                className="w-full mr-4 field"
+                value={form.city}
+                onChange={handleChange}
+                disabled={diable}
+              />
+            </div>
+            <div className="flex justify-between w-full">
+              <input
+                type="text"
+                name="street"
+                placeholder="Street"
+                className="w-full mr-4 field"
+                value={form.street}
+                onChange={handleChange}
+                disabled={diable}
+              />
+              <input
+                type="number"
+                name="zipcode"
+                placeholder="Zip code"
+                className="w-full mr-4 field"
+                value={form.zipcode}
+                onChange={handleChange}
+                disabled={diable}
+              />
+            </div>
           </div>
-          {!edit && <Btn text="Create" />}
+          {!loading && showUpdateButton && (
+            <div className="flex gap-4">
+              <Btn text="Update" />
+              <button
+                className="bg-main-green py-3 px-8 rounded-3xl text-white text-sm hover:bg-opacity-75"
+                type="button"
+                text="Cancel"
+                onClick={cancelUpdates}
+              >
+                Cancel
+              </button>
+            </div>
+          )}
+          {!loading && !hasRestaurant && !showUpdateButton && (
+            <Btn text="Create" />
+          )}
         </form>
       </div>
     </div>

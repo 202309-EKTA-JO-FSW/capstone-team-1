@@ -11,8 +11,9 @@ function RestaurantFormContainer() {
     const resId = storedUser.restaurant;
     const fetchRestaurantData = async () => {
       try {
-        const restaurantData = await getAdminRestaurant();
-        setRestaurantData(restaurantData.restaurant);
+        const adminRestaurant = await getAdminRestaurant();
+
+        setRestaurantData(adminRestaurant.restaurant);
       } catch (error) {
         console.error("Error fetching restaurant data:", error);
       }

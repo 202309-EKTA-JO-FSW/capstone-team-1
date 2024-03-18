@@ -133,14 +133,11 @@ export const getAdminRestaurant = async () => {
 };
 
 //update admin restaurant
-export const updateAdminRestaurant = async (form) => {
+export const updateAdminRestaurant = async (formData) => {
   try {
     const res = await fetch(adminUpdateRestaurantUrl, {
       method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(form),
+      body: formData,
       credentials: "include",
     });
 
