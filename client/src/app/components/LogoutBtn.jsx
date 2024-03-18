@@ -15,6 +15,7 @@ const LogoutBtn = () => {
       // if logout suuccefully empty local storage
       localStorage.clear();
       window.dispatchEvent(new Event("storage"));
+      // change auth state to logout
       dispatch(logoutUser());
       // navigate to home page
       router.push("/");
