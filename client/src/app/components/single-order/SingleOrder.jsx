@@ -68,7 +68,7 @@ const SingleOrder = ({ id }) => {
   };
 
   return (
-    <div className="flex flex-col items-center w-full my-10 px-5 md:px-[60px] lg:px-[120px] xl:px-[300px]">
+    <div className="flex flex-col items-center w-full my-10 px-5 md:px-[120px] lg:px-[250px] xl:px-[400px]">
       <h1 className="text-3xl font-bold text-main-green mb-7">Your Order</h1>
       <OrderInfo order={order} />
       <div className="my-8 w-full flex flex-col md:flex-row  justify-around items-center border border-gray-200 rounded-xl bg-gray-50 p-5">
@@ -91,11 +91,11 @@ const SingleOrder = ({ id }) => {
       <OrderTime order={order} />
       {/* place order btns */}
       {!order.status && (
-        <div
-          onClick={handleCancelOrder}
-          className="w-full flex justify-center items-center"
-        >
-          <button className="bg-gray-300 text-white w-full p-3 rounded-lg shadow-md hover:bg-opacity-75 mx-2 h-[48px]">
+        <div className="w-full flex justify-center items-center">
+          <button
+            onClick={handleCancelOrder}
+            className="bg-gray-300 text-white w-full p-3 rounded-lg shadow-md hover:bg-opacity-75 mx-2 h-[48px]"
+          >
             {cancelLoadingBtn ? <LoadingBtn /> : "Cancel"}
           </button>
           <button
