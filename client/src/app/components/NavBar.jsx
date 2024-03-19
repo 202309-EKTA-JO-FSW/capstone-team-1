@@ -10,6 +10,7 @@ import { fetchCart } from "../lib/data";
 import { itemsCount } from "../redux/features/cart/CartSlice";
 import FreshFix from "../../../public/FreshFix.png";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 const NavBar = () => {
   const dispatch = useAppDispatch();
@@ -17,6 +18,7 @@ const NavBar = () => {
   // const [cart, setCart] = useState(null);
   const [loading, setLoading] = useState(true);
   const isLogin = useAppSelector((state) => state.authReducer.value);
+  const currentPath = usePathname();
 
   useEffect(() => {
     // Function to handle local storage change event
@@ -62,7 +64,7 @@ const NavBar = () => {
 
   return (
     <nav className="flex justify-between w-full bg-white sticky top-0 z-50  text-black [font-family:'Inter-Medium',Helvetica] text-base">
-      <section className="flex items-center gap-2 flex-wrap  justify-between pl-2 pt-1 py-2">
+      <section className="flex items-center gap-2 flex-wrap  justify-between pl-2 py-2">
         <div className="flex flex-row justify-start items-start">
           <Logo />
           <Link href="/">
@@ -77,19 +79,55 @@ const NavBar = () => {
         </div>
         {/* List of Links */}
         <ul className=" md:flex gap-x-3  justify-evenly md:items-center pl-6 pt-1">
-          <li className="md:ml-3  text-black hover:text-main-green">
-            <Link href={"/"}>Home</Link>
+          <li className="md:ml-3 ">
+            <Link
+              href={"/"}
+              className={
+                currentPath === "/"
+                  ? "text-main-green font-semibold "
+                  : "text-black hover:text-main-green"
+              }
+            >
+              Home
+            </Link>
           </li>
-          <li className="md:ml-3  text-black hover:text-main-green">
-            <Link href={"/restaurant"}>Restaurants</Link>
+          <li className="md:ml-3  ">
+            <Link
+              href={"/restaurant"}
+              className={
+                currentPath === "/restaurant"
+                  ? "text-main-green font-semibold  "
+                  : "text-black hover:text-main-green"
+              }
+            >
+              Restaurants
+            </Link>
           </li>
-          <li className="md:ml-3  text-black hover:text-main-green">
-            <Link href={"/about"}>About Us</Link>
+          <li className="md:ml-3 ">
+            <Link
+              href={"/about"}
+              className={
+                currentPath === "/about"
+                  ? "text-main-green font-semibold "
+                  : "text-black hover:text-main-green"
+              }
+            >
+              About Us
+            </Link>
           </li>
           {/* conditional rendering of My Restaurants if admin is logged in */}
           {user && user.isAdmin && (
-            <li className="md:ml-3  text-black hover:text-main-green">
-              <Link href={"/my-restaurant"}>My Restaurant</Link>
+            <li className="md:ml-3 ">
+              <Link
+                href={"/my-restaurant"}
+                className={
+                  currentPath === "/my-restaurant"
+                    ? "text-main-green font-semibold "
+                    : "text-black hover:text-main-green"
+                }
+              >
+                My Restaurant
+              </Link>
             </li>
           )}
         </ul>

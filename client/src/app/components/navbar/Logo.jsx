@@ -10,8 +10,8 @@ function Logo() {
         <Image
           src="/favicon.ico"
           alt="Logo"
-          width={35}
-          height={25}
+          width={40}
+          height={40}
           priority="true"
         />
       </>
