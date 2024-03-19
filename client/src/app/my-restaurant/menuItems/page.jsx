@@ -3,7 +3,7 @@ import MenuItems from "@/app/components/my-restaurant/menuitems/MenuItems";
 
 const MyRestaurantMenuItemsPage = () => {
   return (
-    <div>
+    <div className="w-full">
       <MenuItems />
     </div>
   );
