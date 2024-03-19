@@ -3,24 +3,12 @@ import { useEffect, useState } from "react";
 import MenuItemCard from "./MenuItemCard";
 import { fetchMenuItem, searchMenuItem } from "@/app/lib/data";
 import Pagination from "../Pagination";
-import SingleSearch from "./singleSearch";
+
+import SearchBar from "../../SearchBar";
 
 const RestaurantMenu = ({ menuItems, setMenuItems }) => {
   // const [loading, setLoading] = useState(true);
   const [searchTxt, setSearchTxt] = useState("");
-
-  // const searchMenuItems = async () => {
-  //   try {
-  //     setLoading(true);
-  //     const menuItems = await searchMenuItem(searchTxt, currentPage);
-  //     setMenuItems(menuItems);
-
-  //     setLoading(false);
-  //   } catch (error) {
-  //     console.error("Error searching menu items:", error);
-  //     setLoading(false);
-  //   }
-  // };
 
   // if (loading) {
   //   return (
@@ -30,41 +18,22 @@ const RestaurantMenu = ({ menuItems, setMenuItems }) => {
   //   );
   // }
 
-  const renderMenuItems = (items) => (
-    <div className="flex justify-center">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-        {items.map((item) => (
-          <MenuItemCard key={item.id} menuItem={item} />
-        ))}
-      </div>
-    </div>
-  );
-
   return (
-    <div className="flex flex-col items-center">
-      <div className="mt-16 flex flex-col items-center w-full">
-        <div className="flex items-center w-96 justify-center">
-          <SingleSearch
-            value={searchTxt}
-            // onChange={handleSearchValue}
-            // onSubmit={searchMenuItems}
-          />
+    <div className="flex flex-col items-center w-full">
+      <div className="flex items-center justify-center w-[40%]">
+        <SearchBar
+          placeholder={"Search Menu"}
+          searchTxt={searchTxt}
+          setSearchTxt={setSearchTxt}
+        />
+      </div>
+      <div className="flex justify-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {menuItems.map((item) => (
+            <MenuItemCard key={item.id} menuItem={item} />
+          ))}
         </div>
       </div>
-      {menuItems.length > 0 ? (
-        <>
-          {renderMenuItems(menuItems)}
-          {/* <Pagination
-            totalPages={totalPages}
-            currentPage={currentPage}
-            handlePagination={handlePagination}
-          /> */}
-        </>
-      ) : (
-        <div className="h-[500px] flex items-center justify-center text-xl text-main-green">
-          <p>No menu items found.</p>
-        </div>
-      )}
     </div>
   );
 };
