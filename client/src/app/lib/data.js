@@ -4,9 +4,11 @@ const {
   getGoogleUser,
   userProfileUrl,
   restaurantUrl,
+  newMenuItemUrl,
   menuItemsUrl,
   cartUrl,
   updateCartUrl,
+  updateMenuItemUrl,
   checkoutUrl,
   logoutUrl,
   userOrdersUrl,
@@ -110,6 +112,58 @@ export const fetchMenuItem = async (resId) => {
   } catch (error) {
     console.error("Error fetching menu item:", error);
     throw error;
+  }
+};
+
+// post new MenuItem
+export const postItem = async (formData) => {
+  try {
+    const res = await fetch(newMenuItemUrl, {
+      method: "POST",
+
+      body: formData,
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+// update menu Items
+export const fetchUpdateMenuItem = async (menuItemId, menuItem) => {
+  const url = `${updateMenuItemUrl}/${menuItemId}`;
+  try {
+    const res = await fetch(url, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(menuItem),
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+// delete menuItem
+export const fetchdeleteMenuItem = async (menuItemId) => {
+  try {
+    const res = await fetch(`${updateMenuItemUrl}/${menuItemId}`, {
+      method: "delete",
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
   }
 };
 

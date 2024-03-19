@@ -13,9 +13,14 @@ export const userProfileUrl = main_url + "/user/profile";
 // restaurant url
 export const restaurantUrl = main_url + `/restaurant`;
 
+//menuItems url
+
 // menu items
 export const menuItemsUrl = (resId) =>
   main_url + `/restaurant/${resId}/menuItems`;
+
+export const newMenuItemUrl = main_url + "/admin/restaurant/menuItem/new";
+export const updateMenuItemUrl = main_url + "/admin/restaurant/menuItem";
 
 // cart
 export const cartUrl = main_url + "/customer/cart";
