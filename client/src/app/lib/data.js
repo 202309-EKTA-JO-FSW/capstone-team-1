@@ -20,7 +20,7 @@ const {
 // signup
 export const fetchSignup = async (form) => {
   try {
-    const res = await fetch(signupnewUrl, {
+    const res = await fetch(signupUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
