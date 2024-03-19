@@ -9,7 +9,7 @@ import React, { useEffect, useState } from "react";
 import OrderInfo from "./OrderInfo";
 import RestaurantInfo from "./RestaurantInfo";
 import CustomerInfo from "./CustomerInfo";
-import LoadingBtn from "../loading/LoadingBtn";
+import LoadingBtn from "../../../loading/LoadingBtn";
 import OrderStatus from "./OrderStatus";
 import OrderTime from "./OrderTime";
 import { useRouter } from "next/navigation";
@@ -68,7 +68,7 @@ const SingleOrder = ({ id }) => {
   };
 
   return (
-    <div className="flex flex-col items-center w-full my-10 px-5 md:px-[120px] lg:px-[250px] xl:px-[400px]">
+    <div className="flex flex-col items-center w-full my-10 px-5 md:px-[120px] lg:px-[200px] xl:px-[400px]">
       <h1 className="text-3xl font-bold text-main-green mb-7">Your Order</h1>
       <OrderInfo order={order} />
       <div className="my-8 w-full flex flex-col md:flex-row  justify-around items-center border border-gray-200 rounded-xl bg-gray-50 p-5">
@@ -76,17 +76,26 @@ const SingleOrder = ({ id }) => {
         <CustomerInfo customer={order.customer} />
       </div>
       {/* note */}
-      <div className="w-full mb-8">
-        <textarea
-          name="note"
-          className="border w-full bg-gray-50 rounded-md placeholder:text-gray-600 p-3"
-          placeholder="Note"
-          value={note}
-          onChange={(e) => {
-            setNote(e.target.value);
-          }}
-        />
-      </div>
+      {!order.status && (
+        <div className="w-full mb-8">
+          <textarea
+            name="note"
+            className="border w-full bg-gray-50 rounded-md placeholder:text-gray-600 p-3"
+            placeholder="Note"
+            value={note}
+            onChange={(e) => {
+              setNote(e.target.value);
+            }}
+          />
+        </div>
+      )}
+      {order.status && (
+        <div className="w-full mb-8">
+          <p className="border w-full bg-gray-50 rounded-md placeholder:text-gray-600 p-3">
+            {order.note || "No note"}
+          </p>
+        </div>
+      )}
       {/* order time  */}
       <OrderTime order={order} />
       {/* place order btns */}

@@ -1,4 +1,4 @@
-import ProfileSidebar from "../components/profile/profile-sidebar/ProfileSidebar";
+import ProfileSidebar from "../../components/profile/profile-sidebar/ProfileSidebar";
 
 const ProfileLayout = ({ children }) => {
   return (

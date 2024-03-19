@@ -24,7 +24,12 @@ export const updateCartUrl = (resId) => main_url + `/customer/cart/${resId}`;
 // checkout
 export const checkoutUrl = main_url + "/customer/checkout";
 
-// orders
+// user orders
 export const userOrdersUrl = main_url + "/customer/orders";
 export const singleUserOrderUrl = (orderId) =>
   main_url + `/customer/order/${orderId}`;
+
+// restaurant orders
+export const restaurantOrdersUrl = main_url + "/admin/restaurant/orders";
+export const singleRestaurantOrderUrl = (orderId) =>
+  main_url + `/admin/restaurant/order/${orderId}`;

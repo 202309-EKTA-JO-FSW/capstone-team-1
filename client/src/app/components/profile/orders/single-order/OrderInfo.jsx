@@ -8,6 +8,9 @@ const OrderInfo = ({ order }) => {
   return (
     <div className="w-full">
       <div className="flex flex-col justify-between text-base md:text-lg text-gray-500 w-full p-5 rounded-lg border border-gray-100 shadow-[0_5px_10px_5px_rgba(0,0,0,0.1)]">
+        <h1 className="text-center text-xl mb-5 font-bold">
+          {order.restaurant.name}
+        </h1>
         <div>
           {cartItems.map((item) => (
             <div key={item._id}>

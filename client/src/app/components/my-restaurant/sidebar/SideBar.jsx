@@ -16,7 +16,7 @@ const SideBar = () => {
     { name: "menu items", icon: <IoFastFoodSharp />, path: "/menuItems" },
     { name: "orders", icon: <IoReceipt />, path: "/orders" },
   ];
-  console.log(pathname);
+
   return (
     <div className="sidebar">
       <div className="flex md:flex-col">

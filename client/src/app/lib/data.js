@@ -11,6 +11,8 @@ const {
   logoutUrl,
   userOrdersUrl,
   singleUserOrderUrl,
+  restaurantOrdersUrl,
+  singleRestaurantOrderUrl,
 } = require("./utils");
 
 // signup
@@ -290,3 +292,55 @@ export const fetchUserCancelOrder = async (orderId) => {
     return error.message;
   }
 };
+
+////////// restaurant orders ////////////
+
+// fetch restaurant orders
+// get users single order
+export const fetchRestaurantOrders = async () => {
+  try {
+    const res = await fetch(restaurantOrdersUrl, {
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+// get users single order
+export const fetchSingleRestaurantOrder = async (orderId) => {
+  try {
+    const res = await fetch(singleRestaurantOrderUrl(orderId), {
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+// get users single order
+export const fetchUpdateRestaurantOrder = async (orderId, body) => {
+  try {
+    const res = await fetch(singleRestaurantOrderUrl(orderId), {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+////////////////////////////////////////
