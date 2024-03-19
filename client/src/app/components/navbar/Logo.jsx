@@ -1,14 +1,22 @@
 import Image from "next/image";
 import Link from "next/link";
-
-import React from 'react'
+import FreshFix from "../../../../public/FreshFix.png";
+import React from "react";
 
 function Logo() {
   return (
-   <Link href="/">
-      <Image src="/favicon.ico" alt="Logo" width={50} height={50} priority="true"/>
+    <Link href="/">
+      <>
+        <Image
+          src="/favicon.ico"
+          alt="Logo"
+          width={35}
+          height={25}
+          priority="true"
+        />
+      </>
     </Link>
-  )
+  );
 }
 
-export default Logo
+export default Logo;
