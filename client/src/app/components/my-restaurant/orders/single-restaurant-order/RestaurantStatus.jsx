@@ -45,15 +45,13 @@ function RestaurantStatus({ order, setOrder }) {
 
   if (order.status === "delivered" || order.status === "canceled") {
     return (
-      <div className="relative w-full capitalize my-3">
-        <button
-          id="dropdownDefaultButton"
+      <div className=" w-full capitalize my-3">
+        <div
           onClick={toggleDropdown}
           className={`${btnColor()} flex justify-center items-center capitalize w-full text-black border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg text-base px-5 py-2.5 text-center`}
-          type="button"
         >
           {order.status}
-        </button>
+        </div>
       </div>
     );
   }

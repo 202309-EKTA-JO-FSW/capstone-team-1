@@ -18,8 +18,12 @@ const OrderStatus = ({ status }) => {
     return statusColor;
   };
   return (
-    <div className={`p-4 text-xl w-full text-center rounded-md ${cardColor()}`}>
-      <p>Status: {status}</p>
+    <div className=" w-full capitalize">
+      <div
+        className={`${cardColor()} flex justify-center items-center capitalize w-full text-black border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg text-base px-5 py-2.5 text-center`}
+      >
+        {status}
+      </div>
     </div>
   );
 };
