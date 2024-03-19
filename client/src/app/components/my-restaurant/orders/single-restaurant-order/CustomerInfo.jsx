@@ -5,7 +5,7 @@ const CustomerInfo = ({ customer }) => {
     <div className="flex flex-col pl-[10%] mb-5 p-3 capitalize w-full text-lg text-gray-500">
       <div>
         <h1 className="text-xl font-bold text-main-green mb-2">
-          Your Information
+          Customer Information
         </h1>
         <div className="flex mb-2">
           <p className="mr-5">

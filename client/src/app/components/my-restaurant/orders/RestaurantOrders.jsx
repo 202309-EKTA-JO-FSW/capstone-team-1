@@ -22,8 +22,6 @@ const RestaurantOrders = () => {
     return <Loading />;
   }
 
-  console.log(orders);
-
   if (orders.length === 0) {
     return (
       <div className="w-full h-screen flex justify-center">

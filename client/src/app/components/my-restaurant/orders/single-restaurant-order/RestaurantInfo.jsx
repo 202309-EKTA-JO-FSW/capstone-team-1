@@ -4,7 +4,9 @@ const RestaurantInfo = ({ restaurant }) => {
   return (
     <div className="flex flex-col pl-[10%] mb-5 p-3 capitalize w-full text-lg text-gray-500">
       <div>
-        <h1 className="text-xl font-bold text-main-green mb-2">Restaurant</h1>
+        <h1 className="text-xl font-bold text-main-green mb-2">
+          Your Restaurant
+        </h1>
         <div className="flex mb-2">
           <p className="mr-5">
             Country:{" "}
