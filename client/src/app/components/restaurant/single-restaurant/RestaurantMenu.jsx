@@ -5,55 +5,30 @@ import { fetchMenuItem, searchMenuItem } from "@/app/lib/data";
 import Pagination from "../Pagination";
 import SingleSearch from "./singleSearch";
 
-const RestaurantMenu = ({ id }) => {
-  const [menuItems, setMenuItems] = useState([]);
-  const [loading, setLoading] = useState(true);
+const RestaurantMenu = ({ menuItems, setMenuItems }) => {
+  // const [loading, setLoading] = useState(true);
   const [searchTxt, setSearchTxt] = useState("");
 
-  const fetchData = async () => {
-    try {
-      setLoading(true);
-      const menuItems = await fetchMenuItem(id);
-      setMenuItems(menuItems);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching menu items:", error);
-      setLoading(false);
-    }
-  };
-  console.log(menuItems);
-  const handleSearchValue = (event) => {
-    setSearchTxt(event.target.value);
-  };
+  // const searchMenuItems = async () => {
+  //   try {
+  //     setLoading(true);
+  //     const menuItems = await searchMenuItem(searchTxt, currentPage);
+  //     setMenuItems(menuItems);
 
-  const searchMenuItems = async () => {
-    try {
-      setLoading(true);
-      const menuItems = await searchMenuItem(searchTxt, currentPage);
-      setMenuItems(menuItems);
+  //     setLoading(false);
+  //   } catch (error) {
+  //     console.error("Error searching menu items:", error);
+  //     setLoading(false);
+  //   }
+  // };
 
-      setLoading(false);
-    } catch (error) {
-      console.error("Error searching menu items:", error);
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (searchTxt) {
-      searchMenuItems();
-    } else {
-      fetchData();
-    }
-  }, [searchTxt]);
-
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-40">
-        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gray-900"></div>
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div className="flex justify-center items-center h-40">
+  //       <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gray-900"></div>
+  //     </div>
+  //   );
+  // }
 
   const renderMenuItems = (items) => (
     <div className="flex justify-center">
@@ -71,8 +46,8 @@ const RestaurantMenu = ({ id }) => {
         <div className="flex items-center w-96 justify-center">
           <SingleSearch
             value={searchTxt}
-            onChange={handleSearchValue}
-            onSubmit={searchMenuItems}
+            // onChange={handleSearchValue}
+            // onSubmit={searchMenuItems}
           />
         </div>
       </div>

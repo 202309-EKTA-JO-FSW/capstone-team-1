@@ -2,40 +2,16 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { fetchSingleRestaurant } from "@/app/lib/data";
+import menuitemPlaceholderImage from "../../../../../public/image/menuItem-image-placeholder.png";
 
-const Header = ({ id }) => {
-  const [restaurant, setRestaurant] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchRestaurantData = async () => {
-      try {
-        setLoading(true);
-        const restaurantData = await fetchSingleRestaurant(id);
-        setRestaurant(restaurantData);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching restaurant:", error);
-        setLoading(false);
-      }
-    };
-
-    fetchRestaurantData();
-  }, [id]);
-
-  if (loading || !restaurant) {
-    return <div>Loading...</div>;
-  }
-
-  const { name, description, cuisine, contact, rating, image } = restaurant;
-
+const Header = ({ restaurant }) => {
   return (
     <header>
       <div className="absolute inset-0 bg-green-500 w-full h-48 mt-16"></div>
       <div className="relative z-10 flex items-center px-8 py-4">
         <Image
-          src={image}
-          alt={name}
+          src={restaurant.image || menuitemPlaceholderImage}
+          alt={restaurant.name}
           width={200}
           height={200}
           className="w-[160px] h-[160px] rounded-full object-cover  mt-12"
@@ -43,23 +19,25 @@ const Header = ({ id }) => {
 
         <div className="ml-8 mt-48">
           <h1 className="text-3xl font-bold text-black">{name}</h1>
-          <p className="text-black">{description}</p>
+          <p className="text-black">{restaurant.description}</p>
           <div className="flex items-center mt-2">
-            <span className="text-black">{rating || 4.5}</span>
+            <span className="text-black">{restaurant.rating || 4.5}</span>
             &#9733;
-            <span className="text-gray-400 ml-2">({cuisine})</span>
-            {contact.phoneNumber && (
+            <span className="text-gray-400 ml-2">({restaurant.cuisine})</span>
+            {restaurant.contact.phoneNumber && (
               <>
                 <span className="text-black ml-2">|</span>
                 <span className="text-black ml-2">
-                  Phone: {contact.phoneNumber}
+                  Phone: {restaurant.contact.phoneNumber}
                 </span>
               </>
             )}
-            {contact.email && (
+            {restaurant.contact.email && (
               <>
                 <span className="text-black ml-2">|</span>
-                <span className="text-black ml-2">Email: {contact.email}</span>
+                <span className="text-black ml-2">
+                  Email: {restaurant.contact.email}
+                </span>
               </>
             )}
           </div>

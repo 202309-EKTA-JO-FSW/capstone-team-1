@@ -1,4 +1,3 @@
-
 const {
   signupUrl,
   loginUrl,
@@ -6,7 +5,7 @@ const {
   userProfileUrl,
   restaurantUrl,
   menuItemsUrl,
-  singleRestaurantUrl
+  singleRestaurantUrl,
 } = require("./utils");
 
 // signup
@@ -103,32 +102,32 @@ export const searchRestaurant = async (search, page, limit) => {
   }
 };
 
-// fetch menu items
-export const fetchMenuItem = async (resId) => {
-  try { 
-    const res = await fetch(menuItemsUrl(resId));
-    return await res.json();
-  } catch (error) {
-    console.error('Error fetching menu item:', error);
-    throw error; 
-  }
-};
-
 // fetch single restaurant
 export const fetchSingleRestaurant = async (resId) => {
-  try { 
+  try {
     const res = await fetch(singleRestaurantUrl(resId));
     return await res.json();
   } catch (error) {
-    console.error('Error fetching restaurant', error);
-    throw error; 
+    console.error("Error fetching restaurant", error);
+    throw error;
+  }
+};
+
+// fetch menu items
+export const fetchRestaurantMenuItems = async (resId) => {
+  try {
+    const res = await fetch(menuItemsUrl(resId));
+    return await res.json();
+  } catch (error) {
+    console.error("Error fetching menu item:", error);
+    throw error;
   }
 };
 
 // search menu item
-export const searchMenuItem = async (search, page, limit) => {
+export const searchMenuItem = async (resId, searchValue) => {
   try {
-    const url = `${menuItemsUrl}/search?search=${search}&page=${page}&limit=${limit}`;
+    const url = `${menuItemsUrl(resId)}/search?search=${searchValue}`;
     const response = await fetch(url);
     const restaurants = await response.json();
     return restaurants;
@@ -137,8 +136,3 @@ export const searchMenuItem = async (search, page, limit) => {
     throw error;
   }
 };
-
-
-
-
-
