@@ -4,6 +4,9 @@ const {
   getGoogleUser,
   userProfileUrl,
   restaurantUrl,
+  adminNewRestaurantUrl,
+  adminGetRestaurantUrl,
+  adminUpdateRestaurantUrl,
   newMenuItemUrl,
   menuItemsUrl,
   cartUrl,
@@ -104,6 +107,21 @@ export const searchRestaurant = async (search, page, limit) => {
   }
 };
 
+// create restaurant
+export const createRestaurant = async (formData) => {
+  try {
+    const res = await fetch(adminNewRestaurantUrl, {
+      method: "POST",
+      body: formData,
+      credentials: "include",
+    });
+    return await res.json();
+  } catch (error) {
+    console.error("Error fetching menu item:", error);
+    throw error;
+  }
+};
+
 // fetch menu items
 export const fetchMenuItem = async (resId) => {
   try {
@@ -142,6 +160,34 @@ export const fetchUpdateMenuItem = async (menuItemId, menuItem) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(menuItem),
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+//get admin restaurant
+export const getAdminRestaurant = async () => {
+  try {
+    const res = await fetch(adminGetRestaurantUrl, { credentials: "include" });
+    const restaurant = res.json();
+    return restaurant;
+  } catch (error) {
+    console.error("Error getting restaurant", error.message);
+    throw error;
+  }
+};
+
+//update admin restaurant
+export const updateAdminRestaurant = async (formData) => {
+  try {
+    const res = await fetch(adminUpdateRestaurantUrl, {
+      method: "PUT",
+      body: formData,
       credentials: "include",
     });
 
