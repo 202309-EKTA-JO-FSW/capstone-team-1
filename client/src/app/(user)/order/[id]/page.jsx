@@ -1,5 +1,4 @@
-import SingleOrder from "@/app/components/single-order/SingleOrder";
-import React from "react";
+import SingleOrder from "@/app/components/profile/orders/single-order/SingleOrder";
 
 const SingleOrderPage = ({ params }) => {
   const { id } = params;

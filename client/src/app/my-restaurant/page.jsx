@@ -1,6 +1,4 @@
-import React from "react";
-
-const MyRestaurantPage = () => {
+const MyRestaurantPage = async () => {
   return <div>My Restaurant Page</div>;
 };
 

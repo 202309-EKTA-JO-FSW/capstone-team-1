@@ -9,7 +9,7 @@ import React, { useEffect, useState } from "react";
 import OrderInfo from "./OrderInfo";
 import RestaurantInfo from "./RestaurantInfo";
 import CustomerInfo from "./CustomerInfo";
-import LoadingBtn from "../loading/LoadingBtn";
+import LoadingBtn from "../../../loading/LoadingBtn";
 import OrderStatus from "./OrderStatus";
 import OrderTime from "./OrderTime";
 import { useRouter } from "next/navigation";
