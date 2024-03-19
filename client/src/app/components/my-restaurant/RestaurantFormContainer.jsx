@@ -4,7 +4,7 @@ import RestaurantForm from "./RestaurantForm";
 import { getAdminRestaurant } from "@/app/lib/data";
 
 function RestaurantFormContainer() {
-  const [restaurantData, setRestaurantData] = useState(null);
+  const [restaurantData, setRestaurantData] = useState({});
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
@@ -22,7 +22,8 @@ function RestaurantFormContainer() {
     if (resId) {
       fetchRestaurantData();
     } else {
-      setRestaurantData(null); // No need to fetch data if resId is not provided
+      setRestaurantData({}); // No need to fetch data if resId is not provided
+      console.log(restaurantData);
     }
   }, []);
 
@@ -32,11 +33,18 @@ function RestaurantFormContainer() {
 
   return (
     <div className="w-full flex justify-center">
-      {restaurantData ? (
-        <RestaurantForm restaurantData={restaurantData} />
+      {/* {restaurantData ? (
+        <RestaurantForm
+          restaurantData={restaurantData}
+          setRestaurantData={setRestaurantData}
+        />
       ) : (
         <RestaurantForm />
-      )}
+      )} */}
+      <RestaurantForm
+        restaurantData={restaurantData}
+        setRestaurantData={setRestaurantData}
+      />
     </div>
   );
 }

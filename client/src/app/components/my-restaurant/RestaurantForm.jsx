@@ -5,7 +5,7 @@ import Btn from "../Btn";
 import { FiEdit } from "react-icons/fi";
 import { createRestaurant, updateAdminRestaurant } from "@/app/lib/data";
 
-function RestaurantForm({ restaurantData }) {
+function RestaurantForm({ restaurantData, setRestaurantData }) {
   const initialFormData = {
     name: "",
     description: "",
@@ -22,12 +22,13 @@ function RestaurantForm({ restaurantData }) {
   const [loading, setLoading] = useState(false);
   const [file, setFile] = useState();
   const [edit, setEdit] = useState(false);
-  const [diable, setDisable] = useState(false);
+  const [disable, setDisable] = useState(false);
   const [showUpdateButton, setShowUpdateButton] = useState(false); // State to manage the visibility of the Update button
   const [hasRestaurant, setHasRestaurant] = useState(false);
 
   useEffect(() => {
-    if (restaurantData) {
+    if (restaurantData && Object.keys(restaurantData).length > 0) {
+      console.log(restaurantData);
       const {
         name,
         description,
@@ -51,7 +52,8 @@ function RestaurantForm({ restaurantData }) {
       setHasRestaurant(true);
       setDisable(true);
     } else {
-      console.log("edit not has res", edit);
+      setHasRestaurant(false);
+      console.log("edit not has res", hasRestaurant);
     }
   }, [restaurantData]);
 
@@ -87,25 +89,31 @@ function RestaurantForm({ restaurantData }) {
     setLoading(true);
 
     try {
-      const formData = new FormData();
-      formData.append("name", form.name);
-      formData.append("description", form.description);
-      formData.append("cuisine", form.cuisine);
-      formData.append("phoneNumber", form.phoneNumber);
-      formData.append("country", form.country);
-      formData.append("city", form.city);
-      formData.append("street", form.street);
-      formData.append("zipcode", form.zipcode);
-      formData.append("image", file);
+      const formData = {
+        name: form.name,
+        description: form.description,
+        cuisine: form.cuisine,
+        phoneNumber: form.phoneNumber,
+        country: form.country,
+        city: form.city,
+        street: form.street,
+        zipcode: form.zipcode,
+        image: file,
+      };
+
+      const formDataToAppend = new FormData();
+
+      for (const key in formData) {
+        formDataToAppend.append(key, formData[key]);
+      }
 
       if (!edit) {
-        const res = await createRestaurant(formData);
-
-        restaurantData = res.restaurant;
+        const res = await createRestaurant(formDataToAppend);
+        setRestaurantData(res.restaurant); // Update the state with new data
         setHasRestaurant(true);
       } else {
-        const res = await updateAdminRestaurant(formData);
-        console.log("Response:", res.restaurant);
+        const res = await updateAdminRestaurant(formDataToAppend);
+        setRestaurantData(res.results); // Update the state with updated data
       }
     } catch (error) {
       console.error("Error:", error);
@@ -138,7 +146,7 @@ function RestaurantForm({ restaurantData }) {
 
   const toggleFieldsDisabled = () => {
     setEdit((prev) => !prev);
-
+    setHasRestaurant(true);
     setShowUpdateButton((prev) => !prev);
     setDisable(false);
   };
@@ -174,16 +182,14 @@ function RestaurantForm({ restaurantData }) {
                   />
                 )}
               </span>
-              {edit ||
-                (!restaurantData && (
-                  <input
-                    type="file"
-                    accept="image/*"
-                    filename={file}
-                    onChange={handleImageChange}
-                    disabled={diable}
-                  />
-                ))}
+              {(!hasRestaurant || edit) && (
+                <input
+                  type="file"
+                  accept="image/*"
+                  filename={file}
+                  onChange={handleImageChange}
+                />
+              )}
             </div>
             {hasRestaurant && (
               /*  <button
@@ -203,7 +209,7 @@ function RestaurantForm({ restaurantData }) {
               value={form.name}
               onChange={handleChange}
               placeholder="Restaurant Name"
-              disabled={diable}
+              disabled={disable}
             />
             <textarea
               className="w-full field mb-4"
@@ -211,7 +217,7 @@ function RestaurantForm({ restaurantData }) {
               value={form.description}
               onChange={handleChange}
               placeholder="Description"
-              disabled={diable}
+              disabled={disable}
             />
             <input
               className="w-full field mb-4"
@@ -220,7 +226,7 @@ function RestaurantForm({ restaurantData }) {
               value={form.cuisine}
               onChange={handleChange}
               placeholder="Cuisine"
-              disabled={diable}
+              disabled={disable}
             />
             <input
               type="number"
@@ -229,7 +235,7 @@ function RestaurantForm({ restaurantData }) {
               onChange={handleChange}
               placeholder="Phone Number"
               className="w-full field mb-4"
-              disabled={diable}
+              disabled={disable}
             />
             {/* address */}
             <div className="flex justify-between w-full">
@@ -240,7 +246,7 @@ function RestaurantForm({ restaurantData }) {
                 className="w-full mr-4 field"
                 value={form.country}
                 onChange={handleChange}
-                disabled={diable}
+                disabled={disable}
               />
               <input
                 type="text"
@@ -249,7 +255,7 @@ function RestaurantForm({ restaurantData }) {
                 className="w-full mr-4 field"
                 value={form.city}
                 onChange={handleChange}
-                disabled={diable}
+                disabled={disable}
               />
             </div>
             <div className="flex justify-between w-full">
@@ -260,7 +266,7 @@ function RestaurantForm({ restaurantData }) {
                 className="w-full mr-4 field"
                 value={form.street}
                 onChange={handleChange}
-                disabled={diable}
+                disabled={disable}
               />
               <input
                 type="number"
@@ -269,7 +275,7 @@ function RestaurantForm({ restaurantData }) {
                 className="w-full mr-4 field"
                 value={form.zipcode}
                 onChange={handleChange}
-                disabled={diable}
+                disabled={disable}
               />
             </div>
           </div>
