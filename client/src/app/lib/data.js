@@ -107,16 +107,20 @@ export const searchRestaurant = async (search, page, limit) => {
   }
 };
 
-
 // create restaurant
 export const createRestaurant = async (formData) => {
   try {
-    console.log(formData);
     const res = await fetch(adminNewRestaurantUrl, {
       method: "POST",
       body: formData,
       credentials: "include",
     });
+    return await res.json();
+  } catch (error) {
+    console.error("Error fetching menu item:", error);
+    throw error;
+  }
+};
 
 // fetch menu items
 export const fetchMenuItem = async (resId) => {
@@ -166,7 +170,6 @@ export const fetchUpdateMenuItem = async (menuItemId, menuItem) => {
   }
 };
 
-
 //get admin restaurant
 export const getAdminRestaurant = async () => {
   try {
@@ -194,7 +197,7 @@ export const updateAdminRestaurant = async (formData) => {
     return error.message;
   }
 };
-    
+
 // delete menuItem
 export const fetchdeleteMenuItem = async (menuItemId) => {
   try {
@@ -441,4 +444,3 @@ export const fetchUpdateRestaurantOrder = async (orderId, body) => {
 };
 
 ////////////////////////////////////////
-

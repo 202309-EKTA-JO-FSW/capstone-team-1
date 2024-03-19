@@ -28,7 +28,6 @@ function RestaurantForm({ restaurantData, setRestaurantData }) {
 
   useEffect(() => {
     if (restaurantData && Object.keys(restaurantData).length > 0) {
-      console.log(restaurantData);
       const {
         name,
         description,
