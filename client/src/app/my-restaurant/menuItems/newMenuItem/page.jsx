@@ -3,7 +3,7 @@ import React from "react";
 
 const NewMenuItemPage = () => {
   return (
-    <div className="flex w-full justify-start">
+    <div className="flex w-full justify-center">
       <NewMenuItem />
     </div>
   );

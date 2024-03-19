@@ -19,15 +19,15 @@ function MenuItems() {
     setLoading(false);
   };
   useEffect(() => {
-    
-    
     getMenuItems();
   }, []);
 
   const handleDelete = async (deletedItem) => {
     const updatedMenuItems = menuItems.filter((item) => item !== deletedItem);
     setMenuItems(updatedMenuItems);
-    getMenuItems();
+    const menuItemsData = await fetchMenuItem(restaurantId);
+    setMenuItems(menuItemsData);
+    // getMenuItems();
   };
   return (
     <div className=" flex flex-col justify-center  w-full p-5 md:mx-2 border border-white">
