@@ -161,7 +161,7 @@ function RestaurantForm({ restaurantData, setRestaurantData }) {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center w-full sm:w-[700px] p-2">
+    <div className="flex flex-col justify-center items-center w-full p-2">
       <h1 className="text-4xl font-bold my-3">{getTitle()}</h1>
       <div className="flex flex-col justify-around w-full ">
         <form
@@ -169,8 +169,8 @@ function RestaurantForm({ restaurantData, setRestaurantData }) {
           onSubmit={handleSubmit}
         >
           <div className="flex flex-col justify-around w-full">
-            <div className="flex flex-col  p-1">
-              <span className=" h-[160px]  w-[200px] flex justify-center   border border-gray-300">
+            <div className="flex flex-col p-1">
+              <span className=" h-[160px]  w-[200px] flex justify-center border border-gray-300">
                 {form.imageUrl && (
                   <Image
                     src={form.imageUrl}
@@ -178,7 +178,7 @@ function RestaurantForm({ restaurantData, setRestaurantData }) {
                     height={160}
                     alt="Selected Image Preview"
                     priority="true"
-                    style={{ width: "auto", height: "auto" }}
+                    className="w-auto h-auto rounded"
                   />
                 )}
               </span>
@@ -188,6 +188,7 @@ function RestaurantForm({ restaurantData, setRestaurantData }) {
                   accept="image/*"
                   filename={file}
                   onChange={handleImageChange}
+                  className="mt-4"
                 />
               )}
             </div>
@@ -238,7 +239,7 @@ function RestaurantForm({ restaurantData, setRestaurantData }) {
               disabled={disable}
             />
             {/* address */}
-            <div className="flex justify-between w-full">
+            <div className="flex items-center justify-between w-full">
               <input
                 type="text"
                 name="country"
@@ -252,7 +253,7 @@ function RestaurantForm({ restaurantData, setRestaurantData }) {
                 type="text"
                 name="city"
                 placeholder="City"
-                className="w-full mr-4 field"
+                className="w-full field"
                 value={form.city}
                 onChange={handleChange}
                 disabled={disable}
@@ -272,7 +273,7 @@ function RestaurantForm({ restaurantData, setRestaurantData }) {
                 type="number"
                 name="zipcode"
                 placeholder="Zip code"
-                className="w-full mr-4 field"
+                className="w-full field"
                 value={form.zipcode}
                 onChange={handleChange}
                 disabled={disable}
