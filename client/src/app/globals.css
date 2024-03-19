@@ -12,7 +12,7 @@
 
 /* sidebar style  */
 .sidebar {
-  @apply flex md:flex-col items-center justify-center md:justify-start bg-soft-green w-full rounded md:rounded-xl p-5 md:mx-5 md:w-[200px] lg:w-[300px] h-12 md:h-[800px]  border border-gray-100;
+  @apply flex md:flex-col items-center justify-center md:justify-between bg-soft-green w-full rounded md:rounded-xl p-5 md:mx-5 md:w-[200px] lg:w-[300px] h-12 md:h-[800px]  border border-gray-100;
 }
 
 .sidebar-btn {
