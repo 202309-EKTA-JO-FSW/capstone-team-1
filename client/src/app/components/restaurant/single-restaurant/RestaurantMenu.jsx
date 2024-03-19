@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useEffect, useState } from "react";
 import MenuItemCard from "./MenuItemCard";
 import { fetchMenuItem, searchMenuItem } from "@/app/lib/data";
@@ -8,24 +8,20 @@ import SingleSearch from "./singleSearch";
 const RestaurantMenu = ({ id }) => {
   const [menuItems, setMenuItems] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [totalPages, setTotalPages] = useState(1);
   const [searchTxt, setSearchTxt] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
 
   const fetchData = async () => {
     try {
       setLoading(true);
-      const { menuItems, totalPages, currentPage } = await fetchMenuItem(id, currentPage);
+      const menuItems = await fetchMenuItem(id);
       setMenuItems(menuItems);
-      setTotalPages(totalPages);
-      setCurrentPage(currentPage);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching menu items:", error);
       setLoading(false);
     }
   };
-
+  console.log(menuItems);
   const handleSearchValue = (event) => {
     setSearchTxt(event.target.value);
   };
@@ -33,10 +29,9 @@ const RestaurantMenu = ({ id }) => {
   const searchMenuItems = async () => {
     try {
       setLoading(true);
-      const { menuItems, totalPages, currentPage } = await searchMenuItem(searchTxt, currentPage, 10); // Assuming a limit of 10 items per page
+      const menuItems = await searchMenuItem(searchTxt, currentPage);
       setMenuItems(menuItems);
-      setTotalPages(totalPages);
-      setCurrentPage(currentPage);
+
       setLoading(false);
     } catch (error) {
       console.error("Error searching menu items:", error);
@@ -50,11 +45,7 @@ const RestaurantMenu = ({ id }) => {
     } else {
       fetchData();
     }
-  }, [searchTxt, currentPage]);
-
-  const handlePagination = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
+  }, [searchTxt]);
 
   if (loading) {
     return (
@@ -78,17 +69,21 @@ const RestaurantMenu = ({ id }) => {
     <div className="flex flex-col items-center">
       <div className="mt-16 flex flex-col items-center w-full">
         <div className="flex items-center w-96 justify-center">
-          <SingleSearch value={searchTxt} onChange={handleSearchValue} onSubmit={searchMenuItems} />
+          <SingleSearch
+            value={searchTxt}
+            onChange={handleSearchValue}
+            onSubmit={searchMenuItems}
+          />
         </div>
       </div>
       {menuItems.length > 0 ? (
         <>
           {renderMenuItems(menuItems)}
-          <Pagination
+          {/* <Pagination
             totalPages={totalPages}
             currentPage={currentPage}
             handlePagination={handlePagination}
-          />
+          /> */}
         </>
       ) : (
         <div className="h-[500px] flex items-center justify-center text-xl text-main-green">

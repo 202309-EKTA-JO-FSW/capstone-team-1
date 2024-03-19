@@ -1,7 +1,7 @@
 "use client";
-import Image from 'next/image';
-import { useEffect, useState } from 'react';
-import { fetchSingleRestaurant } from '@/app/lib/data';
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import { fetchSingleRestaurant } from "@/app/lib/data";
 
 const Header = ({ id }) => {
   const [restaurant, setRestaurant] = useState(null);
@@ -33,10 +33,15 @@ const Header = ({ id }) => {
     <header>
       <div className="absolute inset-0 bg-green-500 w-full h-48 mt-16"></div>
       <div className="relative z-10 flex items-center px-8 py-4">
-        <div className="w-32 h-32 rounded-full overflow-hidden mt-12">
-          <Image src={image} alt={name} width={128} height={128} />
-        </div>
-        <div className="ml-8 mt-48" >
+        <Image
+          src={image}
+          alt={name}
+          width={200}
+          height={200}
+          className="w-[160px] h-[160px] rounded-full object-cover  mt-12"
+        />
+
+        <div className="ml-8 mt-48">
           <h1 className="text-3xl font-bold text-black">{name}</h1>
           <p className="text-black">{description}</p>
           <div className="flex items-center mt-2">
@@ -46,7 +51,9 @@ const Header = ({ id }) => {
             {contact.phoneNumber && (
               <>
                 <span className="text-black ml-2">|</span>
-                <span className="text-black ml-2">Phone: {contact.phoneNumber}</span>
+                <span className="text-black ml-2">
+                  Phone: {contact.phoneNumber}
+                </span>
               </>
             )}
             {contact.email && (
@@ -63,4 +70,3 @@ const Header = ({ id }) => {
 };
 
 export default Header;
-
