@@ -9,6 +9,12 @@ const {
   cartUrl,
   updateCartUrl,
   updateMenuItemUrl,
+  checkoutUrl,
+  logoutUrl,
+  userOrdersUrl,
+  singleUserOrderUrl,
+  restaurantOrdersUrl,
+  singleRestaurantOrderUrl,
 } = require("./utils");
 
 // signup
@@ -41,6 +47,18 @@ export const fetchLogin = async (form) => {
       body: JSON.stringify(form),
       credentials: "include",
     });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+// login
+export const fetchLogout = async () => {
+  try {
+    const res = await fetch(logoutUrl, { credentials: "include" });
 
     return res.json();
   } catch (error) {
@@ -250,3 +268,133 @@ export const fetchCancelCart = async () => {
     return error.message;
   }
 };
+
+// checkout
+// create order
+export const fetchCreateOrder = async () => {
+  try {
+    const res = await fetch(checkoutUrl, {
+      method: "post",
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+// get all users orders
+export const fetchUserOrders = async () => {
+  try {
+    const res = await fetch(userOrdersUrl, {
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+// get users single order
+export const fetchSingleUserOrder = async (orderId) => {
+  try {
+    const res = await fetch(singleUserOrderUrl(orderId), {
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+// get users single order
+export const fetchPlaceOrder = async (orderId, noteValue) => {
+  try {
+    const res = await fetch(singleUserOrderUrl(orderId), {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ note: noteValue }),
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+// cancel order
+export const fetchUserCancelOrder = async (orderId) => {
+  try {
+    const res = await fetch(singleUserOrderUrl(orderId), {
+      method: "DELETE",
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+////////// restaurant orders ////////////
+
+// fetch restaurant orders
+// get users single order
+export const fetchRestaurantOrders = async () => {
+  try {
+    const res = await fetch(restaurantOrdersUrl, {
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+// get users single order
+export const fetchSingleRestaurantOrder = async (orderId) => {
+  try {
+    const res = await fetch(singleRestaurantOrderUrl(orderId), {
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+// get users single order
+export const fetchUpdateRestaurantOrder = async (orderId, body) => {
+  try {
+    const res = await fetch(singleRestaurantOrderUrl(orderId), {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+////////////////////////////////////////

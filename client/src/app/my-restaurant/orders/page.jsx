@@ -1,7 +1,8 @@
+import RestaurantOrders from "@/app/components/my-restaurant/orders/RestaurantOrders";
 import React from "react";
 
 const MyRestaurantOrdersPage = () => {
-  return <div>My Restaurant Orders Page</div>;
+  return <RestaurantOrders />;
 };
 
 export default MyRestaurantOrdersPage;

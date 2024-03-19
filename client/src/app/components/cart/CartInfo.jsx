@@ -1,13 +1,26 @@
 "use client";
-import { fetchCancelCart, fetchCart, fetchUpdateCart } from "@/app/lib/data";
+import {
+  fetchCancelCart,
+  fetchCart,
+  fetchCreateOrder,
+  fetchUpdateCart,
+  fetchUserUpdate,
+} from "@/app/lib/data";
 import React, { useEffect, useState } from "react";
 import Btn from "../Btn";
-import LoadingBtn from "../LoadingBtn";
+import LoadingBtn from "../loading/LoadingBtn";
 import ItemCart from "./ItemCart";
+import Loading from "../loading/Loading";
+import { useRouter } from "next/navigation";
+import { useAppDispatch } from "@/app/redux/hooks";
+import { itemsCount } from "@/app/redux/features/cart/CartSlice";
 
 const CartInfo = ({ form, loading, setLoading, cart, setCart }) => {
+  const dispatch = useAppDispatch();
+  const router = useRouter();
   const [clickedItem, setClickedItem] = useState("");
   const [cancelLoadingBtn, setCancelLoadingBtn] = useState(false);
+  const [checkoutLoadingBtn, setCheckoutLoadingBtn] = useState(false);
 
   // fetch cart data
   useEffect(() => {
@@ -34,17 +47,13 @@ const CartInfo = ({ form, loading, setLoading, cart, setCart }) => {
         if (update) {
           const data = await fetchCart();
 
-          // update the length count in local storage
+          // update state itemsCount when add and remove
           let cartLength = data.itemsCount;
           if (!data.menuItems) {
-            localStorage.removeItem("cart");
+            dispatch(itemsCount(0));
           } else if (data.menuItems) {
-            localStorage.setItem(
-              "cart",
-              JSON.stringify({ length: cartLength })
-            );
+            dispatch(itemsCount(cartLength));
           }
-          window.dispatchEvent(new Event("storage"));
 
           setCart(data);
         }
@@ -61,24 +70,34 @@ const CartInfo = ({ form, loading, setLoading, cart, setCart }) => {
     if (cancelCart.message === "Cart deleted successfully") {
       const data = await fetchCart();
 
-      // remove the cart from local host to not show the length on navbar
-      localStorage.removeItem("cart");
-      window.dispatchEvent(new Event("storage"));
+      // set itemsCount to zero when cancel the cart
+      dispatch(itemsCount(0));
       setCancelLoadingBtn(false);
       setCart(data);
     }
   };
 
   // handle checkout
-  const handleCheckout = () => {};
+  const handleCheckout = async () => {
+    setCheckoutLoadingBtn(true);
+    // update user info
+    const updateUser = await fetchUserUpdate(form);
+    // create an order
+    const createOrder = await fetchCreateOrder();
+    // update the cart
+    if (updateUser && createOrder) {
+      const cart = await fetchCart();
+      setCart(cart);
+      setCheckoutLoadingBtn(false);
+      // when checkout reset the itemCount to 0
+      dispatch(itemsCount(0));
+      router.push(`/order/${createOrder.order._id}`);
+    }
+  };
 
   // loading
   if (loading) {
-    return (
-      <div className="w-full h-screen flex justify-center">
-        <p className="text-3xl font-bold text-main-green">Loading...</p>
-      </div>
-    );
+    return <Loading />;
   }
 
   // message when cart is empty
@@ -109,7 +128,7 @@ const CartInfo = ({ form, loading, setLoading, cart, setCart }) => {
           <div className="text-xl my-5 border-b border-[#dedede] w-full">
             <p className="text-center">
               Total:{" "}
-              <span className="font-bold text-2xl">{cart.subtotal} $</span>
+              <span className="font-bold text-2xl">{cart.subtotal} JD</span>
             </p>
           </div>
           <div className="w-full flex justify-around my-3">
@@ -119,7 +138,9 @@ const CartInfo = ({ form, loading, setLoading, cart, setCart }) => {
             >
               {cancelLoadingBtn ? <LoadingBtn /> : "Cancel"}
             </button>
-            <Btn text={"Checkout"} onClick={handleCheckout} />
+            <div onClick={handleCheckout}>
+              <Btn text={"Checkout"} loadingBtn={checkoutLoadingBtn} />
+            </div>
           </div>
         </div>
       </div>

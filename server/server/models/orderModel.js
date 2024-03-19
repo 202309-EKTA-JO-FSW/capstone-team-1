@@ -29,6 +29,7 @@ const orderSchema = Schema(
         },
       },
     ],
+    itemsCount: Number,
     note: {
       type: String,
     },
@@ -46,7 +47,7 @@ const orderSchema = Schema(
     },
     status: {
       type: String,
-      enum: ["accepted", "cooking", "completed", "deliveried"],
+      enum: ["accepted", "cooking", "completed", "deliveried", "canceled"],
     },
     review: {
       type: Schema.Types.ObjectId,

@@ -3,6 +3,7 @@ const MenuItem = require("../models/menuItemModel");
 const Restaurant = require("../models/restaurantModel");
 const { uploadImage, deleteImage } = require("../utils/images/imageStorage");
 const { validateRestaurant } = require("../utils/validation");
+const Order = require("../models/orderModel");
 
 // add a new menuItem
 const addNewItem = async (req, res) => {
@@ -344,6 +345,85 @@ const updateAdminRestaurant = async (req, res) => {
   }
 };
 
+// orders
+// get all orders
+const getOrders = async (req, res) => {
+  try {
+    try {
+      // find user
+      const user = await User.findById(req.userId);
+      if (!user) return res.status(403).json({ message: "Access denied" });
+
+      // find orders
+      const orders = await Order.find({ restaurant: user.restaurant })
+        .populate("customer")
+        .populate("restaurant")
+        .populate("cartItems.menuItem")
+        .sort({ createdAt: -1 });
+
+      // if (!orders) return res.status(404).json({ message: "No orders found" });
+
+      return res.status(200).json(orders);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: error.message });
+    }
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+// get a single order
+const getSingleOrder = async (req, res) => {
+  const { orderId } = req.params;
+  try {
+    // find user
+    const user = await User.findById(req.userId);
+    if (!user) return res.status(403).json({ message: "Access denied" });
+
+    // find orders
+    const order = await Order.findOne({
+      restaurant: user.restaurant,
+      _id: orderId,
+    })
+      .populate("customer")
+      .populate("restaurant")
+      .populate("cartItems.menuItem");
+
+    // if (!order) return res.status(404).json({ message: "Order not found" });
+
+    return res.status(200).json(order);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+// get a single order
+const updateSingleOrder = async (req, res) => {
+  const { orderId } = req.params;
+  try {
+    // find user
+    const user = await User.findById(req.userId);
+    if (!user) return res.status(403).json({ message: "Access denied" });
+
+    // find orders
+    const order = await Order.findOneAndUpdate(
+      {
+        restaurant: user.restaurant,
+        _id: orderId,
+      },
+      req.body,
+      { new: true }
+    );
+
+    return res.status(200).json({ message: "order updated", order });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   getAdminRestaurant,
   updateAdminRestaurant,
@@ -351,4 +431,7 @@ module.exports = {
   addNewItem,
   updateItem,
   deleteItem,
+  getOrders,
+  getSingleOrder,
+  updateSingleOrder,
 };
