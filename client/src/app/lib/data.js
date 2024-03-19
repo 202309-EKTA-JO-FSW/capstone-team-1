@@ -7,6 +7,17 @@ const {
   adminNewRestaurantUrl,
   adminGetRestaurantUrl,
   adminUpdateRestaurantUrl,
+  newMenuItemUrl,
+  menuItemsUrl,
+  cartUrl,
+  updateCartUrl,
+  updateMenuItemUrl,
+  checkoutUrl,
+  logoutUrl,
+  userOrdersUrl,
+  singleUserOrderUrl,
+  restaurantOrdersUrl,
+  singleRestaurantOrderUrl,
 } = require("./utils");
 
 // signup
@@ -47,10 +58,11 @@ export const fetchLogin = async (form) => {
   }
 };
 
-// google auth
-export const fetchGoogleUser = async () => {
+// login
+export const fetchLogout = async () => {
   try {
-    const res = await fetch(getGoogleUser, { credentials: "include" });
+    const res = await fetch(logoutUrl, { credentials: "include" });
+
     return res.json();
   } catch (error) {
     console.error(error.message);
@@ -58,18 +70,10 @@ export const fetchGoogleUser = async () => {
   }
 };
 
-// update user profile
-export const fetchUserUpdate = async (form) => {
+// google auth
+export const fetchGoogleUser = async () => {
   try {
-    const res = await fetch(userProfileUrl, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(form),
-      credentials: "include",
-    });
-
+    const res = await fetch(getGoogleUser, { credentials: "include" });
     return res.json();
   } catch (error) {
     console.error(error.message);
@@ -103,6 +107,7 @@ export const searchRestaurant = async (search, page, limit) => {
   }
 };
 
+
 // create restaurant
 export const createRestaurant = async (formData) => {
   try {
@@ -112,6 +117,28 @@ export const createRestaurant = async (formData) => {
       body: formData,
       credentials: "include",
     });
+
+// fetch menu items
+export const fetchMenuItem = async (resId) => {
+  try {
+    const res = await fetch(menuItemsUrl(resId));
+    return await res.json();
+  } catch (error) {
+    console.error("Error fetching menu item:", error);
+    throw error;
+  }
+};
+
+// post new MenuItem
+export const postItem = async (formData) => {
+  try {
+    const res = await fetch(newMenuItemUrl, {
+      method: "POST",
+
+      body: formData,
+      credentials: "include",
+    });
+
     return res.json();
   } catch (error) {
     console.error(error.message);
@@ -119,8 +146,28 @@ export const createRestaurant = async (formData) => {
   }
 };
 
-//get admin restaurant
+// update menu Items
+export const fetchUpdateMenuItem = async (menuItemId, menuItem) => {
+  const url = `${updateMenuItemUrl}/${menuItemId}`;
+  try {
+    const res = await fetch(url, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(menuItem),
+      credentials: "include",
+    });
 
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+
+//get admin restaurant
 export const getAdminRestaurant = async () => {
   try {
     const res = await fetch(adminGetRestaurantUrl, { credentials: "include" });
@@ -147,3 +194,251 @@ export const updateAdminRestaurant = async (formData) => {
     return error.message;
   }
 };
+    
+// delete menuItem
+export const fetchdeleteMenuItem = async (menuItemId) => {
+  try {
+    const res = await fetch(`${updateMenuItemUrl}/${menuItemId}`, {
+      method: "delete",
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+// post cart
+export const fetchPostCart = async (menuItemId) => {
+  try {
+    const res = await fetch(cartUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ menuItemId: menuItemId }),
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+// get cart info
+export const fetchCart = async (menuItemId) => {
+  try {
+    const res = await fetch(cartUrl, {
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+// USER
+// update user profile
+export const fetchUserUpdate = async (form) => {
+  try {
+    const res = await fetch(userProfileUrl, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(form),
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+// get user profile
+export const fetchUser = async () => {
+  try {
+    const res = await fetch(userProfileUrl, {
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+// CART
+// update cart info
+export const fetchUpdateCart = async (itemId, statusRes) => {
+  try {
+    const res = await fetch(updateCartUrl(itemId), {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ status: statusRes }),
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+// cancel cart
+export const fetchCancelCart = async () => {
+  try {
+    const res = await fetch(cartUrl, {
+      method: "delete",
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+// checkout
+// create order
+export const fetchCreateOrder = async () => {
+  try {
+    const res = await fetch(checkoutUrl, {
+      method: "post",
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+// get all users orders
+export const fetchUserOrders = async () => {
+  try {
+    const res = await fetch(userOrdersUrl, {
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+// get users single order
+export const fetchSingleUserOrder = async (orderId) => {
+  try {
+    const res = await fetch(singleUserOrderUrl(orderId), {
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+// get users single order
+export const fetchPlaceOrder = async (orderId, noteValue) => {
+  try {
+    const res = await fetch(singleUserOrderUrl(orderId), {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ note: noteValue }),
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+// cancel order
+export const fetchUserCancelOrder = async (orderId) => {
+  try {
+    const res = await fetch(singleUserOrderUrl(orderId), {
+      method: "DELETE",
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+////////// restaurant orders ////////////
+
+// fetch restaurant orders
+// get users single order
+export const fetchRestaurantOrders = async () => {
+  try {
+    const res = await fetch(restaurantOrdersUrl, {
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+// get users single order
+export const fetchSingleRestaurantOrder = async (orderId) => {
+  try {
+    const res = await fetch(singleRestaurantOrderUrl(orderId), {
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+// get users single order
+export const fetchUpdateRestaurantOrder = async (orderId, body) => {
+  try {
+    const res = await fetch(singleRestaurantOrderUrl(orderId), {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+////////////////////////////////////////
+

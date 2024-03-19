@@ -50,12 +50,62 @@ const newCart = async (req, res) => {
       user.cart.menuItems.push({ menuItem: menuItemId, total: menuItem.price });
     }
 
+    // add subtotal
+    user.cart.subtotal = user.cart.menuItems.reduce(
+      (total, item) => total + item.total,
+      0
+    );
+
+    // add menuitems count
+    const menuItemCount = user.cart.menuItems.reduce(
+      (total, item) => total + item.quantity,
+      0
+    );
+
+    user.cart.itemsCount = menuItemCount;
+
     await user.save();
 
-    res.status(201).json({ message: "Menu item added to cart", results: user });
+    return res
+      .status(201)
+      .json({ message: "Menu item added to cart", results: user });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+const getCart = async (req, res) => {
+  try {
+    const user = await User.findById(req.userId)
+      .populate({
+        path: "cart.restaurant",
+        model: "Restaurant",
+      })
+      .populate({
+        path: "cart.menuItems.menuItem",
+        model: "MenuItem",
+      });
+
+    if (!user)
+      return res.status(401).json({ message: "User not found, Please login" });
+
+    // if (!user.cart) return res.status(404).json({ message: "Cart is empty" });
+    let cart;
+    if (user.cart) {
+      cart = {
+        restaurant: user.cart.restaurant.name,
+        menuItems: user.cart.menuItems,
+        itemsCount: user.cart.itemsCount,
+        subtotal: user.cart.subtotal,
+      };
+    } else {
+      cart = [];
+    }
+    return res.status(200).json(cart);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: error.message });
   }
 };
 
@@ -98,11 +148,27 @@ const updateCart = async (req, res) => {
         .json({ message: "Status should be either add or remove" });
     }
 
+    user.cart.subtotal = user.cart.menuItems.reduce(
+      (total, item) => total + item.total,
+      0
+    );
+
+    // add menuitems count
+    user.cart.itemsCount = user.cart.menuItems.reduce(
+      (total, item) => total + item.quantity,
+      0
+    );
+
+    if (user.cart.subtotal === 0) {
+      user.cart = null;
+    }
+
     await user.save();
 
-    res
-      .status(200)
-      .json({ message: "cart updated successfully", results: user });
+    return res.status(200).json({
+      message: "cart updated successfully",
+      results: user,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: error.message });
@@ -126,12 +192,12 @@ const cancelCart = async (req, res) => {
 
     await user.save();
 
-    res
+    return res
       .status(200)
       .json({ message: "Cart deleted successfully", results: user });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 
@@ -142,52 +208,57 @@ const checkout = async (req, res) => {
 
   try {
     // Find the user by ID and populate the cart field
-    const userCart = await User.findById(userId);
-    if (!userCart) {
+    const user = await User.findById(userId);
+    if (!user) {
       return res.status(404).json({ message: "Cart is empty" });
     }
-    const { cart } = userCart;
+    const { cart } = user;
+
     //Calculate subtotal, delivery fees, and total based on cart items
-    let subtotal = 0;
-    cart.menuItems.forEach((item) => {
-      subtotal += item.quantity * item.total;
-    });
     const deliveryFee = 2.5;
     // Calculate total including delivery fees
-    const total = subtotal + deliveryFee;
+    const total = cart.subtotal + deliveryFee;
     const newOrder = {
       customer: userId,
       restaurant: cart.restaurant,
       cartItems: cart.menuItems,
       deliveryFees: deliveryFee,
-      subtotal: subtotal,
+      itemsCount: cart.itemsCount,
+      subtotal: cart.subtotal,
       total: total,
     };
 
     const order = await Order.create(newOrder);
 
+    user.orders.push(order._id);
+
+    user.cart = null;
+
+    await user.save();
+
     return res.status(201).json({ message: "Ready for Checkout", order });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 
 // process checkout/order
-const processCheckout = async (req, res) => {
-  const { checkoutId } = req.params;
+const placeOrder = async (req, res) => {
+  const { orderId } = req.params;
   const { note } = req.body;
   try {
     const user = await User.findById(req.userId);
     if (!user) return res.status(403).json({ message: "Access denied" });
     //check checkout/order id
-    const order = await Order.findById(checkoutId);
+    const order = await Order.findOne({ customer: user._id, _id: orderId });
+
     // check if the order is available
     if (!order) return res.status(404).json({ message: "Order not found" });
 
     // customer can only add note before precess the order
     if (note) {
-      order.note = req.body.note;
+      order.note = note;
     } else if (note && order.status === "accepted") {
       return res
         .status(400)
@@ -205,97 +276,97 @@ const processCheckout = async (req, res) => {
     restaurant.orders.push(order._id);
     await restaurant.save();
 
-    // add order to the customer model
-    user.orders.push(order._id);
-    await user.save();
-
-    //customer can only add review after delivery
-    // if (req.body.review && order.status === "delivered") {
-    //   order.review = req.body.review;
-    // } else if (req.body.review && order.status !== "delivered") {
-    //   return res
-    //     .status(400)
-    //     .json({ message: "Cannot add reviews until the order is delivered" });
-    // }
-    // // Save the updated order
-    // await order.save();
-
-    //add review to the restaurant
-    // const restaurant = await Restaurant.findById(order.restaurant);
-    // if (!restaurant)
-    //   return res.status(404).json({ message: "Restaurant not found" });
-
-    // restaurant.reviews.push({
-    //   customer: req.userId,
-    //   rating: req.body.review.rating,
-    //   comment: req.body.review.comment,
-    // });
-    // await restaurant.save();
     return res.status(201).json({ message: "Order is proceeded successfully" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 
 //cancel checkout - delete order
-const cancelCheckout = async (req, res) => {
-  const { checkoutId } = req.params;
+const cancelOrder = async (req, res) => {
+  const { orderId } = req.params;
   try {
     const user = await User.findById(req.userId);
     if (!user) return res.status(403).json({ message: "Access denied" });
-    const order = await Order.findById(checkoutId);
+    const order = await Order.findOne({ _id: orderId, customer: user._id });
+
     if (!order) return res.status(404).json({ message: "Order not found" });
+    // if order already was proceeded, just change the status to cancel
+    if (order.status) {
+      order.status = "canceled";
+      await order.save();
+      return res
+        .status(200)
+        .json({ message: "Order canceled successfully", order });
+    }
 
     // if found, delete the order and remove it from restaurant and user models
-    const deletedOrder = await Order.deleteOne({ _id: checkoutId });
+    const deletedOrder = await Order.deleteOne({
+      _id: orderId,
+      customer: user._id,
+    });
 
     // Remove the order from the user's orders list
     const orderIndexUser = user.orders.findIndex((delOrder) =>
-      delOrder.equals(order._id)
+      delOrder.equals(orderId)
     );
     user.orders.splice(orderIndexUser, 1);
     await user.save();
 
-    // Remove the order from the restaurant's orders list
-    const restaurant = await Restaurant.findById(order.restaurant);
-    const orderIndexRes = restaurant.orders.findIndex((delOrder) =>
-      delOrder.equals(order._id)
-    );
-    restaurant.orders.splice(orderIndexRes, 1);
-    await restaurant.save();
-
-    res
+    return res
       .status(200)
       .json({ message: "Order deleted successfully", deletedOrder });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 
-// get checkout
-const getCheckout = async (req, res) => {
+// Orders
+const getOrders = async (req, res) => {
   try {
     // find user
     const user = await User.findById(req.userId);
     if (!user) return res.status(403).json({ message: "Access denied" });
 
     // find orders
-    const order = await Order.find({ customer: user._id });
-    if (!order) return res.status(404).json({ message: "No orders has made" });
+    const orders = await Order.find({ customer: user._id })
+      .populate("customer")
+      .populate("restaurant")
+      .populate("cartItems.menuItem")
+      .sort({ createdAt: -1 });
 
-    // check if the order is delivered
-    if (order.status === deliveried) {
-      return res
-        .status(400)
-        .json({ message: "The order is already delivered" });
-    }
+    if (!orders) return res.status(404).json({ message: "No orders found" });
+
+    return res.status(200).json(orders);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+// get single order
+// get checkout
+const getSingleOrder = async (req, res) => {
+  const { orderId } = req.params;
+  try {
+    // find user
+    const user = await User.findById(req.userId);
+    if (!user) return res.status(403).json({ message: "Access denied" });
+
+    // find orders
+    const order = await Order.findOne({ customer: user._id, _id: orderId })
+      .populate("customer")
+      .populate("restaurant")
+      .populate("cartItems.menuItem");
+
+    if (!order) return res.status(404).json({ message: "Order not found" });
 
     return res.status(200).json(order);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 
@@ -304,7 +375,9 @@ module.exports = {
   updateCart,
   cancelCart,
   checkout,
-  processCheckout,
-  cancelCheckout,
-  getCheckout,
+  placeOrder,
+  cancelOrder,
+  getSingleOrder,
+  getCart,
+  getOrders,
 };
