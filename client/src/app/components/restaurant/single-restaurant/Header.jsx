@@ -6,9 +6,8 @@ import menuitemPlaceholderImage from "../../../../../public/image/menuItem-image
 
 const Header = ({ restaurant }) => {
   return (
-    <header>
-      <div className="absolute inset-0 bg-green-500 w-full h-48 mt-16"></div>
-      <div className="relative z-10 flex items-center px-8 py-4">
+    <header className="relative top-0 left-0 bg-green-500 w-full h-48 flex justify-center mb-28">
+      <div className="absolute z-50 flex flex-col md:flex-row items-center px-8 mt-10  md:mt-0 py-4">
         <Image
           src={restaurant.image || menuitemPlaceholderImage}
           alt={restaurant.name}
@@ -17,8 +16,8 @@ const Header = ({ restaurant }) => {
           className="w-[160px] h-[160px] rounded-full object-cover  mt-12"
         />
 
-        <div className="ml-8 mt-48">
-          <h1 className="text-3xl font-bold text-black">{name}</h1>
+        <div className="ml-8 mt-5 md:mt-48">
+          <h1 className="text-3xl font-bold text-black">{restaurant.name}</h1>
           <p className="text-black">{restaurant.description}</p>
           <div className="flex items-center mt-2">
             <span className="text-black">{restaurant.rating || 4.5}</span>

@@ -148,7 +148,8 @@ const filterRestaurantMenuItems = async (req, res) => {
 
 // search MenuItems w/pagination
 const searchRestaurantMenuItems = async (req, res) => {
-  const { search, type, pageNum, offset } = req.query;
+  const { search, pageNum, offset } = req.query;
+  const { resId } = req.params;
   const page = parseInt(pageNum) || 0;
   const itemsPerPage = parseInt(offset) || 10;
   try {
@@ -158,6 +159,7 @@ const searchRestaurantMenuItems = async (req, res) => {
           { type: { $regex: search.toString(), $options: "i" } },
           { name: { $regex: search.toString(), $options: "i" } },
         ],
+        restaurant: resId,
       })
       .skip(page * itemsPerPage)
       .limit(itemsPerPage);

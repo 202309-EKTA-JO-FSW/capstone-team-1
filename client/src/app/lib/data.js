@@ -125,7 +125,7 @@ export const fetchRestaurantMenuItems = async (resId) => {
 };
 
 // search menu item
-export const searchMenuItem = async (resId, searchValue) => {
+export const fetchSearchMenuItem = async (resId, searchValue) => {
   try {
     const url = `${menuItemsUrl(resId)}/search?search=${searchValue}`;
     const response = await fetch(url);
