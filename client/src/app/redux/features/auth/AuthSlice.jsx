@@ -2,9 +2,6 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   value: {
-    firstName: "",
-    lastName: "",
-    avatar: "",
     isLogin: false,
     isAdmin: false,
     restaurant: "",
@@ -18,9 +15,6 @@ export const authSlice = createSlice({
     loginUser: (state, action) => {
       return {
         value: {
-          firstName: action.payload.firstName,
-          lastName: action.payload.lastName,
-          avatar: action.payload.avatar,
           isAdmin: action.payload.isAdmin,
           restaurant: action.payload.restaurant,
           isLogin: true,

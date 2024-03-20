@@ -16,8 +16,8 @@ const NavBar = () => {
   const dispatch = useAppDispatch();
   const [userInfo, setUserInfo] = useState(null);
   const [loading, setLoading] = useState(true);
-  const loginUser = useAppSelector((state) => state.authReducer.value);
-  console.log(loginUser);
+  const user = useAppSelector((state) => state.authReducer.value);
+
   const contents = [
     { name: "home", path: "/" },
     { name: "restaurant", path: "/restaurant" },
@@ -58,7 +58,7 @@ const NavBar = () => {
 
   useEffect(() => {
     const getCart = async () => {
-      if (loginUser.isLogIn) {
+      if (user.isLogIn) {
         const cart = await fetchCart();
         dispatch(itemsCount(cart.itemsCount));
       }
