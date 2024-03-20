@@ -16,24 +16,19 @@ const RestaurantMenu = ({ id, searchTxt }) => {
         setLoading(true);
         const menuItemsData = await fetchRestaurantMenuItems(id);
         setMenuItems(menuItemsData);
+        setCurrentType(menuItemsData[0].type);
         setLoading(false);
-      }
-    };
-    getMenuItems();
-  }, [id]);
-
-  // search menu items
-  useEffect(() => {
-    const getMenuItems = async () => {
-      if (searchTxt) {
+      } else {
         setLoading(true);
         const searchMenuItemsData = await fetchSearchMenuItem(id, searchTxt);
         setMenuItems(searchMenuItemsData);
+        setCurrentType(searchMenuItemsData[0].type);
         setLoading(false);
       }
     };
+
     getMenuItems();
-  }, [searchTxt]);
+  }, [id, searchTxt]);
 
   if (menuItems.message) {
     return (
@@ -60,7 +55,6 @@ const RestaurantMenu = ({ id, searchTxt }) => {
   }
 
   // filter menuItems
-
   const types = [];
   menuItems.forEach((item) => {
     if (!types.includes(item.type)) {
@@ -68,12 +62,12 @@ const RestaurantMenu = ({ id, searchTxt }) => {
     }
   });
 
-  console.log(currentType);
+  // filter menuItem with types
+  const filteredmenuItems = menuItems.filter(
+    (item) => item.type === currentType
+  );
 
-  const handleFilter = (type) => {
-    setCurrentType(type);
-  };
-
+  // filter btn color
   const currentTypeColor = (type) => {
     if (currentType === type) {
       return "bg-light-green border-main-green";
@@ -83,13 +77,13 @@ const RestaurantMenu = ({ id, searchTxt }) => {
   };
 
   return (
-    <div className="flex flex-col items-start w-full min-h-[400px] px-2 md:px-20 my-10">
+    <div className="flex flex-col items-center md:items-start w-full min-h-[400px] px-2 md:px-[10%] my-10">
       <div className="flex items-center text-base">
         <div className="border-2 border-gray-300 rounded-full p-3 mr-2">
           <CiFilter />
         </div>
         {types.map((type, i) => (
-          <div key={i} onClick={() => handleFilter(type)}>
+          <div key={i} onClick={() => setCurrentType(type)}>
             <p
               className={`border-2 rounded-full p-2 mr-2 cursor-pointer hover:bg-light-green hover:border-main-green ${currentTypeColor(
                 type
@@ -101,7 +95,7 @@ const RestaurantMenu = ({ id, searchTxt }) => {
         ))}
       </div>
       <div className="flex flex-wrap justify-center md:justify-start w-full min-h-[400px]">
-        {menuItems.map((item) => (
+        {filteredmenuItems.map((item) => (
           <div key={item._id}>
             <MenuItemCard key={item.id} menuItem={item} />
           </div>
