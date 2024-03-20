@@ -10,15 +10,20 @@ import { fetchCart } from "../lib/data";
 import { itemsCount } from "../redux/features/cart/CartSlice";
 import FreshFix from "../../../public/FreshFix.png";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import NavbarContent from "./navbar/NavbarContent";
 
 const NavBar = () => {
   const dispatch = useAppDispatch();
   const [user, setUser] = useState(null);
-  // const [cart, setCart] = useState(null);
   const [loading, setLoading] = useState(true);
   const isLogin = useAppSelector((state) => state.authReducer.value);
-  const currentPath = usePathname();
+
+  const contents = [
+    { name: "home", path: "/" },
+    { name: "restaurant", path: "/restaurant" },
+    { name: "about us", path: "/about-us" },
+    { name: "my restaurant", path: "/my-restaurant" },
+  ];
 
   useEffect(() => {
     // Function to handle local storage change event
@@ -78,58 +83,24 @@ const NavBar = () => {
           </Link>
         </div>
         {/* List of Links */}
-        <ul className=" md:flex gap-x-3  justify-evenly md:items-center pl-6 pt-1">
-          <li className="md:ml-3 ">
-            <Link
-              href={"/"}
-              className={
-                currentPath === "/"
-                  ? "text-main-green font-semibold "
-                  : "text-black hover:text-main-green"
-              }
-            >
-              Home
-            </Link>
-          </li>
-          <li className="md:ml-3  ">
-            <Link
-              href={"/restaurant"}
-              className={
-                currentPath === "/restaurant"
-                  ? "text-main-green font-semibold  "
-                  : "text-black hover:text-main-green"
-              }
-            >
-              Restaurants
-            </Link>
-          </li>
-          <li className="md:ml-3 ">
-            <Link
-              href={"/about"}
-              className={
-                currentPath === "/about"
-                  ? "text-main-green font-semibold "
-                  : "text-black hover:text-main-green"
-              }
-            >
-              About Us
-            </Link>
-          </li>
-          {/* conditional rendering of My Restaurants if admin is logged in */}
-          {user && user.isAdmin && (
-            <li className="md:ml-3 ">
-              <Link
-                href={"/my-restaurant"}
-                className={
-                  currentPath === "/my-restaurant"
-                    ? "text-main-green font-semibold "
-                    : "text-black hover:text-main-green"
-                }
-              >
-                My Restaurant
-              </Link>
-            </li>
-          )}
+        <ul className=" md:flex gap-x-3 justify-evenly md:items-center pl-6 pt-1 capitalize">
+          {contents.map((content) => {
+            console.log(user);
+            if (
+              content.path === "/my-restaurant" &&
+              (!user || (user && !user.isAdmin))
+            ) {
+              return <></>;
+            } else {
+              return (
+                <div key={content.name}>
+                  <Link href={content.path}>
+                    <NavbarContent content={content} />
+                  </Link>
+                </div>
+              );
+            }
+          })}
         </ul>
       </section>
 

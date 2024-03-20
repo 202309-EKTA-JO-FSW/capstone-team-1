@@ -4,6 +4,7 @@ import { fetchLogout } from "../lib/data";
 import { useRouter } from "next/navigation";
 import { useAppDispatch } from "../redux/hooks";
 import { logoutUser } from "../redux/features/auth/AuthSlice";
+import { itemsCount } from "../redux/features/cart/CartSlice";
 
 const LogoutBtn = () => {
   const router = useRouter();
@@ -17,6 +18,7 @@ const LogoutBtn = () => {
       window.dispatchEvent(new Event("storage"));
       // change auth state to logout
       dispatch(logoutUser());
+      dispatch(itemsCount(0));
       // navigate to home page
       router.push("/");
     }
