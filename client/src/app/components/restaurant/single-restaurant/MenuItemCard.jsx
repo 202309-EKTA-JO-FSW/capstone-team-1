@@ -1,43 +1,31 @@
 "use client";
 import Image from "next/image";
 import menuItemImage from "../../../../../public/image/menuItem-image-placeholder.png";
-import { fetchPostCart } from "@/app/lib/data";
-import { useAppDispatch } from "@/app/redux/hooks";
-import { itemsCount } from "@/app/redux/features/cart/CartSlice";
 
 const MenuItemCard = ({ menuItem }) => {
-  const dispatch = useAppDispatch();
-  const handleAddToCart = async () => {
-    const cart = await fetchPostCart(menuItem._id);
-
-    // change the cart status to added items
-    if (cart) dispatch(itemsCount(cart.results.cart.itemsCount));
-  };
-
-  if (!menuItem) {
-    return <div className="text-center">No items available</div>;
-  }
-
   return (
-    <div
-      className="bg-white shadow-md rounded-md p-4 flex flex-col items-center mx-4"
-      style={{ width: 250, height: 300 }}
-    >
-      <div className="relative w-[200px] h-[192px] mb-2">
+    <div className="bg-white shadow-lg border border-gray-100 rounded-md p-4 flex flex-col items-center m-5 w-[280px] h-[350px]">
+      <div className="relative h-[250px] w-full mb-2 rounded overflow-hidden">
         <Image
           src={menuItem.image || menuItemImage}
           alt={menuItem.name}
-          fill
           sizes="200vw"
           priority={true}
           className=" object-cover"
+          fill
         />
       </div>
-      <h3 className="text-lg font-bold text-center mb-6">{menuItem.name}</h3>
+      <div className="w-full mb-1">
+        <h3 className="text-lg font-bold text-center">{menuItem.name}</h3>
+        <p className="truncate overflow-hidden whitespace-nowrap w-full text-gray-500">
+          {menuItem.description}
+        </p>
+      </div>
+
       <div className="flex justify-between w-full">
         <div>
           <p className="text-lg font-semibold">{`${menuItem.price} ${
-            menuItem.currency || "JOD"
+            menuItem.currency || "JD"
           }`}</p>
         </div>
         <div className="flex items-center">
@@ -46,10 +34,7 @@ const MenuItemCard = ({ menuItem }) => {
         </div>
       </div>
       <div className="flex justify-center w-full mt-2">
-        <button
-          className="bg-green-500 text-white px-4 py-2 rounded-md"
-          onClick={handleAddToCart}
-        >
+        <button className="bg-green-500 text-white px-4 py-2 rounded-md">
           Add to Cart
         </button>
       </div>

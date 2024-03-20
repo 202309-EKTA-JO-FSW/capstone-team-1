@@ -13,7 +13,6 @@ export const userProfileUrl = main_url + "/user/profile";
 // restaurant url
 export const restaurantUrl = main_url + `/restaurant`;
 
-
 //admin url
 export const adminNewRestaurantUrl = main_url + `/admin/restaurant/new`;
 export const adminGetRestaurantUrl = main_url + `/admin/restaurant`;
@@ -44,3 +43,6 @@ export const singleUserOrderUrl = (orderId) =>
 export const restaurantOrdersUrl = main_url + "/admin/restaurant/orders";
 export const singleRestaurantOrderUrl = (orderId) =>
   main_url + `/admin/restaurant/order/${orderId}`;
+
+// single restaurant url
+export const singleRestaurantUrl = (resId) => main_url + `/restaurant/${resId}`;

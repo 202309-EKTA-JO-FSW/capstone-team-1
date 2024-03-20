@@ -18,6 +18,7 @@ const {
   singleUserOrderUrl,
   restaurantOrdersUrl,
   singleRestaurantOrderUrl,
+  singleRestaurantUrl,
 } = require("./utils");
 
 // signup
@@ -128,6 +129,8 @@ export const fetchMenuItem = async (resId) => {
     const res = await fetch(menuItemsUrl(resId));
     return await res.json();
   } catch (error) {
+    console.error("Error fetching menu item:", error);
+    throw error;
     console.error("Error fetching menu item:", error);
     throw error;
   }
@@ -444,3 +447,40 @@ export const fetchUpdateRestaurantOrder = async (orderId, body) => {
 };
 
 ////////////////////////////////////////
+
+/////////////////restaurabnt nebu items ////////
+// fetch single restaurant
+export const fetchSingleRestaurant = async (resId) => {
+  try {
+    const res = await fetch(singleRestaurantUrl(resId));
+    return await res.json();
+  } catch (error) {
+    console.error("Error fetching restaurant", error);
+    throw error;
+  }
+};
+
+// fetch menu items
+export const fetchRestaurantMenuItems = async (resId) => {
+  try {
+    const res = await fetch(menuItemsUrl(resId));
+    return await res.json();
+  } catch (error) {
+    console.error("Error fetching menu item:", error);
+    throw error;
+  }
+};
+
+// search menu item
+export const fetchSearchMenuItem = async (resId, searchValue) => {
+  try {
+    const url = `${menuItemsUrl(resId)}/search?search=${searchValue}`;
+    const response = await fetch(url);
+    const restaurants = await response.json();
+    return restaurants;
+  } catch (error) {
+    console.error("Error searching menu items:", error.message);
+    throw error;
+  }
+};
+//////////////////////
