@@ -35,7 +35,7 @@ const SignupInfoForm = ({ onSignup }) => {
       router.push("/auth-user");
     }
   };
-
+  console.log(form);
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
 
@@ -109,7 +109,7 @@ const SignupInfoForm = ({ onSignup }) => {
             type="checkbox"
             name="isAdmin"
             onChange={handleChange}
-            value={form.isAdmin}
+            checked={form.isAdmin}
           />
           <label htmlFor="isAdmin">
             {" "}

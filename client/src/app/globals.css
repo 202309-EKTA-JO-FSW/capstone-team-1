@@ -16,7 +16,7 @@
 }
 
 .sidebar-btn {
-  @apply flex items-center justify-center md:w-[160px] lg:w-[200px] md:text-base md:my-3 p-1 mr-3 md:p-2  cursor-pointer hover:bg-white hover:rounded;
+  @apply flex items-center justify-center md:w-[160px] lg:w-[200px] md:text-base md:my-3 p-1 mr-3 md:p-2  cursor-pointer hover:bg-white hover:rounded-lg;
 }
 
 /* order */

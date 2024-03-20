@@ -94,7 +94,7 @@ const getAllRestaurantMenuItems = async (req, res) => {
   const itemsPerPage = parseInt(req.query.offset) || 10;
   try {
     const allMenuItems = await menuItemModel
-      .find({ restaurant: resId })
+      .find({ restaurant: resId, available: true })
       .skip(page * itemsPerPage)
       .limit(itemsPerPage);
 
