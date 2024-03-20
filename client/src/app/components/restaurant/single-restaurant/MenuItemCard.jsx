@@ -9,8 +9,10 @@ const MenuItemCard = ({ menuItem }) => {
         <Image
           src={menuItem.image || menuItemImage}
           alt={menuItem.name}
-          layout="fill"
-          objectFit="cover"
+          fill
+          sizes="200vw"
+          priority={true}
+          className=" object-cover"
         />
       </div>
       <div className="w-full mb-1">

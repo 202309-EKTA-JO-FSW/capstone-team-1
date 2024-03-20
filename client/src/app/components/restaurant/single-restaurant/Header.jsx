@@ -1,7 +1,5 @@
 "use client";
 import Image from "next/image";
-import { useEffect, useState } from "react";
-import { fetchSingleRestaurant } from "@/app/lib/data";
 import menuitemPlaceholderImage from "../../../../../public/image/menuItem-image-placeholder.png";
 
 const Header = ({ restaurant }) => {
@@ -13,6 +11,7 @@ const Header = ({ restaurant }) => {
           alt={restaurant.name}
           width={200}
           height={200}
+          priority={true}
           className="w-[160px] h-[160px] rounded-full object-cover  mt-12"
         />
 

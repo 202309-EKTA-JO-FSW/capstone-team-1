@@ -1,15 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import MenuItemCard from "./MenuItemCard";
-import {
-  fetchMenuItem,
-  fetchRestaurantMenuItems,
-  fetchSearchMenuItem,
-  searchMenuItem,
-} from "@/app/lib/data";
-import Pagination from "../Pagination";
-
-import SearchBar from "../../SearchBar";
+import { fetchRestaurantMenuItems, fetchSearchMenuItem } from "@/app/lib/data";
 
 const RestaurantMenu = ({ id, searchTxt }) => {
   const [menuItems, setMenuItems] = useState([]);
@@ -59,7 +51,9 @@ const RestaurantMenu = ({ id, searchTxt }) => {
   return (
     <div className="flex flex-wrap justify-center md:justify-start w-full min-h-[400px] px-2 md:px-20 my-10">
       {menuItems.map((item) => (
-        <MenuItemCard key={item.id} menuItem={item} />
+        <div key={item._id}>
+          <MenuItemCard key={item.id} menuItem={item} />
+        </div>
       ))}
     </div>
   );
