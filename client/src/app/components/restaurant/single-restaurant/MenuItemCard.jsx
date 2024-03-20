@@ -3,16 +3,24 @@ import Image from "next/image";
 import menuItemImage from "../../../../../public/image/menuItem-image-placeholder.png";
 import { FaStar } from "react-icons/fa";
 import { fetchPostCart } from "@/app/lib/data";
-import { useAppDispatch } from "@/app/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import { itemsCount } from "@/app/redux/features/cart/CartSlice";
+import { useRouter } from "next/navigation";
 
 const MenuItemCard = ({ menuItem }) => {
   const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.authReducer.value);
+  const router = useRouter();
 
   const handleAddToCart = async () => {
+    // check if user loged in, if not navigate him to login page
+    if (user.isLogin === false) {
+      router.push("/login");
+    }
+
     const cart = await fetchPostCart(menuItem._id);
     // change the cart status to added items
-    if (cart) {
+    if (user.isLogin && usecart) {
       dispatch(itemsCount(cart.results.cart.itemsCount));
     }
   };
