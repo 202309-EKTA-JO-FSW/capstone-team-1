@@ -1,9 +1,7 @@
 "use client";
 import { useAppSelector } from "@/app/redux/hooks";
 import ProfileSidebar from "../../components/profile/profile-sidebar/ProfileSidebar";
-import Btn from "@/app/components/Btn";
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import IsLogin from "@/app/components/isLogin/IsLogin";
 
 const ProfileLayout = ({ children }) => {
