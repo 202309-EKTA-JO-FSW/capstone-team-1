@@ -82,7 +82,6 @@ const NavBar = () => {
         {/* List of Links */}
         <ul className=" md:flex gap-x-3 justify-evenly md:items-center pl-6 pt-1 capitalize">
           {contents.map((content) => {
-            console.log(user);
             if (
               content.path === "/my-restaurant" &&
               (!user || (user && !user.isAdmin))
