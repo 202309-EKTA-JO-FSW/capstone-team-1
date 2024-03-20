@@ -1,57 +1,111 @@
 "use client";
 import { useEffect, useState } from "react";
 import MenuItemCard from "./MenuItemCard";
-import { fetchMenuItem } from "@/app/lib/data";
+import { fetchRestaurantMenuItems, fetchSearchMenuItem } from "@/app/lib/data";
+import { CiFilter } from "react-icons/ci";
 
-const RestaurantMenu = ({ id }) => {
+const RestaurantMenu = ({ id, searchTxt }) => {
   const [menuItems, setMenuItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentType, setCurrentType] = useState("");
 
+  // fetch data
   useEffect(() => {
-    const fetchData = async () => {
-      try {
+    const getMenuItems = async () => {
+      if (!searchTxt) {
         setLoading(true);
-        const items = await fetchMenuItem(id);
-        setMenuItems(items);
+        const menuItemsData = await fetchRestaurantMenuItems(id);
+        setMenuItems(menuItemsData);
+
+        if (menuItemsData.length > 0) setCurrentType(menuItemsData[0].type);
         setLoading(false);
-      } catch (error) {
-        console.error("Error fetching menu items:", error);
+      } else {
+        setLoading(true);
+        const searchMenuItemsData = await fetchSearchMenuItem(id, searchTxt);
+        setMenuItems(searchMenuItemsData);
+
+        if (searchMenuItemsData.length > 0)
+          setCurrentType(searchMenuItemsData[0].type);
         setLoading(false);
       }
     };
 
-    fetchData();
-  }, [id]);
+    getMenuItems();
+  }, [id, searchTxt]);
 
-  if (loading) {
+  if (menuItems.message) {
     return (
-      <div className="flex justify-center items-center h-40">
-        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gray-900"></div>
+      <div className="w-full h-[400px] flex justify-center items-center text-2xl font-bold text-main-green">
+        <p>{menuItems.message}</p>
       </div>
     );
   }
 
-  const renderMenuItems = (items) => (
-    <div className="flex justify-center">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-        {items.map((item) => (
-          <div key={item._id}>
-            <MenuItemCard menuItem={item} />
-          </div>
-        ))}
+  if (loading) {
+    return (
+      <div className="w-full h-[400px] flex justify-center items-center text-2xl font-bold text-main-green">
+        <p>Loading...</p>
       </div>
-    </div>
+    );
+  }
+
+  if (menuItems.length === 0) {
+    return (
+      <div className="w-full h-[400px] flex justify-center items-center text-2xl font-bold text-main-green">
+        <p>No Menu Items Found</p>
+      </div>
+    );
+  }
+
+  // filter menuItems
+  const types = [];
+  menuItems.forEach((item) => {
+    if (!types.includes(item.type)) {
+      types.push(item.type);
+    }
+  });
+
+  // filter menuItem with types
+  const filteredmenuItems = menuItems.filter(
+    (item) => item.type === currentType
   );
 
+  // filter btn color
+  const currentTypeColor = (type) => {
+    if (currentType === type) {
+      return "bg-light-green border-main-green";
+    } else {
+      return "bg-transparent border-gray-300";
+    }
+  };
+
   return (
-    <div className="flex justify-center">
-      {menuItems.length > 0 ? (
-        renderMenuItems(menuItems)
-      ) : (
-        <div className="h-[500px] flex items-center justify-center text-xl text-main-green">
-          <p>{menuItems.message}</p>
+    <div className="flex flex-col items-center md:items-start w-full min-h-[400px] px-2 md:px-[10%] my-10">
+      <div className="flex items-center text-base">
+        <div className="border-2 border-gray-300 rounded-full p-3 mr-2">
+          <CiFilter />
         </div>
-      )}
+        {types &&
+          types.map((type, i) => (
+            <div key={i} onClick={() => setCurrentType(type)}>
+              <p
+                className={`border-2 rounded-full p-2 mr-2 cursor-pointer hover:bg-light-green hover:border-main-green ${currentTypeColor(
+                  type
+                )}`}
+              >
+                {type}
+              </p>
+            </div>
+          ))}
+      </div>
+      <div className="flex flex-wrap justify-center md:justify-start w-full min-h-[400px]">
+        {menuItems.length > 0 &&
+          filteredmenuItems.map((item) => (
+            <div key={item._id}>
+              <MenuItemCard key={item.id} menuItem={item} />
+            </div>
+          ))}
+      </div>
     </div>
   );
 };

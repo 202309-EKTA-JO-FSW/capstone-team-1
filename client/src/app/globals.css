@@ -12,11 +12,11 @@
 
 /* sidebar style  */
 .sidebar {
-  @apply flex md:flex-col items-center justify-center md:justify-between bg-soft-green w-full rounded md:rounded-xl p-5 md:mx-5 md:w-[200px] lg:w-[250px] h-12 md:h-[800px]  border border-gray-100;
+  @apply flex md:flex-col items-center justify-center md:justify-between bg-soft-green w-full rounded md:rounded-xl p-5 md:mx-5 md:w-[200px] lg:w-[300px] h-12 md:h-[800px]  border border-gray-100;
 }
 
 .sidebar-btn {
-  @apply flex items-center justify-center md:w-[160px] lg:w-[200px] md:text-base md:my-3 p-1 mr-3 md:p-2 cursor-pointer hover:bg-white hover:rounded-lg;
+  @apply flex items-center justify-center md:w-[160px] lg:w-[200px] md:text-base md:my-3 p-1 mr-3 md:p-2  cursor-pointer hover:bg-white hover:rounded;
 }
 
 /* order */

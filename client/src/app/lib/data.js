@@ -4,13 +4,21 @@ const {
   getGoogleUser,
   userProfileUrl,
   restaurantUrl,
+  adminNewRestaurantUrl,
+  adminGetRestaurantUrl,
+  adminUpdateRestaurantUrl,
+  newMenuItemUrl,
   menuItemsUrl,
   cartUrl,
   updateCartUrl,
+  updateMenuItemUrl,
   checkoutUrl,
   logoutUrl,
   userOrdersUrl,
   singleUserOrderUrl,
+  restaurantOrdersUrl,
+  singleRestaurantOrderUrl,
+  singleRestaurantUrl,
 } = require("./utils");
 
 // signup
@@ -100,6 +108,21 @@ export const searchRestaurant = async (search, page, limit) => {
   }
 };
 
+// create restaurant
+export const createRestaurant = async (formData) => {
+  try {
+    const res = await fetch(adminNewRestaurantUrl, {
+      method: "POST",
+      body: formData,
+      credentials: "include",
+    });
+    return await res.json();
+  } catch (error) {
+    console.error("Error fetching menu item:", error);
+    throw error;
+  }
+};
+
 // fetch menu items
 export const fetchMenuItem = async (resId) => {
   try {
@@ -108,6 +131,88 @@ export const fetchMenuItem = async (resId) => {
   } catch (error) {
     console.error("Error fetching menu item:", error);
     throw error;
+    console.error("Error fetching menu item:", error);
+    throw error;
+  }
+};
+
+// post new MenuItem
+export const postItem = async (formData) => {
+  try {
+    const res = await fetch(newMenuItemUrl, {
+      method: "POST",
+
+      body: formData,
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+// update menu Items
+export const fetchUpdateMenuItem = async (menuItemId, menuItem) => {
+  const url = `${updateMenuItemUrl}/${menuItemId}`;
+  try {
+    const res = await fetch(url, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(menuItem),
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+//get admin restaurant
+export const getAdminRestaurant = async () => {
+  try {
+    const res = await fetch(adminGetRestaurantUrl, { credentials: "include" });
+    const restaurant = res.json();
+    return restaurant;
+  } catch (error) {
+    console.error("Error getting restaurant", error.message);
+    throw error;
+  }
+};
+
+//update admin restaurant
+export const updateAdminRestaurant = async (formData) => {
+  try {
+    const res = await fetch(adminUpdateRestaurantUrl, {
+      method: "PUT",
+      body: formData,
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+// delete menuItem
+export const fetchdeleteMenuItem = async (menuItemId) => {
+  try {
+    const res = await fetch(`${updateMenuItemUrl}/${menuItemId}`, {
+      method: "delete",
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
   }
 };
 
@@ -290,3 +395,92 @@ export const fetchUserCancelOrder = async (orderId) => {
     return error.message;
   }
 };
+
+////////// restaurant orders ////////////
+
+// fetch restaurant orders
+// get users single order
+export const fetchRestaurantOrders = async () => {
+  try {
+    const res = await fetch(restaurantOrdersUrl, {
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+// get users single order
+export const fetchSingleRestaurantOrder = async (orderId) => {
+  try {
+    const res = await fetch(singleRestaurantOrderUrl(orderId), {
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+// get users single order
+export const fetchUpdateRestaurantOrder = async (orderId, body) => {
+  try {
+    const res = await fetch(singleRestaurantOrderUrl(orderId), {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+////////////////////////////////////////
+
+/////////////////restaurabnt nebu items ////////
+// fetch single restaurant
+export const fetchSingleRestaurant = async (resId) => {
+  try {
+    const res = await fetch(singleRestaurantUrl(resId));
+    return await res.json();
+  } catch (error) {
+    console.error("Error fetching restaurant", error);
+    throw error;
+  }
+};
+
+// fetch menu items
+export const fetchRestaurantMenuItems = async (resId) => {
+  try {
+    const res = await fetch(menuItemsUrl(resId));
+    return await res.json();
+  } catch (error) {
+    console.error("Error fetching menu item:", error);
+    throw error;
+  }
+};
+
+// search menu item
+export const fetchSearchMenuItem = async (resId, searchValue) => {
+  try {
+    const url = `${menuItemsUrl(resId)}/search?search=${searchValue}`;
+    const response = await fetch(url);
+    const restaurants = await response.json();
+    return restaurants;
+  } catch (error) {
+    console.error("Error searching menu items:", error.message);
+    throw error;
+  }
+};
+//////////////////////

@@ -38,4 +38,11 @@ const menuItemSchema = new Schema(
   }
 );
 
+// make type lowercase when add to model
+menuItemSchema.pre("save", function (next) {
+  // Capitalize first letter of first name
+  this.type = this.type.toLowerCase();
+  next();
+});
+
 module.exports = mongoose.model("MenuItem", menuItemSchema);

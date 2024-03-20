@@ -13,9 +13,19 @@ export const userProfileUrl = main_url + "/user/profile";
 // restaurant url
 export const restaurantUrl = main_url + `/restaurant`;
 
+//admin url
+export const adminNewRestaurantUrl = main_url + `/admin/restaurant/new`;
+export const adminGetRestaurantUrl = main_url + `/admin/restaurant`;
+export const adminUpdateRestaurantUrl = main_url + `/admin/restaurant`;
+
+//menuItems url
+
 // menu items
 export const menuItemsUrl = (resId) =>
   main_url + `/restaurant/${resId}/menuItems`;
+
+export const newMenuItemUrl = main_url + "/admin/restaurant/menuItem/new";
+export const updateMenuItemUrl = main_url + "/admin/restaurant/menuItem";
 
 // cart
 export const cartUrl = main_url + "/customer/cart";
@@ -24,7 +34,15 @@ export const updateCartUrl = (resId) => main_url + `/customer/cart/${resId}`;
 // checkout
 export const checkoutUrl = main_url + "/customer/checkout";
 
-// orders
+// user orders
 export const userOrdersUrl = main_url + "/customer/orders";
 export const singleUserOrderUrl = (orderId) =>
   main_url + `/customer/order/${orderId}`;
+
+// restaurant orders
+export const restaurantOrdersUrl = main_url + "/admin/restaurant/orders";
+export const singleRestaurantOrderUrl = (orderId) =>
+  main_url + `/admin/restaurant/order/${orderId}`;
+
+// single restaurant url
+export const singleRestaurantUrl = (resId) => main_url + `/restaurant/${resId}`;
