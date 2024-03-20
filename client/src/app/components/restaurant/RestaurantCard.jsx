@@ -1,37 +1,26 @@
-import React from "react";
-import Link from "next/link";
+import { FaStar } from "react-icons/fa";
 import Image from "next/image";
-import restaurantPlateSVG from "../../../../public/image/restaurant-svg.svg";
+import restaurantPlaceholderImg from "../../../../public/image/restaurant-placeholder.png";
 
 function RestaurantCard({ restaurant }) {
   return (
-    <div className="h-[400px] w-full sm:w-[250px] m-1 sm:m-6 flex flex-col justify-center bg-white shadow-md rounded-lg overflow-hidden border border-gray-100 hover:bg-violet-100">
-      <div className="h-[400px] flex justify-center items-center p-1 rounded">
+    <div className="h-[350px] w-[250px] m-3 flex flex-col bg-white shadow-md rounded-lg overflow-hidden border border-gray-100 hover:bg-violet-100">
+      <div className="relative h-[250px] w-full mb-2 rounded overflow-hidden">
         <Image
-          src={restaurant.image || restaurantPlateSVG}
+          src={restaurant.image || restaurantPlaceholderImg}
           alt={restaurant.name}
-          width={300}
-          height={0}
-          className="rounded"
-          priority="true"
+          sizes="200vw"
+          priority={true}
+          className="object-cover"
+          fill
         />
       </div>
-      <div className="p-4">
+      <div className="p-2">
         <h2 className="text-xl font-semibold mb-2">{restaurant.name}</h2>
         <p className="text-gray-600 mb-2">{restaurant.cuisine}</p>
         <div className="flex items-center">
-          <svg
-            className="w-9 h-5 text-yellow-500 mr-1"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-          >
-            <path
-              fillRule="evenodd"
-              d="M10 3a1 1 0 011 1v4.297l3.65 1.742a1 1 0 01.316 1.684l-2.65 2.297.8 3.95a1 1 0 01-1.451 1.054L10 15.898l-3.515 1.847a1 1 0 01-1.45-1.054l.8-3.95-2.65-2.297a1 1 0 01.316-1.684L9 8.297V4a1 1 0 011-1z"
-              clipRule="evenodd"
-            />
-          </svg>
-          <span className="text-gray-600">{restaurant.reviews}</span>
+          <FaStar className=" text-yellow-300" />
+          <span className="text-gray-600 ml-1">4.5</span>
         </div>
       </div>
     </div>

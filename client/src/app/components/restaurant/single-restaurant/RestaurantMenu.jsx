@@ -80,7 +80,7 @@ const RestaurantMenu = ({ id, searchTxt }) => {
   };
 
   return (
-    <div className="flex flex-col items-center md:items-start w-full min-h-[400px] px-2 md:px-[10%] my-10">
+    <div className="flex flex-col items-center md:items-start w-full min-h-[400px] px-2 md:px-[5%] my-10">
       <div className="flex items-center text-base">
         <div className="border-2 border-gray-300 rounded-full p-3 mr-2">
           <CiFilter />
