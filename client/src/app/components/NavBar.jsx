@@ -8,13 +8,22 @@ import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { login } from "../redux/features/auth/AuthSlice";
 import { fetchCart } from "../lib/data";
 import { itemsCount } from "../redux/features/cart/CartSlice";
+import FreshFix from "../../../public/FreshFix.png";
+import Image from "next/image";
+import NavbarContent from "./navbar/NavbarContent";
 
 const NavBar = () => {
   const dispatch = useAppDispatch();
   const [user, setUser] = useState(null);
-  // const [cart, setCart] = useState(null);
   const [loading, setLoading] = useState(true);
   const isLogin = useAppSelector((state) => state.authReducer.value);
+
+  const contents = [
+    { name: "home", path: "/" },
+    { name: "restaurant", path: "/restaurant" },
+    { name: "about us", path: "/about-us" },
+    { name: "my restaurant", path: "/my-restaurant" },
+  ];
 
   useEffect(() => {
     // Function to handle local storage change event
@@ -56,27 +65,38 @@ const NavBar = () => {
   const cartItemsCount = useAppSelector((state) => state.cartReducer.value);
 
   return (
-    <nav className="flex justify-between w-full bg-white sticky top-0 z-50 text-black [font-family:'Inter-Medium',Helvetica] text-base">
-      <section className="flex items-center gap-2 flex-wrap  justify-between pl-3 pt-2 py-2">
-        <Logo />
-
+    <nav className="flex justify-between w-full bg-white sticky top-0 z-50  text-black [font-family:'Inter-Medium',Helvetica] text-base">
+      <section className="flex items-center gap-2 flex-wrap  justify-between pl-2 py-2">
+        <div className="flex flex-row justify-start items-start">
+          <Logo />
+          <Link href="/">
+            <Image
+              src={FreshFix}
+              alt="FreshFix"
+              width={100}
+              height={50}
+              priority="true"
+            />
+          </Link>
+        </div>
         {/* List of Links */}
-        <ul className=" md:flex gap-x-3  justify-evenly md:items-center pl-10">
-          <li className="md:ml-3  text-black hover:text-main-green">
-            <Link href={"/"}>Home</Link>
-          </li>
-          <li className="md:ml-3  text-black hover:text-main-green">
-            <Link href={"/restaurant"}>Restaurants</Link>
-          </li>
-          <li className="md:ml-3  text-black hover:text-main-green">
-            <Link href={"/about"}>About Us</Link>
-          </li>
-          {/* conditional rendering of My Restaurants if admin is logged in */}
-          {user && user.isAdmin && (
-            <li className="md:ml-3  text-black hover:text-main-green">
-              <Link href={"/my-restaurant"}>My Restaurant</Link>
-            </li>
-          )}
+        <ul className=" md:flex gap-x-3 justify-evenly md:items-center pl-6 pt-1 capitalize">
+          {contents.map((content) => {
+            if (
+              content.path === "/my-restaurant" &&
+              (!user || (user && !user.isAdmin))
+            ) {
+              return <></>;
+            } else {
+              return (
+                <div key={content.name}>
+                  <Link href={content.path}>
+                    <NavbarContent content={content} />
+                  </Link>
+                </div>
+              );
+            }
+          })}
         </ul>
       </section>
 
