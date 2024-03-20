@@ -98,11 +98,6 @@ const getAllRestaurantMenuItems = async (req, res) => {
       .skip(page * itemsPerPage)
       .limit(itemsPerPage);
 
-    if (allMenuItems.length === 0) {
-      return res
-        .status(404)
-        .json({ message: "Restaurant doesn't have any MenuItems" });
-    }
     return res.status(200).json(allMenuItems);
   } catch (err) {
     res.status(500).json({ message: err.message });

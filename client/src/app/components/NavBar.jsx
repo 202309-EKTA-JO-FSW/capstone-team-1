@@ -86,7 +86,7 @@ const NavBar = () => {
               content.path === "/my-restaurant" &&
               (!user || (user && !user.isAdmin))
             ) {
-              return <></>;
+              return null;
             } else {
               return (
                 <div key={content.name}>
