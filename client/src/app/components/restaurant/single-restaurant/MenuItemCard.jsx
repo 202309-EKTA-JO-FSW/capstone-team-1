@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import menuItemImage from "../../../../../public/image/menuItem-image-placeholder.png";
+import { FaStar } from "react-icons/fa";
 
 const MenuItemCard = ({ menuItem }) => {
   return (
@@ -30,7 +31,7 @@ const MenuItemCard = ({ menuItem }) => {
         </div>
         <div className="flex items-center">
           <span className="mr-1">{menuItem.rating || 4.5}</span>
-          &#9733;
+          <FaStar className=" text-yellow-300" />
         </div>
       </div>
       <div className="flex justify-center w-full mt-2">
