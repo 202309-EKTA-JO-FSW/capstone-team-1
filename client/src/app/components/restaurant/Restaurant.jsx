@@ -3,9 +3,10 @@ import React, { useState, useEffect } from "react";
 import { fetchRestaurants, searchRestaurant } from "@/app/lib/data";
 import Pagination from "./Pagination";
 import RestaurantCard from "./RestaurantCard";
-import Search from "./Search";
 import Link from "next/link";
 import Loading from "../loading/Loading";
+import Empty from "../Empty";
+import SearchBar from "../SearchBar";
 
 function Restaurant() {
   const [restaurants, setRestaurants] = useState([]); // Initialize with an empty array
@@ -45,19 +46,22 @@ function Restaurant() {
     setPage(pageNumber);
   };
 
-  if (restaurants.length < 0) {
-    return <Empty />;
-  }
-
   return (
-    <div className="flex flex-col justify-start items-center px-4 md:px-24 w-full mt-20 border">
+    <div className="flex flex-col justify-start items-center px-3 lg:px-[10%] w-full mt-20">
       <h1 className="flex justify-center font-bold text-5xl w-full">
         Restaurants
       </h1>
-      <div className="flex flex-wrap justify-center p-7 w-full">
-        <Search value={searchTxt} onChange={handleSearchValue} />
+      <div className="flex flex-wrap justify-center p-7 w-[80%] md:w-[50%] my-7">
+        <SearchBar
+          searchTxt={searchTxt}
+          setSearchTxt={setSearchTxt}
+          placeholder={"Search for restaurant"}
+        />
       </div>
+      {/* loading display */}
       {loading && <Loading />}
+      {/* if There is no restaurnats  */}
+      {restaurants.length === 0 && <Empty text={"No restaurant found"} />}
       <div className="w-full flex flex-wrap justify-center md:justify-start">
         {!loading &&
           restaurants &&

@@ -1,14 +1,13 @@
-import React from "react";
 import { FaStar } from "react-icons/fa";
 import Image from "next/image";
-import restaurantPlateSVG from "../../../../public/image/restaurant-svg.svg";
+import restaurantPlaceholderImg from "../../../../public/image/restaurant-placeholder.png";
 
 function RestaurantCard({ restaurant }) {
   return (
-    <div className="h-[350px] w-full sm:w-[250px] m-1 sm:m-6 flex flex-col bg-white shadow-md rounded-lg overflow-hidden border border-gray-100 hover:bg-violet-100">
+    <div className="h-[350px] w-[250px] m-3 flex flex-col bg-white shadow-md rounded-lg overflow-hidden border border-gray-100 hover:bg-violet-100">
       <div className="relative h-[250px] w-full mb-2 rounded overflow-hidden">
         <Image
-          src={restaurant.image || restaurantPlateSVG}
+          src={restaurant.image || restaurantPlaceholderImg}
           alt={restaurant.name}
           sizes="200vw"
           priority={true}

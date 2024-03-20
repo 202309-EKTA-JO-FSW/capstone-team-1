@@ -30,11 +30,11 @@ const SingleRestaurant = ({ id }) => {
   }
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center ">
       <Header restaurant={restaurant} />
 
-      <div className="mt-20 w-full flex flex-col items-center pt-[56px]">
-        <div className="flex items-center justify-center w-[40%]">
+      <div className="mt-20 w-full flex flex-col items-center px-3 lg:px-[10%]">
+        <div className="flex items-center justify-center w-[80%] md:w-[50%] mb-7">
           <SearchBar
             placeholder={"Search Menu"}
             searchTxt={searchTxt}
