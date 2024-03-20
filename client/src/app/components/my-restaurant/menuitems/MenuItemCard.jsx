@@ -48,13 +48,14 @@ const MenuItemCard = ({ menuItem, onDelete }) => {
   };
   return (
     <div className="h-[460px]  w-[200px] sm:w-[210px] md:w-[220px] lg:w-[230px] m-6 flex flex-col justify-center bg-white shadow-md rounded-lg overflow-hidden border border-gray-100 hover:bg-light-green">
-      <div className="relative h-[250px] w-[full] flex justify-center items-center rounded">
+      <div className="relative h-[250px] w-full flex justify-center items-center rounded">
         <Image
           src={editedMenuItem.image || menuItemImage}
           alt={editedMenuItem.name}
-          width={180}
-          height={180}
-          priority="true"
+          sizes="200vw"
+          priority={true}
+          className=" object-cover"
+          fill
         />
       </div>
       <div className="justify-center p-2 font-normal">

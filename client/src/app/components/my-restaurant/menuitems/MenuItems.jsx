@@ -10,15 +10,15 @@ function MenuItems() {
   const [menuItems, setMenuItems] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const storedUser = JSON.parse(localStorage.getItem("user"));
-  const restaurantId = storedUser.restaurant;
-  const getMenuItems = async () => {
-    setLoading(true);
-    const menuItemsData = await fetchMenuItem(restaurantId);
-    setMenuItems(menuItemsData);
-    setLoading(false);
-  };
   useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    const restaurantId = storedUser.restaurant;
+    const getMenuItems = async () => {
+      setLoading(true);
+      const menuItemsData = await fetchMenuItem(restaurantId);
+      setMenuItems(menuItemsData);
+      setLoading(false);
+    };
     getMenuItems();
   }, []);
 
