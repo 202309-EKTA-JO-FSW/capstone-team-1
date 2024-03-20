@@ -3,10 +3,7 @@
 import { useEffect } from "react";
 import RestaurantMenu from "./RestaurantMenu";
 import Header from "./Header";
-import {
-  fetchRestaurantMenuItems,
-  fetchSingleRestaurant,
-} from "@/app/lib/data";
+import { fetchSingleRestaurant } from "@/app/lib/data";
 import { useState } from "react";
 import SearchBar from "../../SearchBar";
 
