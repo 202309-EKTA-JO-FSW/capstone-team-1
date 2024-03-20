@@ -3,12 +3,11 @@
 import { useEffect } from "react";
 import RestaurantMenu from "./RestaurantMenu";
 import Header from "./Header";
-import {
-  fetchRestaurantMenuItems,
-  fetchSingleRestaurant,
-} from "@/app/lib/data";
+import { fetchSingleRestaurant } from "@/app/lib/data";
 import { useState } from "react";
 import SearchBar from "../../SearchBar";
+import ReviewCard from "./ReviewCard";
+import Loading from "../../loading/Loading";
 
 const SingleRestaurant = ({ id }) => {
   const [restaurant, setRestaurant] = useState([]);
@@ -27,7 +26,7 @@ const SingleRestaurant = ({ id }) => {
   }, []);
 
   if (loading) {
-    return <p>Loading....</p>;
+    return <Loading />;
   }
 
   return (
@@ -44,9 +43,9 @@ const SingleRestaurant = ({ id }) => {
         </div>
         <RestaurantMenu id={id} searchTxt={searchTxt} />
       </div>
-      <div className="mt-8">
+      <div className="my-8 text-center">
         <h2 className="text-xl font-semibold mb-4 mt-20">Reviews</h2>
-        {/* <ReviewCard className="mb-16" /> */}
+        <ReviewCard />
       </div>
     </div>
   );

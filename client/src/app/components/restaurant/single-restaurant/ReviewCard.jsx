@@ -1,26 +1,26 @@
-import React from 'react';
+import React from "react";
 
 const mockReviews = [
   {
     rating: 4,
-    username: 'User011',
-    review: 'great food and ambience',
+    username: "User011",
+    review: "great food and ambience",
   },
   {
     rating: 3,
-    username: 'user022',
-    review: 'excellent taste and cooking, came super hot',
+    username: "user022",
+    review: "excellent taste and cooking, came super hot",
   },
   {
     rating: 4,
-    username: 'user033',
-    review: 'amazing experience',
+    username: "user033",
+    review: "amazing experience",
   },
   {
     rating: 5,
-    username: 'user044',
-    review: 'wonderful',
-  }
+    username: "user044",
+    review: "wonderful",
+  },
 ];
 
 const ReviewCard = ({ rating, username, review }) => {
@@ -28,7 +28,7 @@ const ReviewCard = ({ rating, username, review }) => {
     <span
       key={index}
       className={`text-yellow-400 ${
-        index < rating ? 'fill-current' : 'text-gray-300'
+        index < rating ? "fill-current" : "text-gray-300"
       }`}
     >
       &#9733;
