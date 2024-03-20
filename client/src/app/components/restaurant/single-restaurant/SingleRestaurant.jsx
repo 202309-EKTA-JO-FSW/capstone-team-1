@@ -7,6 +7,7 @@ import { fetchSingleRestaurant } from "@/app/lib/data";
 import { useState } from "react";
 import SearchBar from "../../SearchBar";
 import ReviewCard from "./ReviewCard";
+import Loading from "../../loading/Loading";
 
 const SingleRestaurant = ({ id }) => {
   const [restaurant, setRestaurant] = useState([]);
@@ -25,7 +26,7 @@ const SingleRestaurant = ({ id }) => {
   }, []);
 
   if (loading) {
-    return <p>Loading....</p>;
+    return <Loading />;
   }
 
   return (

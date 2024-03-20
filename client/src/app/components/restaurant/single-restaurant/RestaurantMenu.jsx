@@ -16,13 +16,16 @@ const RestaurantMenu = ({ id, searchTxt }) => {
         setLoading(true);
         const menuItemsData = await fetchRestaurantMenuItems(id);
         setMenuItems(menuItemsData);
-        setCurrentType(menuItemsData[0].type);
+
+        if (menuItemsData.length > 0) setCurrentType(menuItemsData[0].type);
         setLoading(false);
       } else {
         setLoading(true);
         const searchMenuItemsData = await fetchSearchMenuItem(id, searchTxt);
         setMenuItems(searchMenuItemsData);
-        setCurrentType(searchMenuItemsData[0].type);
+
+        if (searchMenuItemsData.length > 0)
+          setCurrentType(searchMenuItemsData[0].type);
         setLoading(false);
       }
     };
@@ -82,24 +85,26 @@ const RestaurantMenu = ({ id, searchTxt }) => {
         <div className="border-2 border-gray-300 rounded-full p-3 mr-2">
           <CiFilter />
         </div>
-        {types.map((type, i) => (
-          <div key={i} onClick={() => setCurrentType(type)}>
-            <p
-              className={`border-2 rounded-full p-2 mr-2 cursor-pointer hover:bg-light-green hover:border-main-green ${currentTypeColor(
-                type
-              )}`}
-            >
-              {type}
-            </p>
-          </div>
-        ))}
+        {types &&
+          types.map((type, i) => (
+            <div key={i} onClick={() => setCurrentType(type)}>
+              <p
+                className={`border-2 rounded-full p-2 mr-2 cursor-pointer hover:bg-light-green hover:border-main-green ${currentTypeColor(
+                  type
+                )}`}
+              >
+                {type}
+              </p>
+            </div>
+          ))}
       </div>
       <div className="flex flex-wrap justify-center md:justify-start w-full min-h-[400px]">
-        {filteredmenuItems.map((item) => (
-          <div key={item._id}>
-            <MenuItemCard key={item.id} menuItem={item} />
-          </div>
-        ))}
+        {menuItems.length > 0 &&
+          filteredmenuItems.map((item) => (
+            <div key={item._id}>
+              <MenuItemCard key={item.id} menuItem={item} />
+            </div>
+          ))}
       </div>
     </div>
   );
