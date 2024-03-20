@@ -9,6 +9,7 @@ const RestaurantMenu = ({ id, searchTxt }) => {
 
   useEffect(() => {
     const getMenuItems = async () => {
+      console.log("here");
       if (!searchTxt) {
         setLoading(true);
         const menuItemsData = await fetchRestaurantMenuItems(id);
@@ -34,8 +35,8 @@ const RestaurantMenu = ({ id, searchTxt }) => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-40">
-        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gray-900"></div>
+      <div className="w-full h-[400px] flex justify-center items-center text-2xl font-bold text-main-green">
+        <p>Loading...</p>
       </div>
     );
   }

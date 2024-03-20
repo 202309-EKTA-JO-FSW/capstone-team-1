@@ -62,9 +62,11 @@ function Restaurant() {
             <p className="font-bold text-2xl">Loading...</p>
           ) : restaurants && restaurants.length > 0 ? ( // Check if restaurants is not null or undefined
             restaurants.map((restaurant) => (
-              <Link href={`/restaurant/${restaurant._id}`}>
-                <RestaurantCard key={restaurant._id} restaurant={restaurant} />
-              </Link>
+              <div key={restaurant._id}>
+                <Link href={`/restaurant/${restaurant._id}`}>
+                  <RestaurantCard restaurant={restaurant} />
+                </Link>
+              </div>
             ))
           ) : (
             <div className="flex items-center justify-center w-full h-64">

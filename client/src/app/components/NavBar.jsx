@@ -4,10 +4,17 @@ import Logo from "./navbar/Logo";
 import { GiShoppingCart } from "react-icons/gi";
 import Link from "next/link";
 import User from "./navbar/User";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { login } from "../redux/features/auth/AuthSlice";
+import { fetchCart } from "../lib/data";
+import { itemsCount } from "../redux/features/cart/CartSlice";
 
 const NavBar = () => {
+  const dispatch = useAppDispatch();
   const [user, setUser] = useState(null);
+  // const [cart, setCart] = useState(null);
   const [loading, setLoading] = useState(true);
+  const isLogin = useAppSelector((state) => state.authReducer.value);
 
   useEffect(() => {
     // Function to handle local storage change event
@@ -15,23 +22,41 @@ const NavBar = () => {
       const storedUser = JSON.parse(localStorage.getItem("user"));
       setUser(storedUser);
     };
-
     // Add event listener for storage change
     window.addEventListener("storage", handleStorageChange);
-
     // Initial setup
     const storedUser = JSON.parse(localStorage.getItem("user"));
+
     setUser(storedUser);
     setLoading(false);
-
     // Cleanup function
     return () => {
       window.removeEventListener("storage", handleStorageChange);
     };
   }, []);
 
+  useEffect(() => {
+    // Dispatch login action if user is logged in
+    if (user) {
+      dispatch(login());
+    }
+  }, [user, dispatch]);
+
+  useEffect(() => {
+    const getCart = async () => {
+      if (isLogin) {
+        const cart = await fetchCart();
+        dispatch(itemsCount(cart.itemsCount));
+      }
+    };
+    getCart();
+  }, []);
+
+  // get items count in cart
+  const cartItemsCount = useAppSelector((state) => state.cartReducer.value);
+
   return (
-    <nav className="flex justify-between w-full z-50 bg-white sticky top-0 text-black [font-family:'Inter-Medium',Helvetica] text-base">
+    <nav className="flex justify-between w-full bg-white sticky top-0 z-50 text-black [font-family:'Inter-Medium',Helvetica] text-base">
       <section className="flex items-center gap-2 flex-wrap  justify-between pl-3 pt-2 py-2">
         <Logo />
 
@@ -60,8 +85,15 @@ const NavBar = () => {
       ) : (
         <section className="flex items-center gap-2 flex-wrap pr-3 pt-2 py-2">
           {/* condtional rendering of Login button or name of user if logged in */}
-          <Link href="/checkout">
-            <GiShoppingCart className="text-3xl  hover:text-main-green" />
+          <Link href="/cart">
+            <div className="relative w-[35px]">
+              <GiShoppingCart className="text-3xl hover:text-main-green" />
+              {cartItemsCount > 0 && (
+                <div className="absolute top-0 right-0 bg-red-500 rounded-full flex justify-center items-center w-[16px] h-[16px] text-white text-[10px]">
+                  {cartItemsCount}
+                </div>
+              )}
+            </div>
           </Link>
           <User user={user} />
         </section>

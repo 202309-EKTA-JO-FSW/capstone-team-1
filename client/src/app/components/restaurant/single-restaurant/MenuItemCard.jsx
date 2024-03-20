@@ -9,10 +9,10 @@ const MenuItemCard = ({ menuItem }) => {
         <Image
           src={menuItem.image || menuItemImage}
           alt={menuItem.name}
-          fill
           sizes="200vw"
           priority={true}
           className=" object-cover"
+          fill
         />
       </div>
       <div className="w-full mb-1">
