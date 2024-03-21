@@ -115,163 +115,168 @@ const UserProfile = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center w-full p-1">
+    <div className="flex flex-col justify-center items-center w-full px-6 md:px-[12%]">
       <h1 className="text-4xl font-bold my-3">User Profile</h1>
+      {isLoading && <Loading />}
 
-      <div className="flex flex-col justify-around w-full ">
-        {isLoading ? (
-          <Loading />
-        ) : (
-          <form
-            className="flex flex-col justify-center items-center w-full "
-            onSubmit={handleSubmit}
-          >
-            <div className="flex flex-col justify-around w-full">
-              <div className="flex flex-col p-1">
-                <span className=" h-[200px]  w-[200px] flex justify-center border border-gray-300">
-                  {form.avatar && (
-                    <Image
-                      src={form.avatar}
-                      width={200}
-                      height={200}
-                      alt="Selected Image Preview"
-                      priority={true}
-                      className="w-auto h-auto rounded"
-                    />
-                  )}
-                </span>
-                {isEditing && (
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImgChange}
-                    className="mt-4"
-                  />
-                )}
-
-                <section className="flex justify-end p-2 cursor-pointer hover:text-main-green">
-                  <FiEdit
-                    className="text-2xl "
-                    onClick={toggleFieldsDisabled}
-                  />
-                </section>
-                {/* Name */}
-                <label>First Name:</label>
-                <input
-                  type="text"
-                  name="firstName"
-                  placeholder="First Name"
-                  className="w-full field mb-4 pl-2"
-                  autoComplete="name"
-                  value={form.firstName}
-                  required
-                  onChange={handleChange}
-                  disabled={disable}
+      {!isLoading && (
+        <form
+          className="flex flex-col justify-center items-center w-full "
+          onSubmit={handleSubmit}
+        >
+          {/* <div className="flex flex-col justify-around w-full"> */}
+          <div className="flex flex-col items-start p-1 w-full ml-8">
+            <span>
+              {form.avatar && (
+                <Image
+                  src={form.avatar}
+                  width={200}
+                  height={200}
+                  alt="Selected Image Preview"
+                  priority={true}
+                  className="h-[200px] w-[200px] rounded-full object-cover border border-gray-300"
                 />
-                <label>Last Name:</label>
-
-                <input
-                  type="text"
-                  name="lastName"
-                  placeholder="Last Name"
-                  className="w-full field mb-4"
-                  autoComplete="name"
-                  value={form.lastName}
-                  required
-                  onChange={handleChange}
-                  disabled={disable}
-                />
-
-                {/* E-Mail */}
-                <label>E-Mail:</label>
-
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="E-Mail"
-                  className="w-full field mb-4"
-                  autoComplete="email"
-                  value={form.email}
-                  onChange={handleChange}
-                  required
-                  disabled={disable}
-                />
-
-                <label>Phone Number:</label>
-
-                <input
-                  type="text"
-                  name="phoneNumber"
-                  placeholder="Phone Number"
-                  className="w-full field mb-4"
-                  autoComplete="phoneNumber"
-                  value={form.phoneNumber}
-                  onChange={handleChange}
-                  required
-                  disabled={disable}
-                />
-
-                {/* address */}
-                <div className="flex items-center justify-between w-full">
-                  <label className="mb-8">Street: </label>
-
-                  <input
-                    type="text"
-                    name="street"
-                    placeholder="Street"
-                    className="w-full mr-4 field"
-                    value={form.street}
-                    onChange={handleChange}
-                    disabled={disable}
-                  />
-
-                  <label className="mb-8">City:</label>
-
-                  <input
-                    type="text"
-                    name="city"
-                    placeholder="City"
-                    className="w-full mr-4 field"
-                    value={form.city}
-                    onChange={handleChange}
-                    disabled={disable}
-                  />
-                </div>
-                <div className="flex justify-between w-full">
-                  <label>Zip Code:</label>
-
-                  <input
-                    type="number"
-                    name="zipcode"
-                    placeholder="Zip Code"
-                    className="w-full mr-4 field"
-                    value={form.zipcode}
-                    onChange={handleChange}
-                    disabled={disable}
-                  />
-
-                  <label className="mt-2">Country:</label>
-
-                  <input
-                    type="text"
-                    name="country"
-                    placeholder="Country"
-                    className="w-full mr-4 field"
-                    value={form.country}
-                    onChange={handleChange}
-                    disabled={disable}
-                  />
-                </div>
-              </div>
-              {!isLoading && isEditing && (
-                <div className="flex items-center justify-center">
-                  <Btn type="submit" text={"Update Profile"} />
-                </div>
               )}
+            </span>
+            {isEditing && (
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImgChange}
+                className="mt-4"
+              />
+            )}
+          </div>
+          {/* edit btn */}
+          <div className="p-2 flex justify-end cursor-pointer hover:text-main-green w-full">
+            <FiEdit className="text-2xl " onClick={toggleFieldsDisabled} />
+          </div>
+          {/* Name */}
+          <div className="w-full flex justify-between items-center">
+            <div className="w-full mr-4">
+              <label>First Name:</label>
+              <input
+                type="text"
+                name="firstName"
+                placeholder="First Name"
+                className="w-full field pl-2"
+                autoComplete="name"
+                value={form.firstName}
+                required
+                onChange={handleChange}
+                disabled={disable}
+              />
             </div>
-          </form>
-        )}
-      </div>
+            <div className="w-full">
+              <label>Last Name:</label>
+              <input
+                type="text"
+                name="lastName"
+                placeholder="Last Name"
+                className="w-full field"
+                autoComplete="name"
+                value={form.lastName}
+                required
+                onChange={handleChange}
+                disabled={disable}
+              />
+            </div>
+          </div>
+          {/* E-Mail */}
+          <div className="w-full">
+            <label>Email:</label>
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              className="w-full field"
+              autoComplete="email"
+              value={form.email}
+              onChange={handleChange}
+              required
+              disabled={disable}
+            />
+          </div>
+
+          {/* phone number  */}
+          <div className="w-full">
+            <label>Phone Number:</label>
+            <input
+              type="text"
+              name="phoneNumber"
+              placeholder="Phone Number"
+              className="w-full field"
+              autoComplete="phoneNumber"
+              value={form.phoneNumber}
+              onChange={handleChange}
+              required
+              disabled={disable}
+            />
+          </div>
+
+          {/* address */}
+          <div className="flex items-center justify-between w-full">
+            <div className="w-full mr-4">
+              <label className="mt-2">Country:</label>
+              <input
+                type="text"
+                name="country"
+                placeholder="Country"
+                className="w-full mr-4 field"
+                value={form.country}
+                onChange={handleChange}
+                disabled={disable}
+              />
+            </div>
+
+            <div className="w-full">
+              <label className="mb-8">City:</label>
+              <input
+                type="text"
+                name="city"
+                placeholder="City"
+                className="w-full field"
+                value={form.city}
+                onChange={handleChange}
+                disabled={disable}
+              />
+            </div>
+          </div>
+
+          <div className="flex justify-between w-full">
+            <div className="w-full mr-4">
+              <label className="mb-8">Street: </label>
+              <input
+                type="text"
+                name="street"
+                placeholder="Street"
+                className="w-full field"
+                value={form.street}
+                onChange={handleChange}
+                disabled={disable}
+              />
+            </div>
+            <div className="w-full">
+              <label>Zip Code:</label>
+              <input
+                type="number"
+                name="zipcode"
+                placeholder="Zip Code"
+                className="w-full field"
+                value={form.zipcode}
+                onChange={handleChange}
+                disabled={disable}
+              />
+            </div>
+          </div>
+
+          {!isLoading && isEditing && (
+            <div className="flex items-center justify-center">
+              <Btn type="submit" text={"Update Profile"} />
+            </div>
+          )}
+        </form>
+      )}
     </div>
   );
 };
