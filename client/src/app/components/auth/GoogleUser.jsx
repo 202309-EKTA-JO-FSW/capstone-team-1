@@ -8,6 +8,7 @@ const GoogleUser = () => {
   useEffect(() => {
     const getData = async () => {
       const user = await fetchGoogleUser();
+
       if (user) {
         localStorage.setItem("user", JSON.stringify(user));
         window.dispatchEvent(new Event("storage"));

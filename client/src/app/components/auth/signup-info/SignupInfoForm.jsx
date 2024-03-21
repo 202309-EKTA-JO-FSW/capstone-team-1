@@ -28,14 +28,24 @@ const SignupInfoForm = ({ onSignup }) => {
     } else {
       onSignup("All field must be filled");
     }
-
+    console.log(signup);
+    const userInfo = {
+      email: signup.results.email,
+      firstName: signup.results.firstName,
+      lastName: signup.results.lastName,
+      avatar: signup.results.avatar,
+      isAdmin: signup.results.isAdmin,
+      restaurant: signup.results.restaurant,
+      country: signup.results.address.country,
+      city: signup.results.address.city,
+    };
     // check if there is a user to refresh the page
     if (signup) {
-      localStorage.setItem("user", JSON.stringify(signup.user));
+      localStorage.setItem("user", JSON.stringify(userInfo));
       setForm(formData);
       window.dispatchEvent(new Event("storage"));
       // redirect the user to home page after signup
-      router.push("/auth-user");
+      router.push("/");
     }
   };
 
