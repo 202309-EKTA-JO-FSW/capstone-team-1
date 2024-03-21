@@ -20,7 +20,7 @@ const UserProfile = () => {
     zipcode: 0,
     avatar: null,
   });
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [file, setFile] = useState(AvatarImg);
   const [disable, setDisable] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -100,6 +100,21 @@ const UserProfile = () => {
           country: updatedUser.address.country,
         });
         setDisable(true);
+        console.log(updatedUser);
+        // update local storage
+
+        const userInfo = {
+          firstName: updatedUser.firstName,
+          lastName: updatedUser.lastName,
+          avatar: updatedUser.avatar,
+          email: updatedUser.email,
+          isAdmin: updatedUser.isAdmin,
+          restaurant: updatedUser.restaurant,
+          country: updatedUser.address.country,
+          city: updatedUser.address.restaurant,
+        };
+        localStorage.setItem("user", JSON.stringify(userInfo));
+        window.dispatchEvent(new Event("storage"));
       }
     } catch (error) {
       console.error("Error updating user profile:", error);
