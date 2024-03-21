@@ -1,9 +1,9 @@
-import AddressField from "./components/auth/AddressField";
+import CreateRestaurantForm from "./components/my-restaurant/my-restaurant-form/CreateRestaurantForm";
 
 export default function Home() {
   return (
-    <div>
-      <AddressField />
+    <div className="flex flex-col items-center">
+      <CreateRestaurantForm />
     </div>
   );
 }

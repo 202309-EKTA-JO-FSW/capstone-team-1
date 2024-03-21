@@ -213,6 +213,12 @@ const createRestaurant = async (req, res) => {
     if (!user || !user.isAdmin) {
       return res.status(401).json({ message: "Unauthorized" });
     }
+
+    // don't allow user to create a restarant if he already has one
+    if (user.restaurant) {
+      return res.status(403).json({ message: "Already have a restaurant" });
+    }
+
     if (
       !name ||
       !description ||
