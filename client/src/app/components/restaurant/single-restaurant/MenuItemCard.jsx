@@ -20,7 +20,7 @@ const MenuItemCard = ({ menuItem }) => {
 
     const cart = await fetchPostCart(menuItem._id);
     // change the cart status to added items
-    if (user.isLogin && usecart) {
+    if (user.isLogin && cart) {
       dispatch(itemsCount(cart.results.cart.itemsCount));
     }
   };

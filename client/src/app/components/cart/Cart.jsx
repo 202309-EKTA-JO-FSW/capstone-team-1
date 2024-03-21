@@ -15,6 +15,15 @@ const Cart = () => {
     zipcode: "",
   });
 
+  // message when cart is empty
+  if (cart.length === 0) {
+    return (
+      <div className="w-full h-screen flex justify-center mt-[15%]">
+        <p className="text-3xl font-bold text-main-green">Cart Empty</p>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col lg:flex-row justify-around items-center w-full mt-10 px-7">
       <CartInfo
