@@ -74,7 +74,7 @@ const SignupForm = ({ onSignup }) => {
       city: selectedCity, // Set city value
     }));
   };
-  console.log(form);
+
   return (
     <div className="flex flex-col justify-start items-center w-full sm:w-[600px] p-7">
       <h1 className="text-4xl font-bold my-10">Create an account</h1>
