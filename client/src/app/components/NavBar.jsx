@@ -23,6 +23,7 @@ const NavBar = () => {
     { name: "restaurant", path: "/restaurant" },
     { name: "about us", path: "/about-us" },
     { name: "my restaurant", path: "/my-restaurant" },
+    {name: "contact us", path: "/contact"}
   ];
 
   useEffect(() => {
