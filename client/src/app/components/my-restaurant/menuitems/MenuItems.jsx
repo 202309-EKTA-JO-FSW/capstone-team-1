@@ -39,11 +39,12 @@ function MenuItems() {
       </h1>
       {/* display loading */}
       {loading && <Loading />}
-
-      {/* display empty cart */}
-      {menuItems.length === 0 && (
-        <Empty text={"Restaurant doesn't have any menu items"} />
-      )}
+      <div className="mb-40">
+        {/* display empty cart */}
+        {menuItems.length === 0 && (
+          <Empty text={"Restaurant doesn't have any menu items"} />
+        )}
+      </div>
 
       {/* diplay menuItems */}
       <div className="flex flex-wrap  sm:p-2 p-3">
