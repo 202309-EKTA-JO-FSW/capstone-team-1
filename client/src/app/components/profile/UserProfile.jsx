@@ -1,12 +1,12 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { fetchUser, fetchUserUpdate } from "@/app/lib/data";
+import { fetchUser, fetchUserUpdateImg } from "@/app/lib/data";
 import Btn from "@/app/components/Btn";
 import Image from "next/image";
 import { FiEdit } from "react-icons/fi";
 import AvatarImg from "../../../../public/Avatar-Profile-Image.png";
-import { La_Belle_Aurore } from "next/font/google";
 import Loading from "../loading/Loading";
+import { useRouter } from "next/navigation";
 
 const UserProfile = () => {
   const [form, setForm] = useState({
@@ -18,38 +18,39 @@ const UserProfile = () => {
     city: "",
     country: "",
     zipcode: 0,
-    avatar: AvatarImg,
+    avatar: null,
   });
   const [isLoading, setIsLoading] = useState(false);
   const [file, setFile] = useState(AvatarImg);
   const [disable, setDisable] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  useEffect(() => {
-    const getUserInfo = async () => {
-      try {
-        setIsLoading(true);
-        const user = await fetchUser();
-        console.log(user);
-        if (user) {
-          setForm({
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email,
-            phoneNumber: user.phoneNumber,
-            avatar: user.avatar || AvatarImg,
-            street: user.address.street,
-            city: user.address.city,
-            zipcode: user.address.zipcode,
-            country: user.address.country,
-          });
-          setIsLoading(false);
-          setDisable(true);
-        }
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
+  const router = useRouter();
+  const getUserInfo = async () => {
+    try {
+      setIsLoading(true);
+      const user = await fetchUser();
 
+      if (user) {
+        setForm({
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          phoneNumber: user.phoneNumber,
+          avatar: user.avatar,
+          street: user.address.street,
+          city: user.address.city,
+          zipcode: user.address.zipcode,
+          country: user.address.country,
+        });
+        setIsLoading(false);
+        setDisable(true);
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
+
+  useEffect(() => {
     // Call the function to fetch user data
     getUserInfo();
   }, []);
@@ -59,17 +60,48 @@ const UserProfile = () => {
     setForm({ ...form, [name]: value });
   };
 
+  const handleImgChange = (e) => {
+    const fileImg = e.target.files[0];
+    setFile(fileImg);
+    setForm((prevForm) => ({
+      ...prevForm,
+      avatar: fileImg || null, // Store the selected image file
+      avatar: URL.createObjectURL(fileImg) || null,
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const updatedData = { ...form };
-      updatedData.avatar = file;
+      const formData = new FormData();
+      formData.append("avatar", file);
+      formData.append("firstName", form.firstName);
+      formData.append("lastName", form.lastName);
+      formData.append("email", form.email);
+      formData.append("phoneNumber", form.phoneNumber);
+      formData.append("street", form.street);
+      formData.append("city", form.city);
+      formData.append("country", form.country);
+      formData.append("zipcode", form.zipcode);
 
-      const updateUserInfo = await fetchUserUpdate(updatedData);
-      setForm(updatedData);
-      setDisable(true);
-    } catch {
+      await fetchUserUpdateImg(formData);
+      const updatedUser = await fetchUser();
+      if (updatedUser) {
+        setForm({
+          firstName: updatedUser.firstName,
+          lastName: updatedUser.lastName,
+          email: updatedUser.email,
+          phoneNumber: updatedUser.phoneNumber,
+          avatar: updatedUser.avatar,
+          street: updatedUser.address.street,
+          city: updatedUser.address.city,
+          zipcode: updatedUser.address.zipcode,
+          country: updatedUser.address.country,
+        });
+        setDisable(true);
+      }
+    } catch (error) {
       console.error("Error updating user profile:", error);
     } finally {
       setIsLoading(false);
@@ -97,21 +129,22 @@ const UserProfile = () => {
             <div className="flex flex-col justify-around w-full">
               <div className="flex flex-col p-1">
                 <span className=" h-[200px]  w-[200px] flex justify-center border border-gray-300">
-                  <Image
-                    src={form.avatar || AvatarImg}
-                    width={180}
-                    height={180}
-                    alt="Selected Image Preview"
-                    priority={true}
-                    className="w-auto h-auto rounded"
-                  />
+                  {form.avatar && (
+                    <Image
+                      src={form.avatar}
+                      width={200}
+                      height={200}
+                      alt="Selected Image Preview"
+                      priority={true}
+                      className="w-auto h-auto rounded"
+                    />
+                  )}
                 </span>
                 {isEditing && (
                   <input
-                    name={file}
                     type="file"
                     accept="image/*"
-                    onChange={(e) => setFile(e.target.files[0])}
+                    onChange={handleImgChange}
                     className="mt-4"
                   />
                 )}
