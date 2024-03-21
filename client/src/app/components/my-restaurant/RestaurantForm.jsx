@@ -27,7 +27,7 @@ function RestaurantForm({ restaurantData, setRestaurantData }) {
   const [hasRestaurant, setHasRestaurant] = useState(false);
 
   useEffect(() => {
-    if (restaurantData && Object.keys(restaurantData).length > 0) {
+    if (restaurantData) {
       const {
         name,
         description,
@@ -149,6 +149,7 @@ function RestaurantForm({ restaurantData, setRestaurantData }) {
     setShowUpdateButton((prev) => !prev);
     setDisable(false);
   };
+
   const getTitle = () => {
     if (loading) {
       return "Loading...";

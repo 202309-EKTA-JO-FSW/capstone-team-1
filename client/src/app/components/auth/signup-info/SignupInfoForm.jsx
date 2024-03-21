@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Btn from "../../Btn";
 import { fetchUserUpdate } from "@/app/lib/data";
+import AddressField from "../AddressField";
 
 const SignupInfoForm = ({ onSignup }) => {
   const formData = {
@@ -27,12 +28,24 @@ const SignupInfoForm = ({ onSignup }) => {
     } else {
       onSignup("All field must be filled");
     }
-
+    console.log(signup);
+    const userInfo = {
+      email: signup.results.email,
+      firstName: signup.results.firstName,
+      lastName: signup.results.lastName,
+      avatar: signup.results.avatar,
+      isAdmin: signup.results.isAdmin,
+      restaurant: signup.results.restaurant,
+      country: signup.results.address.country,
+      city: signup.results.address.city,
+    };
     // check if there is a user to refresh the page
     if (signup) {
+      localStorage.setItem("user", JSON.stringify(userInfo));
       setForm(formData);
+      window.dispatchEvent(new Event("storage"));
       // redirect the user to home page after signup
-      router.push("/auth-user");
+      router.push("/");
     }
   };
 
@@ -51,6 +64,24 @@ const SignupInfoForm = ({ onSignup }) => {
       }));
     }
   };
+
+  // Callback function to handle country change
+  const handleCountryChange = (selectedCountry) => {
+    setForm((prevState) => ({
+      ...prevState,
+      country: selectedCountry.label, // Set country value
+      city: "", // Reset city when changing country
+    }));
+  };
+
+  // Callback function to handle city change
+  const handleCityChange = (selectedCity) => {
+    setForm((prevState) => ({
+      ...prevState,
+      city: selectedCity, // Set city value
+    }));
+  };
+
   return (
     <div className="flex flex-col justify-start items-center w-full sm:w-[600px] p-7">
       <h1 className="text-4xl font-bold my-10">Continue Sign Up</h1>
@@ -68,7 +99,7 @@ const SignupInfoForm = ({ onSignup }) => {
           onChange={handleChange}
         />
         {/* address */}
-        <div className="flex justify-between w-full">
+        {/* <div className="flex justify-between w-full">
           <input
             type="text"
             name="country"
@@ -85,7 +116,12 @@ const SignupInfoForm = ({ onSignup }) => {
             value={form.city}
             onChange={handleChange}
           />
-        </div>
+        </div> */}
+        <AddressField
+          // Pass callbacks to handle country and city changes
+          onCountryChange={handleCountryChange}
+          onCityChange={handleCityChange}
+        />
         <div className="flex justify-between w-full">
           <input
             type="text"

@@ -3,6 +3,7 @@ import { fetchSignup } from "@/app/lib/data";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Btn from "../../Btn";
+import AddressField from "../AddressField";
 
 const SignupForm = ({ onSignup }) => {
   const formData = {
@@ -55,6 +56,23 @@ const SignupForm = ({ onSignup }) => {
         [name]: value,
       }));
     }
+  };
+
+  // Callback function to handle country change
+  const handleCountryChange = (selectedCountry) => {
+    setForm((prevState) => ({
+      ...prevState,
+      country: selectedCountry.label, // Set country value
+      city: "", // Reset city when changing country
+    }));
+  };
+
+  // Callback function to handle city change
+  const handleCityChange = (selectedCity) => {
+    setForm((prevState) => ({
+      ...prevState,
+      city: selectedCity, // Set city value
+    }));
   };
 
   return (
@@ -123,7 +141,7 @@ const SignupForm = ({ onSignup }) => {
         />
 
         {/* address */}
-        <div className="flex justify-between w-full">
+        {/* <div className="flex justify-between w-full">
           <input
             type="text"
             name="country"
@@ -140,7 +158,14 @@ const SignupForm = ({ onSignup }) => {
             value={form.city}
             onChange={handleChange}
           />
-        </div>
+        </div> */}
+        {/* address new */}
+        <AddressField
+          // Pass callbacks to handle country and city changes
+          onCountryChange={handleCountryChange}
+          onCityChange={handleCityChange}
+        />
+
         <div className="flex justify-between w-full">
           <input
             type="text"

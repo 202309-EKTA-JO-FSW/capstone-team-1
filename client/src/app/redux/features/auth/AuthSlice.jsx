@@ -14,7 +14,9 @@ export const authSlice = createSlice({
   reducers: {
     loginUser: (state, action) => {
       return {
+        ...state,
         value: {
+          ...state.value,
           isAdmin: action.payload.isAdmin,
           restaurant: action.payload.restaurant,
           isLogin: true,

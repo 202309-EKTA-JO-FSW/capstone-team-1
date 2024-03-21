@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Loading from "../../loading/Loading";
 import RestaurantOrderCard from "./RestaurantOrderCard";
+import Empty from "../../Empty";
 
 const RestaurantOrders = () => {
   const [orders, setOrders] = useState([]);
@@ -23,11 +24,7 @@ const RestaurantOrders = () => {
   }
 
   if (orders.length === 0) {
-    return (
-      <div className="w-full h-screen flex justify-center">
-        <p className="text-3xl font-bold text-main-green">No orders found</p>
-      </div>
-    );
+    return <Empty text={"No orders found"} />;
   }
   return (
     <div className="w-full px-5 md:px-20 mt-5">

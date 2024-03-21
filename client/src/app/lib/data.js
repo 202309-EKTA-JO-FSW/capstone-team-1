@@ -109,11 +109,14 @@ export const searchRestaurant = async (search, page, limit) => {
 };
 
 // create restaurant
-export const createRestaurant = async (formData) => {
+export const createRestaurant = async (form) => {
   try {
     const res = await fetch(adminNewRestaurantUrl, {
       method: "POST",
-      body: formData,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(form),
       credentials: "include",
     });
     return await res.json();
@@ -129,8 +132,6 @@ export const fetchMenuItem = async (resId) => {
     const res = await fetch(menuItemsUrl(resId));
     return await res.json();
   } catch (error) {
-    console.error("Error fetching menu item:", error);
-    throw error;
     console.error("Error fetching menu item:", error);
     throw error;
   }

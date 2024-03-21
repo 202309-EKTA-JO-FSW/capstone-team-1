@@ -47,7 +47,7 @@ function Restaurant() {
   };
 
   return (
-    <div className="flex flex-col justify-start items-center px-3 lg:px-[10%] w-full mt-20">
+    <div className="flex flex-col justify-start items-center px-3 lg:px-[8%] w-full mt-20">
       <h1 className="flex justify-center font-bold text-5xl w-full">
         Restaurants
       </h1>
@@ -62,7 +62,7 @@ function Restaurant() {
       {loading && <Loading />}
       {/* if There is no restaurnats  */}
       {restaurants.length === 0 && <Empty text={"No restaurant found"} />}
-      <div className="w-full flex flex-wrap justify-center md:justify-start">
+      <div className="w-full flex flex-wrap justify-center lg:justify-start">
         {!loading &&
           restaurants &&
           restaurants.length > 0 &&
