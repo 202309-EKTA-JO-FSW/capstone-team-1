@@ -22,8 +22,8 @@ const NavBar = () => {
     { name: "home", path: "/" },
     { name: "restaurant", path: "/restaurant" },
     { name: "about us", path: "/about-us" },
+    { name: "contact us", path: "/contact" },
     { name: "my restaurant", path: "/my-restaurant" },
-    {name: "contact us", path: "/contact"}
   ];
 
   useEffect(() => {
@@ -59,13 +59,13 @@ const NavBar = () => {
 
   useEffect(() => {
     const getCart = async () => {
-      if (user.isLogIn) {
+      if (user.isLogin) {
         const cart = await fetchCart();
         dispatch(itemsCount(cart.itemsCount));
       }
     };
     getCart();
-  }, []);
+  }, [user]);
 
   // get items count in cart
   const cartItemsCount = useAppSelector((state) => state.cartReducer.value);

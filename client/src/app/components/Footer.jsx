@@ -30,9 +30,9 @@ const teamMembers = [
 ];
 function Footer() {
   return (
-    <footer class=" bg-white border-t border-gray-100 hadow-lg w-full mx-auto p-4 py-6 lg:py-8">
-      <div class="md:flex md:justify-between space-y-10 md:space-y-0 pb-10">
-        <div class="mb-6 md:mb-0 md:mr-12 pl-2 ">
+    <footer className=" bg-white border-t border-gray-100 hadow-lg w-full mx-auto p-4 pt-6 lg:pt-8">
+      <div className="md:flex md:justify-between space-y-10 md:space-y-0 pb-10">
+        <div className="mb-6 md:mb-0 md:mr-12 pl-2 ">
           <Logo />
           <Link href="/">
             <Image
@@ -44,49 +44,49 @@ function Footer() {
               className="w-auto h-auto"
             />
           </Link>
-          <div class="text-center text-base md:text-left pt-2 ">
+          <div className="text-center text-base md:text-left pt-2 ">
             Experience the joy of culinary excellence
           </div>
         </div>
-        <div class="grid grid-cols-2 gap-8 sm:gap-35 sm:grid-cols-3">
+        <div className="grid grid-cols-2 gap-8 sm:gap-35 sm:grid-cols-3">
           <div>
-            <h2 class="mb-3 text-sm font-semibold text-gray-900 uppercase ">
+            <h2 className="mb-3 text-sm font-semibold text-gray-900 uppercase ">
               Browse
             </h2>
-            <ul class="text-gray-500  font-medium">
+            <ul className="text-gray-500  font-medium">
               <li className="mb-3">
-                <a href="/" class="hover:underline">
+                <a href="/" className="hover:underline">
                   Home
                 </a>
               </li>
-              <li class="mb-3">
-                <a href="/restaurant" class="hover:underline">
+              <li className="mb-3">
+                <a href="/restaurant" className="hover:underline">
                   Restaurants
                 </a>
               </li>
               <li>
-                <a href="/about-us" class="hover:underline">
+                <a href="/about-us" className="hover:underline">
                   About us
                 </a>
               </li>
             </ul>
           </div>
           <div>
-            <h2 class="mb-3 text-sm font-semibold text-gray-900 uppercase ">
+            <h2 className="mb-3 text-sm font-semibold text-gray-900 uppercase ">
               Follow us
             </h2>
-            <ul class="text-gray-500 font-medium">
+            <ul className="text-gray-500 font-medium">
               {teamMembers.map((member, index) => (
-                <li key={index} class="mb-3">
-                  <div class="flex items-center">
-                    <p class="mr-2">{member.Name}</p>
-                    <div class="flex">
+                <li key={index} className="mb-3">
+                  <div className="flex items-center">
+                    <p className="mr-2">{member.Name}</p>
+                    <div className="flex">
                       {member.Github && (
                         <a
                           href={member.Github}
                           target="_blank"
                           rel="noopener noreferrer"
-                          class="hover:underline mr-2"
+                          className="hover:underline mr-2"
                         >
                           <FaGithub />
                         </a>
@@ -96,7 +96,7 @@ function Footer() {
                           href={member.Linkedin}
                           target="_blank"
                           rel="noopener noreferrer"
-                          class="hover:underline"
+                          className="hover:underline"
                         >
                           <FaLinkedin />
                         </a>
@@ -108,14 +108,14 @@ function Footer() {
             </ul>
           </div>
           <div>
-            <h2 class="mb-3 text-sm font-semibold text-gray-900 uppercase ">
+            <h2 className="mb-3 text-sm font-semibold text-gray-900 uppercase ">
               Contact Us
             </h2>
-            <ul class="text-gray-500 font-medium">
-              <li class="mb-4">
+            <ul className="text-gray-500 font-medium">
+              <li className="mb-4">
                 <a
                   href="mailto:team1.recoder@gmail.com"
-                  class="hover:underline"
+                  className="hover:underline"
                 >
                   team1.recoder@gmail.com
                 </a>
@@ -124,11 +124,11 @@ function Footer() {
           </div>
         </div>
       </div>
-      <hr class="my-1 border-gray-200 sm:mx-auto  lg:my-1" />
-      <div class="sm:flex sm:items-center justify-center py-1">
-        <span class="text-sm text-gray-600 sm:text-center">
+      <hr className="my-1 border-gray-200 sm:mx-auto  lg:my-1" />
+      <div className="sm:flex sm:items-center justify-center pt-1">
+        <span className="text-sm text-gray-600 sm:text-center">
           © 2024{" "}
-          <a href="/" class="hover:underline">
+          <a href="/" className="hover:underline">
             FreshFix™
           </a>
           . All Rights Reserved.

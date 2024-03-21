@@ -17,7 +17,7 @@ export default function RootLayout({ children }) {
       <body suppressHydrationWarning={true} className={inter.className}>
         <StoreProvider>
           <NavBar />
-          {children}
+          <div className="min-h-screen">{children}</div>
           <Footer />
         </StoreProvider>
       </body>
