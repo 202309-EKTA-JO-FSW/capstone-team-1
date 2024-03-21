@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import SideBar from "../components/my-restaurant/sidebar/SideBar";
 import { useAppSelector } from "../redux/hooks";
 import IsLogin from "../components/isLogin/IsLogin";
+import CreateRestaurantForm from "../components/my-restaurant/my-restaurant-form/CreateRestaurantForm";
 
 const MyRestaurantLayout = ({ children }) => {
   const [loading, setLoading] = useState(true);
@@ -37,10 +38,18 @@ const MyRestaurantLayout = ({ children }) => {
   }
 
   return (
-    <section className="flex flex-col md:flex-row">
-      <SideBar />
-      {children}
-    </section>
+    <>
+      {user.restaurant ? (
+        <section className="flex flex-col md:flex-row">
+          <SideBar />
+          {children}
+        </section>
+      ) : (
+        <div className="flex flex-col items-center">
+          <CreateRestaurantForm />
+        </div>
+      )}
+    </>
   );
 };
 

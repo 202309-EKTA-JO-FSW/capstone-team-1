@@ -81,6 +81,7 @@ router.get(
       lastName: user.lastName,
       avatar: user.avatar,
       isAdmin: user.isAdmin,
+      restaurant: user.restaurant,
     };
 
     const userInfoToken = jwt.sign(userInfo, process.env.SECRET_KEY);

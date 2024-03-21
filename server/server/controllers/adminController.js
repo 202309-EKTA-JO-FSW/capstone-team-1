@@ -257,7 +257,7 @@ const createRestaurant = async (req, res) => {
     user.restaurant = newRestaurant._id;
     await user.save();
     return res.status(201).json({
-      restaurant: newRestaurant,
+      results: newRestaurant,
       message: "Create new restaurant successful",
     });
   } catch (error) {

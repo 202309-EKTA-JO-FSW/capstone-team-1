@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import AddressField from "../../auth/AddressField";
 import Btn from "../../Btn";
 import { createRestaurant } from "@/app/lib/data";
+import { useAppDispatch } from "@/app/redux/hooks";
+import { loginUser } from "@/app/redux/features/auth/AuthSlice";
 
 const CreateRestaurantForm = () => {
   const formData = {
@@ -18,6 +20,7 @@ const CreateRestaurantForm = () => {
     zipcode: "",
   };
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const [form, setForm] = useState(formData);
 
   const handleSubmit = async (e) => {
@@ -26,7 +29,9 @@ const CreateRestaurantForm = () => {
     // save the user in database
     const restaurant = await createRestaurant(form);
 
-    if (restaurant.restaurant) {
+    if (restaurant.results) {
+      setForm(formData);
+      dispatch(loginUser({ restaurant: restaurant.results._id }));
       router.push("/my-restaurant");
     }
   };

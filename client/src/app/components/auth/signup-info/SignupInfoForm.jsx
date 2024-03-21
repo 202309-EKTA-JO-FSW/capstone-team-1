@@ -31,7 +31,9 @@ const SignupInfoForm = ({ onSignup }) => {
 
     // check if there is a user to refresh the page
     if (signup) {
+      localStorage.setItem("user", JSON.stringify(signup.user));
       setForm(formData);
+      window.dispatchEvent(new Event("storage"));
       // redirect the user to home page after signup
       router.push("/auth-user");
     }
