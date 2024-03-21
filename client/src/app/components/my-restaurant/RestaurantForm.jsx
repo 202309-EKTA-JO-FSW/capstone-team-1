@@ -50,7 +50,7 @@ function RestaurantForm({ restaurantData, setRestaurantData }) {
       setEdit(false);
     }
   }, [restaurantData]);
-
+  // function to cancel user updates
   const cancelUpdates = () => {
     if (restaurantData) {
       const {

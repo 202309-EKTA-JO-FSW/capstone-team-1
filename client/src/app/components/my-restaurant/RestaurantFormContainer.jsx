@@ -8,8 +8,8 @@ function RestaurantFormContainer() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem("user"));
-    const resId = storedUser.restaurant;
+    /*  const storedUser = JSON.parse(localStorage.getItem("user"));
+    const resId = storedUser.restaurant; */
     const fetchRestaurantData = async () => {
       try {
         setLoading(true);
@@ -21,11 +21,6 @@ function RestaurantFormContainer() {
       }
     };
     fetchRestaurantData();
-    /*   if (resId) {
-      fetchRestaurantData();
-    } else {
-      setRestaurantData({}); // No need to fetch data if resId is not provided
-    } */
   }, []);
 
   if (loading) {
@@ -34,14 +29,6 @@ function RestaurantFormContainer() {
 
   return (
     <div className="w-full flex justify-center px-[25%]">
-      {/* {restaurantData ? (
-        <RestaurantForm
-          restaurantData={restaurantData}
-          setRestaurantData={setRestaurantData}
-        />
-      ) : (
-        <RestaurantForm />
-      )} */}
       <RestaurantForm
         restaurantData={restaurantData}
         setRestaurantData={setRestaurantData}
