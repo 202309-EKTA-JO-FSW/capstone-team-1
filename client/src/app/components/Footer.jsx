@@ -30,8 +30,8 @@ const teamMembers = [
 ];
 function Footer() {
   return (
-    <footer class="bg-white dark:bg-gray-900 fixed bottom-0 w-full  mx-auto p-4 py-6 lg:py-8 ">
-      <div class="md:flex md:justify-between space-y-10 md:space-y-0">
+    <footer class=" bg-white border-t border-gray-100 hadow-lg w-full mx-auto p-4 py-6 lg:py-8">
+      <div class="md:flex md:justify-between space-y-10 md:space-y-0 pb-10">
         <div class="mb-6 md:mb-0 md:mr-12 pl-2 ">
           <Logo />
           <Link href="/">
@@ -50,16 +50,16 @@ function Footer() {
         </div>
         <div class="grid grid-cols-2 gap-8 sm:gap-35 sm:grid-cols-3">
           <div>
-            <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">
+            <h2 class="mb-3 text-sm font-semibold text-gray-900 uppercase ">
               Browse
             </h2>
-            <ul class="text-gray-500 dark:text-gray-400 font-medium">
-              <li>
+            <ul class="text-gray-500  font-medium">
+              <li className="mb-3">
                 <a href="/" class="hover:underline">
                   Home
                 </a>
               </li>
-              <li class="mb-4">
+              <li class="mb-3">
                 <a href="/restaurant" class="hover:underline">
                   Restaurants
                 </a>
@@ -72,12 +72,12 @@ function Footer() {
             </ul>
           </div>
           <div>
-            <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">
+            <h2 class="mb-3 text-sm font-semibold text-gray-900 uppercase ">
               Follow us
             </h2>
-            <ul class="text-gray-500 dark:text-gray-400 font-medium">
+            <ul class="text-gray-500 font-medium">
               {teamMembers.map((member, index) => (
-                <li key={index} class="mb-4">
+                <li key={index} class="mb-3">
                   <div class="flex items-center">
                     <p class="mr-2">{member.Name}</p>
                     <div class="flex">
@@ -108,10 +108,10 @@ function Footer() {
             </ul>
           </div>
           <div>
-            <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">
+            <h2 class="mb-3 text-sm font-semibold text-gray-900 uppercase ">
               Contact Us
             </h2>
-            <ul class="text-gray-500 dark:text-gray-400 font-medium">
+            <ul class="text-gray-500 font-medium">
               <li class="mb-4">
                 <a
                   href="mailto:team1.recoder@gmail.com"
@@ -124,9 +124,9 @@ function Footer() {
           </div>
         </div>
       </div>
-      <hr class="my-1 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-1" />
+      <hr class="my-1 border-gray-200 sm:mx-auto  lg:my-1" />
       <div class="sm:flex sm:items-center justify-center py-1">
-        <span class="text-sm text-gray-600 sm:text-center dark:text-gray-500">
+        <span class="text-sm text-gray-600 sm:text-center">
           © 2024{" "}
           <a href="/" class="hover:underline">
             FreshFix™
