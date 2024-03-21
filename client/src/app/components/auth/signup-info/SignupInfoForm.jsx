@@ -35,7 +35,7 @@ const SignupInfoForm = ({ onSignup }) => {
       router.push("/auth-user");
     }
   };
-  console.log(form);
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
 

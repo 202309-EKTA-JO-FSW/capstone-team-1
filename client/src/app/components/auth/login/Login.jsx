@@ -4,13 +4,35 @@ import LoginForm from "./LoginForm";
 import Link from "next/link";
 import GoogleAuth from "../GoogleAuth";
 import AuthMessage from "../AuthMessage";
+import { useAppSelector } from "@/app/redux/hooks";
+import { useEffect } from "react";
+import IsLogin from "../../isLogin/IsLogin";
 
 const Login = () => {
   const [loginRes, setLoginRes] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  const user = useAppSelector((state) => state.authReducer.value);
+
+  useEffect(() => {
+    if (user) {
+      setLoading(false); // Set loading to false to skip form rendering
+    }
+  }, [user]);
+
+  // checking if user is logged in
+  if (user.isLogin === true) {
+    return <IsLogin login={user.isLogin} />;
+  }
+
+  if (loading) {
+    return null;
+  }
 
   const handleLogin = (loginMsg) => {
     setLoginRes(loginMsg);
   };
+
   return (
     <div className="flex flex-col items-center pt-24">
       <LoginForm onLogin={handleLogin} />

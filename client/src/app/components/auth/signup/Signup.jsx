@@ -1,12 +1,33 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SignupForm from "./SignupForm";
 import Link from "next/link";
 import GoogleAuth from "../GoogleAuth";
 import AuthMessage from "../AuthMessage";
+import { useAppSelector } from "@/app/redux/hooks";
+import IsLogin from "../../isLogin/IsLogin";
 
 const Signup = () => {
   const [signupRes, setSignupRes] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  const user = useAppSelector((state) => state.authReducer.value);
+
+  useEffect(() => {
+    if (user) {
+      setLoading(false); // Set loading to false to skip form rendering
+    }
+  }, [user]);
+
+  // checking if user is logged in
+  if (user.isLogin === true) {
+    return <IsLogin login={user.isLogin} />;
+  }
+
+  if (loading) {
+    return null;
+  }
+
   const handleSignup = (signupRes) => {
     setSignupRes(signupRes);
   };

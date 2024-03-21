@@ -5,7 +5,7 @@ import { GiShoppingCart } from "react-icons/gi";
 import Link from "next/link";
 import User from "./navbar/User";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { login } from "../redux/features/auth/AuthSlice";
+import { loginUser } from "../redux/features/auth/AuthSlice";
 import { fetchCart } from "../lib/data";
 import { itemsCount } from "../redux/features/cart/CartSlice";
 import FreshFix from "../../../public/FreshFix.png";
@@ -14,9 +14,9 @@ import NavbarContent from "./navbar/NavbarContent";
 
 const NavBar = () => {
   const dispatch = useAppDispatch();
-  const [user, setUser] = useState(null);
+  const [userInfo, setUserInfo] = useState(null);
   const [loading, setLoading] = useState(true);
-  const isLogin = useAppSelector((state) => state.authReducer.value);
+  const user = useAppSelector((state) => state.authReducer.value);
 
   const contents = [
     { name: "home", path: "/" },
@@ -29,14 +29,14 @@ const NavBar = () => {
     // Function to handle local storage change event
     const handleStorageChange = () => {
       const storedUser = JSON.parse(localStorage.getItem("user"));
-      setUser(storedUser);
+      setUserInfo(storedUser);
     };
     // Add event listener for storage change
     window.addEventListener("storage", handleStorageChange);
     // Initial setup
     const storedUser = JSON.parse(localStorage.getItem("user"));
 
-    setUser(storedUser);
+    setUserInfo(storedUser);
     setLoading(false);
     // Cleanup function
     return () => {
@@ -46,14 +46,19 @@ const NavBar = () => {
 
   useEffect(() => {
     // Dispatch login action if user is logged in
-    if (user) {
-      dispatch(login());
+    if (userInfo) {
+      dispatch(
+        loginUser({
+          isAdmin: userInfo.isAdmin,
+          restaurant: userInfo.restaurant,
+        })
+      );
     }
-  }, [user, dispatch]);
+  }, [userInfo, dispatch]);
 
   useEffect(() => {
     const getCart = async () => {
-      if (isLogin) {
+      if (user.isLogIn) {
         const cart = await fetchCart();
         dispatch(itemsCount(cart.itemsCount));
       }
@@ -84,7 +89,7 @@ const NavBar = () => {
           {contents.map((content) => {
             if (
               content.path === "/my-restaurant" &&
-              (!user || (user && !user.isAdmin))
+              (!userInfo || (userInfo && !userInfo.isAdmin))
             ) {
               return null;
             } else {
@@ -115,7 +120,7 @@ const NavBar = () => {
               )}
             </div>
           </Link>
-          <User user={user} />
+          <User user={userInfo} />
         </section>
       )}
     </nav>

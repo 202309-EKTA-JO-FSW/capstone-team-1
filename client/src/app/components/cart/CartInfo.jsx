@@ -100,15 +100,6 @@ const CartInfo = ({ form, loading, setLoading, cart, setCart }) => {
     return <Loading />;
   }
 
-  // message when cart is empty
-  if (cart.length === 0) {
-    return (
-      <div className="w-full h-screen flex justify-center">
-        <p className="text-3xl font-bold text-main-green">Cart Empty</p>
-      </div>
-    );
-  }
-
   return (
     <div className="flex flex-col justify-center items-center w-full md:p-7">
       <h1 className="text-lg md:text-3xl font-bold m-5">Cart </h1>
