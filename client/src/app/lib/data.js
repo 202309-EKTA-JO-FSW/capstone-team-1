@@ -270,6 +270,24 @@ export const fetchUserUpdate = async (form) => {
   }
 };
 
+//update user profile with avatar
+export const fetchUserUpdateImg = async (formData) => {
+  try {
+    const res = await fetch(userProfileUrl, {
+      method: "PUT",
+      
+      body: formData,
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+
 // get user profile
 export const fetchUser = async () => {
   try {
