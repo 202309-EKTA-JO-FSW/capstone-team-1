@@ -3,9 +3,10 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Btn from "../Btn";
 import { FiEdit } from "react-icons/fi";
-import { createRestaurant, updateAdminRestaurant } from "@/app/lib/data";
+import { updateAdminRestaurant } from "@/app/lib/data";
 
 function RestaurantForm({ restaurantData, setRestaurantData }) {
+  // Define initial form state
   const initialFormData = {
     name: "",
     description: "",
@@ -22,10 +23,8 @@ function RestaurantForm({ restaurantData, setRestaurantData }) {
   const [loading, setLoading] = useState(false);
   const [file, setFile] = useState();
   const [edit, setEdit] = useState(false);
-  const [disable, setDisable] = useState(false);
   const [showUpdateButton, setShowUpdateButton] = useState(false); // State to manage the visibility of the Update button
-  const [hasRestaurant, setHasRestaurant] = useState(false);
-
+  // Update form data when restaurantData changes
   useEffect(() => {
     if (restaurantData) {
       const {
@@ -48,11 +47,7 @@ function RestaurantForm({ restaurantData, setRestaurantData }) {
         street: street || "",
         zipcode: zipcode || "",
       });
-      setHasRestaurant(true);
-      setDisable(true);
-    } else {
-      setHasRestaurant(false);
-      console.log("edit not has res", hasRestaurant);
+      setEdit(false);
     }
   }, [restaurantData]);
 
@@ -81,8 +76,8 @@ function RestaurantForm({ restaurantData, setRestaurantData }) {
     }
     setEdit((prev) => !prev);
     setShowUpdateButton((prev) => !prev);
-    setDisable(true);
   };
+  // Function to handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -106,25 +101,17 @@ function RestaurantForm({ restaurantData, setRestaurantData }) {
         formDataToAppend.append(key, formData[key]);
       }
 
-      if (!edit) {
-        const res = await createRestaurant(formDataToAppend);
-        setRestaurantData(res.restaurant); // Update the state with new data
-        setHasRestaurant(true);
-      } else {
-        const res = await updateAdminRestaurant(formDataToAppend);
-        setRestaurantData(res.results); // Update the state with updated data
-      }
+      const res = await updateAdminRestaurant(formDataToAppend);
+      setRestaurantData(res.results); // Update the state with updated data
     } catch (error) {
       console.error("Error:", error);
     } finally {
       setLoading(false);
-      setEdit(false);
-      setDisable(true);
-
-      setShowUpdateButton(false);
+      setEdit((prev) => !prev);
+      setShowUpdateButton((prev) => !prev);
     }
   };
-
+  // Function to handle form field changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prevForm) => ({
@@ -132,7 +119,7 @@ function RestaurantForm({ restaurantData, setRestaurantData }) {
       [name]: value,
     }));
   };
-
+  // Function to handle image change
   const handleImageChange = (e) => {
     const fileImg = e.target.files[0];
     setFile(fileImg);
@@ -142,27 +129,15 @@ function RestaurantForm({ restaurantData, setRestaurantData }) {
       imageUrl: URL.createObjectURL(fileImg) || null, // Generate a preview URL for the selected image
     }));
   };
-
-  const toggleFieldsDisabled = () => {
-    setEdit((prev) => !prev);
-    setHasRestaurant(true);
-    setShowUpdateButton((prev) => !prev);
-    setDisable(false);
-  };
-
-  const getTitle = () => {
-    if (loading) {
-      return "Loading...";
-    } else if (hasRestaurant) {
-      return "Restaurant Profile";
-    } else {
-      return "Create Restaurant";
-    }
+  // Function to toggle edit mode
+  const toggleEdit = () => {
+    setEdit((prevEdit) => !prevEdit);
+    setShowUpdateButton(true);
   };
 
   return (
     <div className="flex flex-col justify-center items-center w-full p-2">
-      <h1 className="text-4xl font-bold my-3">{getTitle()}</h1>
+      <h1 className="text-4xl font-bold my-3">Restaurant Profile</h1>
       <div className="flex flex-col justify-around w-full ">
         <form
           className="flex flex-col justify-center items-center w-full "
@@ -182,7 +157,7 @@ function RestaurantForm({ restaurantData, setRestaurantData }) {
                   />
                 )}
               </span>
-              {(!hasRestaurant || edit) && (
+              {edit && (
                 <input
                   type="file"
                   accept="image/*"
@@ -192,17 +167,9 @@ function RestaurantForm({ restaurantData, setRestaurantData }) {
                 />
               )}
             </div>
-            {hasRestaurant && (
-              /*  <button
-                className="flex justify-end p-2 "
-                onClick={toggleFieldsDisabled}
-                type="button"
-              > */
-              <section className="flex justify-end p-2 cursor-pointer hover:text-main-green">
-                <FiEdit className="text-2xl " onClick={toggleFieldsDisabled} />
-              </section>
-              //  </button>
-            )}
+            <section className="flex justify-end p-2 cursor-pointer hover:text-main-green">
+              <FiEdit className="text-2xl" onClick={toggleEdit} />
+            </section>
             <input
               className="w-full field mb-4"
               type="text"
@@ -210,7 +177,7 @@ function RestaurantForm({ restaurantData, setRestaurantData }) {
               value={form.name}
               onChange={handleChange}
               placeholder="Restaurant Name"
-              disabled={disable}
+              disabled={!edit}
             />
             <textarea
               className="w-full field mb-4"
@@ -218,7 +185,7 @@ function RestaurantForm({ restaurantData, setRestaurantData }) {
               value={form.description}
               onChange={handleChange}
               placeholder="Description"
-              disabled={disable}
+              disabled={!edit}
             />
             <input
               className="w-full field mb-4"
@@ -227,7 +194,7 @@ function RestaurantForm({ restaurantData, setRestaurantData }) {
               value={form.cuisine}
               onChange={handleChange}
               placeholder="Cuisine"
-              disabled={disable}
+              disabled={!edit}
             />
             <input
               type="number"
@@ -236,7 +203,7 @@ function RestaurantForm({ restaurantData, setRestaurantData }) {
               onChange={handleChange}
               placeholder="Phone Number"
               className="w-full field mb-4"
-              disabled={disable}
+              disabled={!edit}
             />
             {/* address */}
             <div className="flex items-center justify-between w-full">
@@ -247,7 +214,7 @@ function RestaurantForm({ restaurantData, setRestaurantData }) {
                 className="w-full mr-4 field"
                 value={form.country}
                 onChange={handleChange}
-                disabled={disable}
+                disabled={!edit}
               />
               <input
                 type="text"
@@ -256,7 +223,7 @@ function RestaurantForm({ restaurantData, setRestaurantData }) {
                 className="w-full field"
                 value={form.city}
                 onChange={handleChange}
-                disabled={disable}
+                disabled={!edit}
               />
             </div>
             <div className="flex justify-between w-full">
@@ -267,7 +234,7 @@ function RestaurantForm({ restaurantData, setRestaurantData }) {
                 className="w-full mr-4 field"
                 value={form.street}
                 onChange={handleChange}
-                disabled={disable}
+                disabled={!edit}
               />
               <input
                 type="number"
@@ -276,7 +243,7 @@ function RestaurantForm({ restaurantData, setRestaurantData }) {
                 className="w-full field"
                 value={form.zipcode}
                 onChange={handleChange}
-                disabled={disable}
+                disabled={!edit}
               />
             </div>
           </div>
@@ -292,9 +259,6 @@ function RestaurantForm({ restaurantData, setRestaurantData }) {
                 Cancel
               </button>
             </div>
-          )}
-          {!loading && !hasRestaurant && !showUpdateButton && (
-            <Btn text="Create" />
           )}
         </form>
       </div>

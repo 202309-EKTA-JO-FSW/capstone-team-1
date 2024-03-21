@@ -20,12 +20,12 @@ function RestaurantFormContainer() {
         console.error("Error fetching restaurant data:", error);
       }
     };
-
-    if (resId) {
+    fetchRestaurantData();
+    /*   if (resId) {
       fetchRestaurantData();
     } else {
       setRestaurantData({}); // No need to fetch data if resId is not provided
-    }
+    } */
   }, []);
 
   if (loading) {
