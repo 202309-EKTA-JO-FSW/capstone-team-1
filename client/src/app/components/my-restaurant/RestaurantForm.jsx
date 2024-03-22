@@ -4,6 +4,7 @@ import Image from "next/image";
 import Btn from "../Btn";
 import { FiEdit } from "react-icons/fi";
 import { updateAdminRestaurant } from "@/app/lib/data";
+import restaurantPlaceHolderImg from "../../../../public/image/restaurant-placeholder.png";
 
 function RestaurantForm({ restaurantData, setRestaurantData }) {
   // Define initial form state
@@ -148,7 +149,7 @@ function RestaurantForm({ restaurantData, setRestaurantData }) {
               <span className=" h-[160px]  w-[200px] flex justify-center border border-gray-300">
                 {form.imageUrl && (
                   <Image
-                    src={form.imageUrl}
+                    src={form.imageUrl || restaurantPlaceHolderImg}
                     width={200}
                     height={160}
                     alt="Selected Image Preview"
