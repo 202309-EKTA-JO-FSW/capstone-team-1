@@ -86,7 +86,7 @@ export const fetchGoogleUser = async () => {
 export const fetchRestaurants = async (page, limit) => {
   try {
     const url = `${restaurantUrl}?page=${page}&limit=${limit}`;
-    const response = await fetch(url);
+    const response = await fetch(url, { credentials: "include" });
     const restaurants = await response.json();
     return restaurants;
   } catch (error) {
@@ -99,7 +99,7 @@ export const fetchRestaurants = async (page, limit) => {
 export const searchRestaurant = async (search, page, limit) => {
   try {
     const url = `${restaurantUrl}/search?search=${search}&page=${page}&limit=${limit}`;
-    const response = await fetch(url);
+    const response = await fetch(url, { credentials: "include" });
     const restaurants = await response.json();
     return restaurants;
   } catch (error) {
@@ -142,7 +142,6 @@ export const postItem = async (formData) => {
   try {
     const res = await fetch(newMenuItemUrl, {
       method: "POST",
-
       body: formData,
       credentials: "include",
     });
@@ -275,7 +274,7 @@ export const fetchUserUpdateImg = async (formData) => {
   try {
     const res = await fetch(userProfileUrl, {
       method: "PUT",
-      
+
       body: formData,
       credentials: "include",
     });
@@ -286,7 +285,6 @@ export const fetchUserUpdateImg = async (formData) => {
     return error.message;
   }
 };
-
 
 // get user profile
 export const fetchUser = async () => {

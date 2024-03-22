@@ -9,6 +9,8 @@ import Loading from "../loading/Loading";
 import { useRouter } from "next/navigation";
 import { useAppDispatch } from "@/app/redux/hooks";
 import { actionMsg } from "@/app/redux/features/message/MessageSlice";
+import avatarPlaceHolder from "../../../../public/Avatar-Profile-Image.png";
+import AddressField from "../auth/AddressField";
 
 const UserProfile = () => {
   const dispatch = useAppDispatch();
@@ -27,7 +29,8 @@ const UserProfile = () => {
   const [file, setFile] = useState(AvatarImg);
   const [disable, setDisable] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const router = useRouter();
+  const [loadingBtn, setLoadingBtn] = useState(false);
+
   const getUserInfo = async () => {
     try {
       setIsLoading(true);
@@ -75,7 +78,8 @@ const UserProfile = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
+    setLoadingBtn(true);
+
     try {
       const formData = new FormData();
       formData.append("avatar", file);
@@ -105,7 +109,7 @@ const UserProfile = () => {
           country: updatedUser.address.country,
         });
         setDisable(true);
-        console.log(updatedUser);
+
         // update local storage
 
         const userInfo = {
@@ -124,7 +128,7 @@ const UserProfile = () => {
     } catch (error) {
       console.error("Error updating user profile:", error);
     } finally {
-      setIsLoading(false);
+      setLoadingBtn(false);
       setIsEditing(false);
     }
   };
@@ -147,16 +151,14 @@ const UserProfile = () => {
           {/* <div className="flex flex-col justify-around w-full"> */}
           <div className="flex flex-col items-start p-1 w-full ml-8">
             <span>
-              {form.avatar && (
-                <Image
-                  src={form.avatar}
-                  width={200}
-                  height={200}
-                  alt="Selected Image Preview"
-                  priority={true}
-                  className="h-[200px] w-[200px] rounded-full object-cover border border-gray-300"
-                />
-              )}
+              <Image
+                src={form.avatar || avatarPlaceHolder}
+                width={200}
+                height={200}
+                alt="Selected Image Preview"
+                priority={true}
+                className="h-[200px] w-[200px] rounded-full object-cover border border-gray-300"
+              />
             </span>
             {isEditing && (
               <input
@@ -235,33 +237,36 @@ const UserProfile = () => {
           </div>
 
           {/* address */}
-          <div className="flex items-center justify-between w-full">
-            <div className="w-full mr-4">
-              <label className="mt-2">Country:</label>
-              <input
-                type="text"
-                name="country"
-                placeholder="Country"
-                className="w-full mr-4 field"
-                value={form.country}
-                onChange={handleChange}
-                disabled={disable}
-              />
-            </div>
+          {!isEditing && (
+            <div className="flex items-center justify-between w-full">
+              <div className="w-full mr-4">
+                <label className="mt-2">Country:</label>
+                <input
+                  type="text"
+                  name="country"
+                  placeholder="Country"
+                  className="w-full mr-4 field"
+                  value={form.country}
+                  onChange={handleChange}
+                  disabled={disable}
+                />
+              </div>
 
-            <div className="w-full">
-              <label className="mb-8">City:</label>
-              <input
-                type="text"
-                name="city"
-                placeholder="City"
-                className="w-full field"
-                value={form.city}
-                onChange={handleChange}
-                disabled={disable}
-              />
+              <div className="w-full">
+                <label className="mb-8">City:</label>
+                <input
+                  type="text"
+                  name="city"
+                  placeholder="City"
+                  className="w-full field"
+                  value={form.city}
+                  onChange={handleChange}
+                  disabled={disable}
+                />
+              </div>
             </div>
-          </div>
+          )}
+          {isEditing && <AddressField setForm={setForm} />}
 
           <div className="flex justify-between w-full">
             <div className="w-full mr-4">
@@ -290,9 +295,13 @@ const UserProfile = () => {
             </div>
           </div>
 
-          {!isLoading && isEditing && (
+          {isEditing && (
             <div className="flex items-center justify-center">
-              <Btn type="submit" text={"Update Profile"} />
+              <Btn
+                type="submit"
+                text={"Update Profile"}
+                loadingBtn={loadingBtn}
+              />
             </div>
           )}
         </form>

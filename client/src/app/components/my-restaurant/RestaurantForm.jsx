@@ -5,8 +5,12 @@ import Btn from "../Btn";
 import { FiEdit } from "react-icons/fi";
 import { updateAdminRestaurant } from "@/app/lib/data";
 import restaurantPlaceHolderImg from "../../../../public/image/restaurant-placeholder.png";
+import AddressField from "../auth/AddressField";
+import { useAppDispatch } from "@/app/redux/hooks";
+import { actionMsg } from "@/app/redux/features/message/MessageSlice";
 
 function RestaurantForm({ restaurantData, setRestaurantData }) {
+  const dispatch = useAppDispatch();
   // Define initial form state
   const initialFormData = {
     name: "",
@@ -25,59 +29,44 @@ function RestaurantForm({ restaurantData, setRestaurantData }) {
   const [file, setFile] = useState();
   const [edit, setEdit] = useState(false);
   const [showUpdateButton, setShowUpdateButton] = useState(false); // State to manage the visibility of the Update button
+
   // Update form data when restaurantData changes
   useEffect(() => {
     if (restaurantData) {
-      const {
-        name,
-        description,
-        cuisine,
-        image,
-        contact: { phoneNumber } = {},
-        address: { country, city, street, zipcode } = {},
-      } = restaurantData;
-
       setForm({
-        name: name || "",
-        description: description || "",
-        cuisine: cuisine || "",
-        imageUrl: image,
-        phoneNumber: phoneNumber || "",
-        country: country || "",
-        city: city || "",
-        street: street || "",
-        zipcode: zipcode || "",
+        name: restaurantData.name || "",
+        description: restaurantData.description || "",
+        cuisine: restaurantData.cuisine || "",
+        imageUrl: restaurantData.image,
+        phoneNumber: restaurantData.contact.phoneNumber || "",
+        country: restaurantData.address.country || "",
+        city: restaurantData.address.city || "",
+        street: restaurantData.address.street || "",
+        zipcode: restaurantData.address.zipcode || "",
       });
       setEdit(false);
     }
   }, [restaurantData]);
+
   // function to cancel user updates
   const cancelUpdates = () => {
     if (restaurantData) {
-      const {
-        name,
-        description,
-        cuisine,
-        image,
-        contact: { phoneNumber } = {},
-        address: { country, city, street, zipcode } = {},
-      } = restaurantData;
-
       setForm({
-        name: name || "",
-        description: description || "",
-        cuisine: cuisine || "",
-        imageUrl: image,
-        phoneNumber: phoneNumber || "",
-        country: country || "",
-        city: city || "",
-        street: street || "",
-        zipcode: zipcode || "",
+        name: restaurantData.name || "",
+        description: restaurantData.description || "",
+        cuisine: restaurantData.cuisine || "",
+        imageUrl: restaurantData.image,
+        phoneNumber: restaurantData.contact.phoneNumber || "",
+        country: restaurantData.address.country || "",
+        city: restaurantData.address.city || "",
+        street: restaurantData.address.street || "",
+        zipcode: restaurantData.address.zipcode || "",
       });
     }
     setEdit((prev) => !prev);
     setShowUpdateButton((prev) => !prev);
   };
+
   // Function to handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -85,14 +74,7 @@ function RestaurantForm({ restaurantData, setRestaurantData }) {
 
     try {
       const formData = {
-        name: form.name,
-        description: form.description,
-        cuisine: form.cuisine,
-        phoneNumber: form.phoneNumber,
-        country: form.country,
-        city: form.city,
-        street: form.street,
-        zipcode: form.zipcode,
+        ...form,
         image: file,
       };
 
@@ -103,13 +85,17 @@ function RestaurantForm({ restaurantData, setRestaurantData }) {
       }
 
       const res = await updateAdminRestaurant(formDataToAppend);
+      // update the message state
+      dispatch(actionMsg(res.message));
       setRestaurantData(res.results); // Update the state with updated data
+
+      if (res) {
+        setLoading(false);
+        setEdit((prev) => !prev);
+        setShowUpdateButton((prev) => !prev);
+      }
     } catch (error) {
       console.error("Error:", error);
-    } finally {
-      setLoading(false);
-      setEdit((prev) => !prev);
-      setShowUpdateButton((prev) => !prev);
     }
   };
   // Function to handle form field changes
@@ -137,7 +123,7 @@ function RestaurantForm({ restaurantData, setRestaurantData }) {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center w-full p-2">
+    <div className="flex relative flex-col justify-center items-center w-full p-2">
       <h1 className="text-4xl font-bold my-3">Restaurant Profile</h1>
       <div className="flex flex-col justify-around w-full ">
         <form
@@ -147,16 +133,16 @@ function RestaurantForm({ restaurantData, setRestaurantData }) {
           <div className="flex flex-col justify-around w-full">
             <div className="flex flex-col p-1">
               <span className=" h-[160px]  w-[200px] flex justify-center border border-gray-300">
-                {form.imageUrl && (
+                {
                   <Image
                     src={form.imageUrl || restaurantPlaceHolderImg}
                     width={200}
                     height={160}
                     alt="Selected Image Preview"
-                    priority="true"
+                    priority={true}
                     className="w-auto h-auto rounded"
                   />
-                )}
+                }
               </span>
               {edit && (
                 <input
@@ -207,26 +193,29 @@ function RestaurantForm({ restaurantData, setRestaurantData }) {
               disabled={!edit}
             />
             {/* address */}
-            <div className="flex items-center justify-between w-full">
-              <input
-                type="text"
-                name="country"
-                placeholder="Country"
-                className="w-full mr-4 field"
-                value={form.country}
-                onChange={handleChange}
-                disabled={!edit}
-              />
-              <input
-                type="text"
-                name="city"
-                placeholder="City"
-                className="w-full field"
-                value={form.city}
-                onChange={handleChange}
-                disabled={!edit}
-              />
-            </div>
+            {!edit && (
+              <div className="flex items-center justify-between w-full">
+                <input
+                  type="text"
+                  name="country"
+                  placeholder="Country"
+                  className="w-full mr-4 field"
+                  value={form.country}
+                  onChange={handleChange}
+                  disabled={!edit}
+                />
+                <input
+                  type="text"
+                  name="city"
+                  placeholder="City"
+                  className="w-full field"
+                  value={form.city}
+                  onChange={handleChange}
+                  disabled={!edit}
+                />
+              </div>
+            )}
+            {edit && <AddressField setForm={setForm} />}
             <div className="flex justify-between w-full">
               <input
                 type="text"
@@ -248,9 +237,9 @@ function RestaurantForm({ restaurantData, setRestaurantData }) {
               />
             </div>
           </div>
-          {!loading && showUpdateButton && (
+          {showUpdateButton && (
             <div className="flex gap-4">
-              <Btn text="Update" />
+              <Btn text="Update" loadingBtn={loading} />
               <button
                 className="bg-main-green py-3 px-8 rounded-3xl text-white text-sm hover:bg-opacity-75"
                 type="button"
