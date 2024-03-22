@@ -1,4 +1,4 @@
-const main_url = "http://localhost:3001/api";
+const main_url = "https://capstone-team-1.onrender.com/";
 
 // auth url
 export const signupUrl = main_url + "/auth/signup";
