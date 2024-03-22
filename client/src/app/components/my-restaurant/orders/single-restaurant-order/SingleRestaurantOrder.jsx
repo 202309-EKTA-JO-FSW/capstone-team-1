@@ -13,9 +13,12 @@ import { useRouter } from "next/navigation";
 import RestaurantOrderInfo from "./RestaurantOrderInfo";
 import RestaurantStatus from "./RestaurantStatus";
 import LoadingBtn from "@/app/components/loading/LoadingBtn";
+import { useAppDispatch } from "@/app/redux/hooks";
+import { actionMsg } from "@/app/redux/features/message/MessageSlice";
 
 const SingleRestaurantOrder = ({ id }) => {
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const [order, setOrder] = useState({});
   const [loading, setLoading] = useState(true);
   const [cancelLoadingBtn, setCancelLoadingBtn] = useState(false);
@@ -47,6 +50,8 @@ const SingleRestaurantOrder = ({ id }) => {
     const orderStatus = await fetchUpdateRestaurantOrder(order._id, {
       status: "canceled",
     });
+    // update the message state
+    dispatch(actionMsg(orderStatus.message));
 
     if (orderStatus) {
       const updatedOrder = await fetchSingleRestaurantOrder(order._id);

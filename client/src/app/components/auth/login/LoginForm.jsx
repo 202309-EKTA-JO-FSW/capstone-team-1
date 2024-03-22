@@ -3,9 +3,11 @@ import { useState } from "react";
 import Btn from "../../Btn";
 import { fetchLogin } from "@/app/lib/data";
 import { useRouter } from "next/navigation";
-import MessageBox from "../../MessageBox";
+import { useAppDispatch } from "@/app/redux/hooks";
+import { actionMsg } from "@/app/redux/features/message/MessageSlice";
 
-const LoginForm = ({ onLogin }) => {
+const LoginForm = () => {
+  const dispatch = useAppDispatch();
   const formData = {
     email: "",
     password: "",
@@ -20,7 +22,7 @@ const LoginForm = ({ onLogin }) => {
     const loginRef = await fetchLogin(form);
 
     // send the login messages to parent component
-    onLogin(loginRef.message);
+    dispatch(actionMsg(loginRef.message));
 
     // if it loged in succeccfully refresh the form and redirect to home page
     if (loginRef.user) {

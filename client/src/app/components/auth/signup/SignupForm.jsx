@@ -7,7 +7,7 @@ import AddressField from "../AddressField";
 import { useAppDispatch } from "@/app/redux/hooks";
 import { actionMsg } from "@/app/redux/features/message/MessageSlice";
 
-const SignupForm = ({ onSignup }) => {
+const SignupForm = () => {
   const dispatch = useAppDispatch();
   const formData = {
     firstName: "",
@@ -31,8 +31,7 @@ const SignupForm = ({ onSignup }) => {
     // save the user in database
     const signup = await fetchSignup(form);
 
-    // send the signup message to parent component
-    // onSignup(signup.message);
+    // set the message
     dispatch(actionMsg(signup.message));
 
     // check if there is a user to refresh the page

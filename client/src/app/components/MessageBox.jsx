@@ -9,7 +9,6 @@ const MessageBox = () => {
   const [isVisible, setIsVisible] = useState(false);
   const message = useAppSelector((state) => state.messageReducer.value);
 
-  console.log(message);
   useEffect(() => {
     if (message) {
       setIsVisible(true);
@@ -29,11 +28,6 @@ const MessageBox = () => {
           {message}
         </div>
       )}
-      {/* {!isVisible && (
-        <div className="fixed top-[100px] left-[100px] mb-4 mr-4 p-3 bg-gray-600 text-white rounded-md shadow-md transition-opacity duration-3000 opacity-0">
-          {message}
-        </div>
-      )} */}
     </div>
   );
 };

@@ -6,6 +6,7 @@ import { fetchPostCart } from "@/app/lib/data";
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import { itemsCount } from "@/app/redux/features/cart/CartSlice";
 import { useRouter } from "next/navigation";
+import { actionMsg } from "@/app/redux/features/message/MessageSlice";
 
 const MenuItemCard = ({ menuItem }) => {
   const dispatch = useAppDispatch();
@@ -19,6 +20,9 @@ const MenuItemCard = ({ menuItem }) => {
     }
 
     const cart = await fetchPostCart(menuItem._id);
+    // update the message state
+    dispatch(actionMsg(cart.message));
+
     // change the cart status to added items
     if (user.isLogin && cart) {
       dispatch(itemsCount(cart.results.cart.itemsCount));

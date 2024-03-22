@@ -4,8 +4,11 @@ import React, { useState } from "react";
 import AddressField from "../../auth/AddressField";
 import Btn from "../../Btn";
 import { createRestaurant } from "@/app/lib/data";
+import { useAppDispatch } from "@/app/redux/hooks";
+import { actionMsg } from "@/app/redux/features/message/MessageSlice";
 
 const CreateRestaurantForm = () => {
+  const dispatch = useAppDispatch();
   const formData = {
     name: "",
     cuisine: "",
@@ -25,12 +28,14 @@ const CreateRestaurantForm = () => {
 
     // save the user in database
     const restaurant = await createRestaurant(form);
-
+    // update the message state
+    dispatch(actionMsg(restaurant.message));
     if (restaurant.results) {
       setForm(formData);
       // update local storage
       const user = JSON.parse(localStorage.getItem("user"));
       const updatedUser = { ...user, restaurant: restaurant.results._id };
+      // save user info in  local storage
       localStorage.setItem("user", JSON.stringify(updatedUser));
       setForm(formData);
       window.dispatchEvent(new Event("storage"));
@@ -63,7 +68,7 @@ const CreateRestaurantForm = () => {
       city: selectedCity, // Set city value
     }));
   };
-  console.log(form);
+
   return (
     <div className="flex flex-col justify-start items-center w-full sm:w-[600px] p-7">
       <h1 className="text-4xl font-bold my-10">Create a restaurant</h1>

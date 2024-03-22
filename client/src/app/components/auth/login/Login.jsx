@@ -3,13 +3,11 @@ import React, { useState } from "react";
 import LoginForm from "./LoginForm";
 import Link from "next/link";
 import GoogleAuth from "../GoogleAuth";
-import AuthMessage from "../AuthMessage";
 import { useAppSelector } from "@/app/redux/hooks";
 import { useEffect } from "react";
 import IsLogin from "../../isLogin/IsLogin";
 
 const Login = () => {
-  const [loginRes, setLoginRes] = useState("");
   const [loading, setLoading] = useState(true);
 
   const user = useAppSelector((state) => state.authReducer.value);
@@ -29,13 +27,9 @@ const Login = () => {
     return null;
   }
 
-  const handleLogin = (loginMsg) => {
-    setLoginRes(loginMsg);
-  };
-
   return (
     <div className="flex flex-col items-center pt-24">
-      <LoginForm onLogin={handleLogin} />
+      <LoginForm />
 
       {/* or line */}
       <div className="w-[250px] sm:w-[380px]  flex justify-center items-center">
@@ -52,7 +46,6 @@ const Login = () => {
         </span>
         {/* login messages comes from backend */}
       </p>
-      <AuthMessage resMsg={loginRes} msg={"Login successful"} />
     </div>
   );
 };
