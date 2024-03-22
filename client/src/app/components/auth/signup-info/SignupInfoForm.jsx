@@ -5,8 +5,11 @@ import { useState } from "react";
 import Btn from "../../Btn";
 import { fetchUserUpdate } from "@/app/lib/data";
 import AddressField from "../AddressField";
+import { useAppDispatch } from "@/app/redux/hooks";
+import { actionMsg } from "@/app/redux/features/message/MessageSlice";
 
-const SignupInfoForm = ({ onSignup }) => {
+const SignupInfoForm = () => {
+  const dispatch = useAppDispatch();
   const formData = {
     phoneNumber: "",
     country: "",
@@ -23,10 +26,10 @@ const SignupInfoForm = ({ onSignup }) => {
     let signup;
     if (form.phoneNumber && form.country && form.street && form.zipcode) {
       signup = await fetchUserUpdate(form);
-      // send the signup message to parent component
-      onSignup(signup.message);
+      // update the message state
+      dispatch(actionMsg(signup.message));
     } else {
-      onSignup("All field must be filled");
+      dispatch(actionMsg("All field must be filled"));
     }
     console.log(signup);
     const userInfo = {

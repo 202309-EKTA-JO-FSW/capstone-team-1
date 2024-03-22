@@ -7,8 +7,11 @@ import { FiEdit } from "react-icons/fi";
 import AvatarImg from "../../../../public/Avatar-Profile-Image.png";
 import Loading from "../loading/Loading";
 import { useRouter } from "next/navigation";
+import { useAppDispatch } from "@/app/redux/hooks";
+import { actionMsg } from "@/app/redux/features/message/MessageSlice";
 
 const UserProfile = () => {
+  const dispatch = useAppDispatch();
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
@@ -85,7 +88,9 @@ const UserProfile = () => {
       formData.append("country", form.country);
       formData.append("zipcode", form.zipcode);
 
-      await fetchUserUpdateImg(formData);
+      const editUser = await fetchUserUpdateImg(formData);
+      // update the message state
+      dispatch(actionMsg(editUser.message));
       const updatedUser = await fetchUser();
       if (updatedUser) {
         setForm({

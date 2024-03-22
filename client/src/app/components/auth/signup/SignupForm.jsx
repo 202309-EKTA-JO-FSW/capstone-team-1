@@ -4,8 +4,11 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Btn from "../../Btn";
 import AddressField from "../AddressField";
+import { useAppDispatch } from "@/app/redux/hooks";
+import { actionMsg } from "@/app/redux/features/message/MessageSlice";
 
-const SignupForm = ({ onSignup }) => {
+const SignupForm = () => {
+  const dispatch = useAppDispatch();
   const formData = {
     firstName: "",
     lastName: "",
@@ -28,8 +31,8 @@ const SignupForm = ({ onSignup }) => {
     // save the user in database
     const signup = await fetchSignup(form);
 
-    // send the signup message to parent component
-    onSignup(signup.message);
+    // set the message
+    dispatch(actionMsg(signup.message));
 
     // check if there is a user to refresh the page
     if (signup.user) {

@@ -3,7 +3,7 @@ import "./globals.css";
 import NavBar from "./components/NavBar";
 import StoreProvider from "./redux/StoreProvider";
 import Footer from "./components/Footer";
-
+import MessageBox from "./components/MessageBox";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -17,6 +17,7 @@ export default function RootLayout({ children }) {
       <body suppressHydrationWarning={true} className={inter.className}>
         <StoreProvider>
           <NavBar />
+          <MessageBox />
           <div className="min-h-screen">{children}</div>
           <Footer />
         </StoreProvider>

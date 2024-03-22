@@ -14,6 +14,7 @@ import Loading from "../loading/Loading";
 import { useRouter } from "next/navigation";
 import { useAppDispatch } from "@/app/redux/hooks";
 import { itemsCount } from "@/app/redux/features/cart/CartSlice";
+import { actionMsg } from "@/app/redux/features/message/MessageSlice";
 
 const CartInfo = ({ form, loading, setLoading, cart, setCart }) => {
   const dispatch = useAppDispatch();
@@ -66,7 +67,8 @@ const CartInfo = ({ form, loading, setLoading, cart, setCart }) => {
   const handleCancel = async () => {
     setCancelLoadingBtn(true);
     const cancelCart = await fetchCancelCart();
-
+    // update the message state
+    dispatch(actionMsg(cancelCart.message));
     if (cancelCart.message === "Cart deleted successfully") {
       const data = await fetchCart();
 
@@ -84,6 +86,8 @@ const CartInfo = ({ form, loading, setLoading, cart, setCart }) => {
     const updateUser = await fetchUserUpdate(form);
     // create an order
     const createOrder = await fetchCreateOrder();
+    // update the message state
+    dispatch(actionMsg(createOrder.message));
     // update the cart
     if (updateUser && createOrder) {
       const cart = await fetchCart();
