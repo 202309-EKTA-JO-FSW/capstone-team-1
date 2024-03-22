@@ -31,7 +31,7 @@ const SignupInfoForm = () => {
     } else {
       dispatch(actionMsg("All field must be filled"));
     }
-    console.log(signup);
+
     const userInfo = {
       email: signup.results.email,
       firstName: signup.results.firstName,
