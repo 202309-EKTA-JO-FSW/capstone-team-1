@@ -6,12 +6,12 @@ function SearchBar({ placeholder, searchTxt, setSearchTxt }) {
       <input
         type="text"
         id="location-search"
-        className="block p-2.5 w-full z-20 text-sm rounded-lg border-2 outline-none focus:ring-green-500 bg-gray-200 border-gray-200 placeholder-gray-400 text-black focus:border-main-green focus:border-2 focus:border-solid"
+        className="block p-2.5 w-full z-20 text-sm rounded-lg border-2 outline-none bg-gray-50 border-main-green placeholder-gray-400 text-black"
         placeholder={placeholder}
         value={searchTxt}
         onChange={(e) => setSearchTxt(e.target.value)}
       />
-      <div className="absolute top-1 right-0 h-full p-2.5 text-sm font-medium text-gray-600 rounded-lg">
+      <div className="absolute top-1 right-0 h-full p-2.5 text-sm font-extrabold rounded-lg text-main-green">
         <svg
           className="w-4 h-4"
           aria-hidden="true"

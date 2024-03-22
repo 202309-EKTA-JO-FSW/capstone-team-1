@@ -1,8 +1,34 @@
 "use client";
 import Image from "next/image";
 import menuItemImage from "../../../../../public/image/menuItem-image-placeholder.png";
+import { FaStar } from "react-icons/fa";
+import { fetchPostCart } from "@/app/lib/data";
+import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
+import { itemsCount } from "@/app/redux/features/cart/CartSlice";
+import { useRouter } from "next/navigation";
+import { actionMsg } from "@/app/redux/features/message/MessageSlice";
 
 const MenuItemCard = ({ menuItem }) => {
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.authReducer.value);
+  const router = useRouter();
+
+  const handleAddToCart = async () => {
+    // check if user loged in, if not navigate him to login page
+    if (user.isLogin === false) {
+      router.push("/login");
+    }
+
+    const cart = await fetchPostCart(menuItem._id);
+    // update the message state
+    dispatch(actionMsg(cart.message));
+
+    // change the cart status to added items
+    if (user.isLogin && cart) {
+      dispatch(itemsCount(cart.results.cart.itemsCount));
+    }
+  };
+
   return (
     <div className="bg-white shadow-lg border border-gray-100 rounded-md p-4 flex flex-col items-center m-5 w-[280px] h-[350px]">
       <div className="relative h-[250px] w-full mb-2 rounded overflow-hidden">
@@ -30,11 +56,14 @@ const MenuItemCard = ({ menuItem }) => {
         </div>
         <div className="flex items-center">
           <span className="mr-1">{menuItem.rating || 4.5}</span>
-          &#9733;
+          <FaStar className=" text-yellow-300" />
         </div>
       </div>
       <div className="flex justify-center w-full mt-2">
-        <button className="bg-green-500 text-white px-4 py-2 rounded-md">
+        <button
+          onClick={handleAddToCart}
+          className="bg-green-500 text-white px-4 py-2 rounded-md"
+        >
           Add to Cart
         </button>
       </div>

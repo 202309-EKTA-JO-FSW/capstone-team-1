@@ -13,9 +13,12 @@ import LoadingBtn from "../../../loading/LoadingBtn";
 import OrderStatus from "./OrderStatus";
 import OrderTime from "./OrderTime";
 import { useRouter } from "next/navigation";
+import { useAppDispatch } from "@/app/redux/hooks";
+import { actionMsg } from "@/app/redux/features/message/MessageSlice";
 
 const SingleOrder = ({ id }) => {
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const [order, setOrder] = useState({});
   const [loading, setLoading] = useState(true);
   const [cancelLoadingBtn, setCancelLoadingBtn] = useState(false);
@@ -49,6 +52,8 @@ const SingleOrder = ({ id }) => {
   const handlePlaceOrder = async () => {
     setPlaceOrderlLoadingBtn(true);
     const placeOrder = await fetchPlaceOrder(order._id, note);
+    // update the message state
+    dispatch(actionMsg(placeOrder.message));
 
     if (placeOrder) {
       const orderData = await fetchSingleUserOrder(id);
@@ -61,6 +66,9 @@ const SingleOrder = ({ id }) => {
   const handleCancelOrder = async () => {
     setCancelLoadingBtn(true);
     const cancelOrder = await fetchUserCancelOrder(order._id);
+    // update the message state
+    dispatch(actionMsg(cancelOrder.message));
+
     if (cancelOrder) {
       setCancelLoadingBtn(false);
       router.push("/");

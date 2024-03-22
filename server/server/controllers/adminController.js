@@ -213,6 +213,12 @@ const createRestaurant = async (req, res) => {
     if (!user || !user.isAdmin) {
       return res.status(401).json({ message: "Unauthorized" });
     }
+
+    // don't allow user to create a restarant if he already has one
+    if (user.restaurant) {
+      return res.status(403).json({ message: "Already have a restaurant" });
+    }
+
     if (
       !name ||
       !description ||
@@ -251,7 +257,7 @@ const createRestaurant = async (req, res) => {
     user.restaurant = newRestaurant._id;
     await user.save();
     return res.status(201).json({
-      restaurant: newRestaurant,
+      results: newRestaurant,
       message: "Create new restaurant successful",
     });
   } catch (error) {
@@ -303,8 +309,8 @@ const updateAdminRestaurant = async (req, res) => {
         .status(404)
         .json({ message: "Restaurant not found, should create a restaurant" });
     }
-
     const restaurant = await Restaurant.findById(restaurantId);
+    console.log(restaurant);
     if (!restaurant) {
       return res.status(404).json({ message: "Restaurant not found" });
     }

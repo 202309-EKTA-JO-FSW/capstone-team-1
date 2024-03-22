@@ -192,9 +192,7 @@ const cancelCart = async (req, res) => {
 
     await user.save();
 
-    return res
-      .status(200)
-      .json({ message: "Cart deleted successfully", results: user });
+    return res.status(200).json({ message: "Cart deleted", results: user });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: error.message });
@@ -236,7 +234,7 @@ const checkout = async (req, res) => {
 
     await user.save();
 
-    return res.status(201).json({ message: "Ready for Checkout", order });
+    return res.status(201).json({ message: "Order created", order });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: error.message });
@@ -276,7 +274,7 @@ const placeOrder = async (req, res) => {
     restaurant.orders.push(order._id);
     await restaurant.save();
 
-    return res.status(201).json({ message: "Order is proceeded successfully" });
+    return res.status(201).json({ message: "Order proceed" });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: error.message });
@@ -296,9 +294,7 @@ const cancelOrder = async (req, res) => {
     if (order.status) {
       order.status = "canceled";
       await order.save();
-      return res
-        .status(200)
-        .json({ message: "Order canceled successfully", order });
+      return res.status(200).json({ message: "Order canceled", order });
     }
 
     // if found, delete the order and remove it from restaurant and user models
@@ -314,9 +310,7 @@ const cancelOrder = async (req, res) => {
     user.orders.splice(orderIndexUser, 1);
     await user.save();
 
-    return res
-      .status(200)
-      .json({ message: "Order deleted successfully", deletedOrder });
+    return res.status(200).json({ message: "Order canceled", deletedOrder });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: error.message });

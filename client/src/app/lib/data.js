@@ -83,10 +83,16 @@ export const fetchGoogleUser = async () => {
 };
 
 // fetch restaurant
-export const fetchRestaurants = async (page, limit) => {
+export const fetchRestaurants = async (page, limit, body) => {
   try {
     const url = `${restaurantUrl}?page=${page}&limit=${limit}`;
-    const response = await fetch(url);
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
     const restaurants = await response.json();
     return restaurants;
   } catch (error) {
@@ -96,10 +102,16 @@ export const fetchRestaurants = async (page, limit) => {
 };
 
 // search restaurant
-export const searchRestaurant = async (search, page, limit) => {
+export const searchRestaurant = async (search, page, limit, body) => {
   try {
     const url = `${restaurantUrl}/search?search=${search}&page=${page}&limit=${limit}`;
-    const response = await fetch(url);
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
     const restaurants = await response.json();
     return restaurants;
   } catch (error) {
@@ -109,11 +121,14 @@ export const searchRestaurant = async (search, page, limit) => {
 };
 
 // create restaurant
-export const createRestaurant = async (formData) => {
+export const createRestaurant = async (form) => {
   try {
     const res = await fetch(adminNewRestaurantUrl, {
       method: "POST",
-      body: formData,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(form),
       credentials: "include",
     });
     return await res.json();
@@ -131,8 +146,6 @@ export const fetchMenuItem = async (resId) => {
   } catch (error) {
     console.error("Error fetching menu item:", error);
     throw error;
-    console.error("Error fetching menu item:", error);
-    throw error;
   }
 };
 
@@ -141,7 +154,6 @@ export const postItem = async (formData) => {
   try {
     const res = await fetch(newMenuItemUrl, {
       method: "POST",
-
       body: formData,
       credentials: "include",
     });
@@ -259,6 +271,23 @@ export const fetchUserUpdate = async (form) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(form),
+      credentials: "include",
+    });
+
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+//update user profile with avatar
+export const fetchUserUpdateImg = async (formData) => {
+  try {
+    const res = await fetch(userProfileUrl, {
+      method: "PUT",
+
+      body: formData,
       credentials: "include",
     });
 

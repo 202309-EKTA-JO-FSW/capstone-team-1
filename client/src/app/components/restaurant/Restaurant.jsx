@@ -3,8 +3,10 @@ import React, { useState, useEffect } from "react";
 import { fetchRestaurants, searchRestaurant } from "@/app/lib/data";
 import Pagination from "./Pagination";
 import RestaurantCard from "./RestaurantCard";
-import Search from "./Search";
 import Link from "next/link";
+import Loading from "../loading/Loading";
+import Empty from "../Empty";
+import SearchBar from "../SearchBar";
 
 function Restaurant() {
   const [restaurants, setRestaurants] = useState([]); // Initialize with an empty array
@@ -14,24 +16,35 @@ function Restaurant() {
   const [loading, setLoading] = useState(true);
   const [totalPages, setTotalPages] = useState(1);
 
-  const getRestaurants = async () => {
-    try {
-      let restaurantsData = [];
-      if (searchTxt) {
-        restaurantsData = await searchRestaurant(searchTxt, page, limit);
-      } else {
-        restaurantsData = await fetchRestaurants(page, limit);
-      }
-      setRestaurants(restaurantsData.restaurants);
-      setTotalPages(restaurantsData.totalPages);
-    } catch (error) {
-      console.error("Error getting restaurants:", error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const getRestaurants = async () => {
+      // get country and city from local storage to find resturant close to user's location
+      const storedUser = JSON.parse(localStorage.getItem("user"));
+      const body = storedUser
+        ? { country: storedUser.country, city: storedUser.city }
+        : {};
+
+      try {
+        let restaurantsData = [];
+        if (searchTxt) {
+          restaurantsData = await searchRestaurant(
+            searchTxt,
+            page,
+            limit,
+            body
+          );
+        } else {
+          restaurantsData = await fetchRestaurants(page, limit, body);
+        }
+        setRestaurants(restaurantsData.restaurants);
+        setTotalPages(restaurantsData.totalPages);
+      } catch (error) {
+        console.error("Error getting restaurants:", error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     getRestaurants();
   }, [searchTxt, page, limit]);
 
@@ -45,46 +58,43 @@ function Restaurant() {
   };
 
   return (
-    <div className="flex flex-col justify-start items-center p-4 md:p-8 lg:p-12 w-full">
+    <div className="flex flex-col justify-start items-center px-3 lg:px-[8%] w-full mt-20">
       <h1 className="flex justify-center font-bold text-5xl w-full">
         Restaurants
       </h1>
-      <div className="flex flex-wrap justify-center p-7 w-full">
-        <Search
-          value={searchTxt}
-          onChange={handleSearchValue}
-          onSubmit={getRestaurants}
+      <div className="flex flex-wrap justify-center p-7 w-[80%] md:w-[50%] my-7">
+        <SearchBar
+          searchTxt={searchTxt}
+          setSearchTxt={setSearchTxt}
+          placeholder={"Search for restaurant"}
         />
       </div>
-      <div className="flex-grow w-full relative">
-        <div className="relative w-full flex flex-wrap md:flex-row md:justify-start md:p-8">
-          {loading ? (
-            <p className="font-bold text-2xl">Loading...</p>
-          ) : restaurants && restaurants.length > 0 ? ( // Check if restaurants is not null or undefined
-            restaurants.map((restaurant) => (
-              <div key={restaurant._id}>
-                <Link href={`/restaurant/${restaurant._id}`}>
-                  <RestaurantCard restaurant={restaurant} />
-                </Link>
-              </div>
-            ))
-          ) : (
-            <div className="flex items-center justify-center w-full h-64">
-              <p className="font-bold text-2xl">No restaurants found</p>
+      {/* loading display */}
+      {loading && <Loading />}
+      {/* if There is no restaurnats  */}
+      {restaurants.length === 0 && <Empty text={"No restaurant found"} />}
+      <div className="w-full flex flex-wrap justify-center lg:justify-start">
+        {!loading &&
+          restaurants &&
+          restaurants.length > 0 &&
+          restaurants.map((restaurant) => (
+            <div key={restaurant._id}>
+              <Link href={`/restaurant/${restaurant._id}`}>
+                <RestaurantCard restaurant={restaurant} />
+              </Link>
             </div>
-          )}
-        </div>
-        {restaurants &&
-          restaurants.length > 0 && ( // Check if restaurants is not null or undefined
-            <div className="w-full flex justify-center items-center mt-8 ">
-              <Pagination
-                totalPages={totalPages}
-                currentPage={page}
-                handlePagination={handlePagination}
-              />
-            </div>
-          )}
+          ))}
       </div>
+      {restaurants &&
+        restaurants.length > 0 && ( // Check if restaurants is not null or undefined
+          <div className="w-full flex justify-center items-center mt-8 ">
+            <Pagination
+              totalPages={totalPages}
+              currentPage={page}
+              handlePagination={handlePagination}
+            />
+          </div>
+        )}
     </div>
   );
 }

@@ -1,18 +1,26 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  value: false,
+  value: {
+    isLogin: false,
+    isAdmin: false,
+    restaurant: "",
+  },
 };
 
 export const authSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    login: (state) => {
-      // Return a new state object with `value` set to true
+    loginUser: (state, action) => {
       return {
         ...state,
-        value: true,
+        value: {
+          ...state.value,
+          isAdmin: action.payload.isAdmin,
+          restaurant: action.payload.restaurant,
+          isLogin: true,
+        },
       };
     },
     logoutUser: (state) => initialState,
@@ -20,6 +28,6 @@ export const authSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { login, logoutUser } = authSlice.actions;
+export const { loginUser, logoutUser } = authSlice.actions;
 
 export default authSlice.reducer;

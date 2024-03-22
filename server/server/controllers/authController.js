@@ -32,6 +32,8 @@ const login = async (req, res) => {
       maxAge: 1000 * 60 * 60 * 24,
     });
 
+    console.log(user);
+
     // send token with user details
     return res.status(201).json({
       user: {
@@ -40,6 +42,8 @@ const login = async (req, res) => {
         lastName: user.lastName,
         avatar: user.avatar,
         isAdmin: user.isAdmin,
+        country: user.address.country,
+        city: user.address.city,
         restaurant: user.restaurant,
       },
       message: "Login successful",
@@ -122,6 +126,9 @@ const signup = async (req, res) => {
         lastName: user.lastName,
         avatar: user.avatar,
         isAdmin: user.isAdmin,
+        country: user.address.country,
+        city: user.address.city,
+        restaurant: user.restaurant,
       },
       message: "Signup successful",
     });

@@ -2,14 +2,13 @@
 import React, { useEffect, useState } from "react";
 import RestaurantForm from "./RestaurantForm";
 import { getAdminRestaurant } from "@/app/lib/data";
+import Loading from "../loading/Loading";
 
 function RestaurantFormContainer() {
   const [restaurantData, setRestaurantData] = useState({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem("user"));
-    const resId = storedUser.restaurant;
     const fetchRestaurantData = async () => {
       try {
         setLoading(true);
@@ -20,28 +19,15 @@ function RestaurantFormContainer() {
         console.error("Error fetching restaurant data:", error);
       }
     };
-
-    if (resId) {
-      fetchRestaurantData();
-    } else {
-      setRestaurantData({}); // No need to fetch data if resId is not provided
-    }
+    fetchRestaurantData();
   }, []);
 
   if (loading) {
-    return <p className="text-center mt-10">Loading...</p>;
+    return <Loading />;
   }
 
   return (
-    <div className="w-full flex justify-center px-[25%]">
-      {/* {restaurantData ? (
-        <RestaurantForm
-          restaurantData={restaurantData}
-          setRestaurantData={setRestaurantData}
-        />
-      ) : (
-        <RestaurantForm />
-      )} */}
+    <div className="w-full flex justify-center px-3 lg:px-[17%]">
       <RestaurantForm
         restaurantData={restaurantData}
         setRestaurantData={setRestaurantData}

@@ -4,8 +4,12 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Btn from "../../Btn";
 import { fetchUserUpdate } from "@/app/lib/data";
+import AddressField from "../AddressField";
+import { useAppDispatch } from "@/app/redux/hooks";
+import { actionMsg } from "@/app/redux/features/message/MessageSlice";
 
-const SignupInfoForm = ({ onSignup }) => {
+const SignupInfoForm = () => {
+  const dispatch = useAppDispatch();
   const formData = {
     phoneNumber: "",
     country: "",
@@ -22,20 +26,32 @@ const SignupInfoForm = ({ onSignup }) => {
     let signup;
     if (form.phoneNumber && form.country && form.street && form.zipcode) {
       signup = await fetchUserUpdate(form);
-      // send the signup message to parent component
-      onSignup(signup.message);
+      // update the message state
+      dispatch(actionMsg(signup.message));
     } else {
-      onSignup("All field must be filled");
+      dispatch(actionMsg("All field must be filled"));
     }
 
+    const userInfo = {
+      email: signup.results.email,
+      firstName: signup.results.firstName,
+      lastName: signup.results.lastName,
+      avatar: signup.results.avatar,
+      isAdmin: signup.results.isAdmin,
+      restaurant: signup.results.restaurant,
+      country: signup.results.address.country,
+      city: signup.results.address.city,
+    };
     // check if there is a user to refresh the page
     if (signup) {
+      localStorage.setItem("user", JSON.stringify(userInfo));
       setForm(formData);
+      window.dispatchEvent(new Event("storage"));
       // redirect the user to home page after signup
-      router.push("/auth-user");
+      router.push("/");
     }
   };
-  console.log(form);
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
 
@@ -51,6 +67,7 @@ const SignupInfoForm = ({ onSignup }) => {
       }));
     }
   };
+
   return (
     <div className="flex flex-col justify-start items-center w-full sm:w-[600px] p-7">
       <h1 className="text-4xl font-bold my-10">Continue Sign Up</h1>
@@ -68,24 +85,8 @@ const SignupInfoForm = ({ onSignup }) => {
           onChange={handleChange}
         />
         {/* address */}
-        <div className="flex justify-between w-full">
-          <input
-            type="text"
-            name="country"
-            placeholder="Country"
-            className="w-full mr-4 field"
-            value={form.country}
-            onChange={handleChange}
-          />
-          <input
-            type="text"
-            name="city"
-            placeholder="City"
-            className="w-full ml-4 field"
-            value={form.city}
-            onChange={handleChange}
-          />
-        </div>
+
+        <AddressField setForm={setForm} />
         <div className="flex justify-between w-full">
           <input
             type="text"

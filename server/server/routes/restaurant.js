@@ -3,9 +3,9 @@ const router = express.Router();
 const restaurantController = require("../controllers/restaurantController");
 
 // restaurant
-router.get("/", restaurantController.getAllRestaurants);
-router.get("/search", restaurantController.searchRestaurant);
-router.get("/filter", restaurantController.filterRestaurant);
+router.post("/", restaurantController.getAllRestaurants);
+router.post("/search", restaurantController.searchRestaurant);
+router.post("/filter", restaurantController.filterRestaurant);
 router.get("/:resId", restaurantController.getOneRestaurant);
 
 // menuItems

@@ -14,6 +14,7 @@ import Loading from "../loading/Loading";
 import { useRouter } from "next/navigation";
 import { useAppDispatch } from "@/app/redux/hooks";
 import { itemsCount } from "@/app/redux/features/cart/CartSlice";
+import { actionMsg } from "@/app/redux/features/message/MessageSlice";
 
 const CartInfo = ({ form, loading, setLoading, cart, setCart }) => {
   const dispatch = useAppDispatch();
@@ -66,13 +67,14 @@ const CartInfo = ({ form, loading, setLoading, cart, setCart }) => {
   const handleCancel = async () => {
     setCancelLoadingBtn(true);
     const cancelCart = await fetchCancelCart();
-
-    if (cancelCart.message === "Cart deleted successfully") {
+    // update the message state
+    dispatch(actionMsg(cancelCart.message));
+    if (cancelCart.message === "Cart deleted") {
       const data = await fetchCart();
 
+      setCancelLoadingBtn(false);
       // set itemsCount to zero when cancel the cart
       dispatch(itemsCount(0));
-      setCancelLoadingBtn(false);
       setCart(data);
     }
   };
@@ -84,6 +86,8 @@ const CartInfo = ({ form, loading, setLoading, cart, setCart }) => {
     const updateUser = await fetchUserUpdate(form);
     // create an order
     const createOrder = await fetchCreateOrder();
+    // update the message state
+    dispatch(actionMsg(createOrder.message));
     // update the cart
     if (updateUser && createOrder) {
       const cart = await fetchCart();
@@ -98,15 +102,6 @@ const CartInfo = ({ form, loading, setLoading, cart, setCart }) => {
   // loading
   if (loading) {
     return <Loading />;
-  }
-
-  // message when cart is empty
-  if (cart.length === 0) {
-    return (
-      <div className="w-full h-screen flex justify-center">
-        <p className="text-3xl font-bold text-main-green">Cart Empty</p>
-      </div>
-    );
   }
 
   return (
