@@ -142,7 +142,6 @@ export const postItem = async (formData) => {
   try {
     const res = await fetch(newMenuItemUrl, {
       method: "POST",
-
       body: formData,
       credentials: "include",
     });
@@ -275,7 +274,7 @@ export const fetchUserUpdateImg = async (formData) => {
   try {
     const res = await fetch(userProfileUrl, {
       method: "PUT",
-      
+
       body: formData,
       credentials: "include",
     });
@@ -286,7 +285,6 @@ export const fetchUserUpdateImg = async (formData) => {
     return error.message;
   }
 };
-
 
 // get user profile
 export const fetchUser = async () => {

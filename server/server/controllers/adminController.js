@@ -309,8 +309,8 @@ const updateAdminRestaurant = async (req, res) => {
         .status(404)
         .json({ message: "Restaurant not found, should create a restaurant" });
     }
-
     const restaurant = await Restaurant.findById(restaurantId);
+    console.log(restaurant);
     if (!restaurant) {
       return res.status(404).json({ message: "Restaurant not found" });
     }

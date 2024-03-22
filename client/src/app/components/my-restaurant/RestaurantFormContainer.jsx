@@ -2,14 +2,13 @@
 import React, { useEffect, useState } from "react";
 import RestaurantForm from "./RestaurantForm";
 import { getAdminRestaurant } from "@/app/lib/data";
+import Loading from "../loading/Loading";
 
 function RestaurantFormContainer() {
   const [restaurantData, setRestaurantData] = useState({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    /*  const storedUser = JSON.parse(localStorage.getItem("user"));
-    const resId = storedUser.restaurant; */
     const fetchRestaurantData = async () => {
       try {
         setLoading(true);
@@ -24,7 +23,7 @@ function RestaurantFormContainer() {
   }, []);
 
   if (loading) {
-    return <p className="text-center mt-10">Loading...</p>;
+    return <Loading />;
   }
 
   return (

@@ -23,10 +23,8 @@ const AddressField = ({ setForm }) => {
     );
     setSelectedCountry(selectedCountry);
     setSelectedCity(null); // Reset city when changing country
-    // Call the callback function to handle country change
-    // onCountryChange(selectedCountry);
 
-    // change the form
+    // handle country changes
     setForm((prevState) => ({
       ...prevState,
       country: selectedCountry.label, // Set country value
@@ -37,10 +35,8 @@ const AddressField = ({ setForm }) => {
   const handleCityChange = (event) => {
     const selectedCityName = event.target.value;
     setSelectedCity(selectedCityName);
-    // Call the callback function to handle city change
-    // onCityChange(selectedCityName);
 
-    // change form
+    // handle city changes
     setForm((prevState) => ({
       ...prevState,
       city: selectedCityName, // Set city value
