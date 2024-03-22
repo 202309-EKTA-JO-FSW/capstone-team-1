@@ -27,7 +27,7 @@ const SignupForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    console.log(form);
     // save the user in database
     const signup = await fetchSignup(form);
 
@@ -61,22 +61,22 @@ const SignupForm = () => {
     }
   };
 
-  // Callback function to handle country change
-  const handleCountryChange = (selectedCountry) => {
-    setForm((prevState) => ({
-      ...prevState,
-      country: selectedCountry.label, // Set country value
-      city: "", // Reset city when changing country
-    }));
-  };
+  // // Callback function to handle country change
+  // const handleCountryChange = (selectedCountry) => {
+  //   setForm((prevState) => ({
+  //     ...prevState,
+  //     country: selectedCountry.label, // Set country value
+  //     city: "", // Reset city when changing country
+  //   }));
+  // };
 
-  // Callback function to handle city change
-  const handleCityChange = (selectedCity) => {
-    setForm((prevState) => ({
-      ...prevState,
-      city: selectedCity, // Set city value
-    }));
-  };
+  // // Callback function to handle city change
+  // const handleCityChange = (selectedCity) => {
+  //   setForm((prevState) => ({
+  //     ...prevState,
+  //     city: selectedCity, // Set city value
+  //   }));
+  // };
 
   return (
     <div className="flex flex-col justify-start items-center w-full sm:w-[600px] p-7">
@@ -165,8 +165,9 @@ const SignupForm = () => {
         {/* address new */}
         <AddressField
           // Pass callbacks to handle country and city changes
-          onCountryChange={handleCountryChange}
-          onCityChange={handleCityChange}
+          // onCountryChange={handleCountryChange}
+          // onCityChange={handleCityChange}
+          setForm={setForm}
         />
 
         <div className="flex justify-between w-full">

@@ -69,12 +69,12 @@ const CartInfo = ({ form, loading, setLoading, cart, setCart }) => {
     const cancelCart = await fetchCancelCart();
     // update the message state
     dispatch(actionMsg(cancelCart.message));
-    if (cancelCart.message === "Cart deleted successfully") {
+    if (cancelCart.message === "Cart deleted") {
       const data = await fetchCart();
 
+      setCancelLoadingBtn(false);
       // set itemsCount to zero when cancel the cart
       dispatch(itemsCount(0));
-      setCancelLoadingBtn(false);
       setCart(data);
     }
   };

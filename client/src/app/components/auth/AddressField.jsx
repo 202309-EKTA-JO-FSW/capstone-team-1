@@ -4,7 +4,7 @@
 import React, { useState } from "react";
 import { Country, City } from "country-state-city";
 
-const AddressField = ({ onCountryChange, onCityChange }) => {
+const AddressField = ({ setForm }) => {
   // Receive callback props
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [selectedCity, setSelectedCity] = useState(null);
@@ -24,14 +24,27 @@ const AddressField = ({ onCountryChange, onCityChange }) => {
     setSelectedCountry(selectedCountry);
     setSelectedCity(null); // Reset city when changing country
     // Call the callback function to handle country change
-    onCountryChange(selectedCountry);
+    // onCountryChange(selectedCountry);
+
+    // change the form
+    setForm((prevState) => ({
+      ...prevState,
+      country: selectedCountry.label, // Set country value
+      city: "", // Reset city when changing country
+    }));
   };
 
   const handleCityChange = (event) => {
     const selectedCityName = event.target.value;
     setSelectedCity(selectedCityName);
     // Call the callback function to handle city change
-    onCityChange(selectedCityName);
+    // onCityChange(selectedCityName);
+
+    // change form
+    setForm((prevState) => ({
+      ...prevState,
+      city: selectedCityName, // Set city value
+    }));
   };
 
   const getCitiesForSelectedCountry = () => {
