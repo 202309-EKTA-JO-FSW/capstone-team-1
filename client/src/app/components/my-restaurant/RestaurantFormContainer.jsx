@@ -27,7 +27,7 @@ function RestaurantFormContainer() {
   }
 
   return (
-    <div className="w-full flex justify-center px-[25%]">
+    <div className="w-full flex justify-center px-3 lg:px-[17%]">
       <RestaurantForm
         restaurantData={restaurantData}
         setRestaurantData={setRestaurantData}
