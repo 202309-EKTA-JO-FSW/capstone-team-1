@@ -18,12 +18,23 @@ function Restaurant() {
 
   useEffect(() => {
     const getRestaurants = async () => {
+      // get country and city from local storage to find resturant close to user's location
+      const storedUser = JSON.parse(localStorage.getItem("user"));
+      const body = storedUser
+        ? { country: storedUser.country, city: storedUser.city }
+        : {};
+
       try {
         let restaurantsData = [];
         if (searchTxt) {
-          restaurantsData = await searchRestaurant(searchTxt, page, limit);
+          restaurantsData = await searchRestaurant(
+            searchTxt,
+            page,
+            limit,
+            body
+          );
         } else {
-          restaurantsData = await fetchRestaurants(page, limit);
+          restaurantsData = await fetchRestaurants(page, limit, body);
         }
         setRestaurants(restaurantsData.restaurants);
         setTotalPages(restaurantsData.totalPages);

@@ -83,10 +83,16 @@ export const fetchGoogleUser = async () => {
 };
 
 // fetch restaurant
-export const fetchRestaurants = async (page, limit) => {
+export const fetchRestaurants = async (page, limit, body) => {
   try {
     const url = `${restaurantUrl}?page=${page}&limit=${limit}`;
-    const response = await fetch(url, { credentials: "include" });
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
     const restaurants = await response.json();
     return restaurants;
   } catch (error) {
@@ -96,10 +102,16 @@ export const fetchRestaurants = async (page, limit) => {
 };
 
 // search restaurant
-export const searchRestaurant = async (search, page, limit) => {
+export const searchRestaurant = async (search, page, limit, body) => {
   try {
     const url = `${restaurantUrl}/search?search=${search}&page=${page}&limit=${limit}`;
-    const response = await fetch(url, { credentials: "include" });
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
     const restaurants = await response.json();
     return restaurants;
   } catch (error) {

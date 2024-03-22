@@ -7,19 +7,18 @@ async function getAllRestaurants(req, res) {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
   const skip = (page - 1) * limit;
+  const { country, city } = req.body;
 
   try {
-    const user = await User.findById(req.userId);
-
     const totalRestaurants = await Restaurant.countDocuments();
     const totalPages = Math.ceil(totalRestaurants / limit);
 
     // find restaurant according to customer's location
     let restaurants = [];
-    if (user) {
+    if (country && city) {
       restaurants = await Restaurant.find({
-        "address.country": user.address.country,
-        "address.city": user.address.city,
+        "address.country": country,
+        "address.city": city,
       })
         .skip(skip)
         .limit(limit);
@@ -44,10 +43,10 @@ async function getAllRestaurants(req, res) {
 
 // Get a single restaurant by ID
 async function getOneRestaurant(req, res) {
-  const { resId } = params.resId;
+  const { resId } = req.params;
 
   try {
-    const restaurant = await Restaurant.find(resId);
+    const restaurant = await Restaurant.findById(resId);
     if (!restaurant) {
       return res.status(404).json({ message: "Restaurant not found" });
     }
@@ -60,19 +59,18 @@ async function getOneRestaurant(req, res) {
 // Search for restaurants by name or cuisine with pagination
 async function searchRestaurant(req, res) {
   const { search, page, limit } = req.query;
+  const { country, city } = req.body;
   const regex = new RegExp(search, "i");
   const pageNum = parseInt(page) || 1;
   const pageSize = parseInt(limit) || 10;
   const skip = (pageNum - 1) * pageSize;
 
   try {
-    const user = await User.findById(req.userId);
-
     let count;
-    if (user) {
+    if (country && city) {
       count = await Restaurant.countDocuments({
-        "address.country": user.address.country,
-        "address.city": user.address.city,
+        "address.country": country,
+        "address.city": city,
         $or: [{ name: regex }, { cuisine: regex }],
       });
     } else {
@@ -84,10 +82,10 @@ async function searchRestaurant(req, res) {
     const totalPages = Math.ceil(count / pageSize);
 
     let restaurants = [];
-    if (user) {
+    if (country && city) {
       restaurants = await Restaurant.find({
-        "address.country": user.address.country,
-        "address.city": user.address.city,
+        "address.country": country,
+        "address.city": city,
         $or: [{ name: regex }, { cuisine: regex }],
       })
         .skip(skip)
@@ -112,15 +110,15 @@ async function filterRestaurant(req, res) {
   const pageNum = parseInt(page) || 1;
   const pageSize = parseInt(limit) || 10;
   const skip = (pageNum - 1) * pageSize;
+  const { country, city } = req.body;
 
   try {
-    const user = await User.findById(req.userId);
     let restaurants;
-    if (user) {
+    if (country && city) {
       restaurants = await Restaurant.find({
         cuisine,
-        "address.country": user.address.country,
-        "address.city": user.address.city,
+        "address.country": country,
+        "address.city": city,
       })
         .skip(skip)
         .limit(pageSize);

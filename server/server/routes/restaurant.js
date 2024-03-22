@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const restaurantController = require("../controllers/restaurantController");
-const authUser = require("../middleware/authUser");
+
 // restaurant
-router.get("/", authUser, restaurantController.getAllRestaurants);
-router.get("/search", authUser, restaurantController.searchRestaurant);
-router.get("/filter", authUser, restaurantController.filterRestaurant);
+router.post("/", restaurantController.getAllRestaurants);
+router.post("/search", restaurantController.searchRestaurant);
+router.post("/filter", restaurantController.filterRestaurant);
 router.get("/:resId", restaurantController.getOneRestaurant);
 
 // menuItems

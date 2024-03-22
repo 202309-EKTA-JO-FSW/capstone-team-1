@@ -111,7 +111,6 @@ const UserProfile = () => {
         setDisable(true);
 
         // update local storage
-
         const userInfo = {
           firstName: updatedUser.firstName,
           lastName: updatedUser.lastName,
@@ -120,7 +119,7 @@ const UserProfile = () => {
           isAdmin: updatedUser.isAdmin,
           restaurant: updatedUser.restaurant,
           country: updatedUser.address.country,
-          city: updatedUser.address.restaurant,
+          city: updatedUser.address.city,
         };
         localStorage.setItem("user", JSON.stringify(userInfo));
         window.dispatchEvent(new Event("storage"));
