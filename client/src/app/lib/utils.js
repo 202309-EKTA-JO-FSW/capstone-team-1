@@ -27,7 +27,7 @@ export const adminUpdateRestaurantUrl = main_url + `/admin/restaurant`;
 export const menuItemsUrl = (resId) =>
   main_url + `/restaurant/${resId}/menuItems`;
   export const singleMenuItemUrl = (resId, itemId) =>
-  main_url + `/restaurant/${resId}/menuItems/${itemId}`;
+  main_url + `/restaurant/${resId}/menuItem/${itemId}`;
 export const newMenuItemUrl = main_url + "/admin/restaurant/menuItem/new";
 export const updateMenuItemUrl = main_url + "/admin/restaurant/menuItem";
 

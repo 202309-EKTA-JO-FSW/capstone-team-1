@@ -514,10 +514,10 @@ export const fetchSearchMenuItem = async (resId, searchValue) => {
   }
 };
 
-//fetch single MenuItem
-export const fetchSingleMenuItem = async ( itemId) => {
+//fetch single MenuItem                
+export const fetchSingleMenuItem = async ( resId, itemId) => {
   try {
-    const res = await fetch(singleMenuItemUrl( itemId));
+    const res = await fetch(singleMenuItemUrl( resId,itemId));
     return await res.json();
   } catch (error) {
     console.error("Error fetching menu item:", error);
