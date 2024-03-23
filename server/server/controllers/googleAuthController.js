@@ -72,6 +72,7 @@ router.get(
     res.cookie("token", token, {
       secure: true,
       httpOnly: true,
+      sameSite: "None",
       maxAge: 1000 * 60 * 60 * 24,
     });
 
@@ -90,6 +91,7 @@ router.get(
     res.cookie("user", userInfoToken, {
       secure: true,
       httpOnly: true,
+      sameSite: "None",
       maxAge: 1000 * 60 * 60 * 24,
     });
 
