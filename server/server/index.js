@@ -21,6 +21,7 @@ app.use(
     credentials: true,
   })
 );
+console.log(process.env.CLIENT_SERVER);
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cookieParser());
