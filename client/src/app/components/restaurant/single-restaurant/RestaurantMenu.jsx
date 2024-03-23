@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import MenuItemCard from "./MenuItemCard";
 import { fetchRestaurantMenuItems, fetchSearchMenuItem } from "@/app/lib/data";
 import { CiFilter } from "react-icons/ci";
+import Link from "next/link";
 
 const RestaurantMenu = ({ id, searchTxt }) => {
   const [menuItems, setMenuItems] = useState([]);
@@ -102,7 +103,9 @@ const RestaurantMenu = ({ id, searchTxt }) => {
         {menuItems.length > 0 &&
           filteredmenuItems.map((item) => (
             <div key={item._id}>
-              <MenuItemCard key={item.id} menuItem={item} />
+              <Link href={`/menuItem/${item._id}`}>
+                <MenuItemCard key={item.id} menuItem={item} />
+              </Link>
             </div>
           ))}
       </div>
