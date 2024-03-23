@@ -11,7 +11,7 @@ passport.use(
     {
       clientID: process.env.GAPP_CLIENT_ID,
       clientSecret: process.env.GAPP_CLIENT_SECRET,
-      callbackURL: "http://localhost:3001/api/auth/google/callback",
+      callbackURL: process.env.BACKEND_SERVER + "/api/auth/google/callback",
     },
     async (accessToken, refreshToken, profile, cb) => {
       try {
@@ -94,9 +94,11 @@ router.get(
     });
 
     if (user.phoneNumber === "0") {
-      return res.status(200).redirect("http://localhost:3000/signup-info");
+      return res
+        .status(200)
+        .redirect(process.env.CLIENT_SERVER + "/signup-info");
     } else {
-      return res.status(200).redirect("http://localhost:3000/auth-user");
+      return res.status(200).redirect(process.env.CLIENT_SERVER + "/auth-user");
     }
   }
 );
