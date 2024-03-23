@@ -19,6 +19,7 @@ const {
   restaurantOrdersUrl,
   singleRestaurantOrderUrl,
   singleRestaurantUrl,
+  singleMenuItemUrl
 } = require("./utils");
 
 // signup
@@ -512,4 +513,16 @@ export const fetchSearchMenuItem = async (resId, searchValue) => {
     throw error;
   }
 };
+
+//fetch single MenuItem                
+export const fetchSingleMenuItem = async ( resId, itemId) => {
+  try {
+    const res = await fetch(singleMenuItemUrl( resId,itemId));
+    return await res.json();
+  } catch (error) {
+    console.error("Error fetching menu item:", error);
+    throw error;
+  }
+};
+
 //////////////////////
