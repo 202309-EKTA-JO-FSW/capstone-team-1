@@ -4,8 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "start": "docker-compose up",
     "build": "next build",
-    "start": "next start"
+    "prune": "docker-compose down -v",
+    "stop": "docker-compose down",
+    "lint": "next lint"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.1",

@@ -1,4 +1,4 @@
-const main_url = "https://capstone-team-1.onrender.com/" + "api";
+const main_url = "https://capstone-team-1.onrender.com" + "/api";
 
 // auth url
 export const signupUrl = main_url + "/auth/signup";
