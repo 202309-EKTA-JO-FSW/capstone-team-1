@@ -1,4 +1,4 @@
-const main_url = "https://capstone-team-1.onrender.com/api";
+const main_url = process.env.SERVER_URL;
 // const main_url = "http://localhost:3001/api";
 // http://localhost:3001
 // auth url
