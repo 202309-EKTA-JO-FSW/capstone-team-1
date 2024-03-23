@@ -43,19 +43,14 @@ const SingleMenuItem = ({ resId, menuItemId }) => {
     const getSingleMenuItem = async () => {
       setLoading(true);
       const menuItemData = await fetchSingleMenuItem(resId, menuItemId);
+      const restaurantInfo = await fetchSingleRestaurant(resId);
+      setRestaurant(restaurantInfo);
       setMenuItem(menuItemData);
 
       setLoading(false);
     };
-    const getRestaurantInfo = async () => {
-      setLoading(true);
-      const restaurantInfo = await fetchSingleRestaurant(resId);
-      setRestaurant(restaurantInfo);
-      setLoading(false);
-    };
 
     getSingleMenuItem();
-    getRestaurantInfo();
   }, []);
 
   if (loading) {
@@ -67,8 +62,18 @@ const SingleMenuItem = ({ resId, menuItemId }) => {
   }
 
   return (
-    <div className="grid grid-cols-2 pt-8">
-      <div className="flex flex-col justify-center items-start px-4 m-2 ">
+    <div className="flex flex-col lg:flex-row items-center justify-center lg:justify-between w-full pt-[70px]">
+      <div className="flex justify-center items-center w-full lg:w-[60%] p-2">
+        <Image
+          src={menuItem.image || MenuItemImg}
+          alt="MenuItem image"
+          width={300}
+          height={300}
+          priority={true}
+          className="object-cover rounded-md w-full h-full "
+        />
+      </div>
+      <div className="flex flex-col justify-center items-start px-4 m-2 w-full lg:w-[40%]">
         <div className="flex items-center space-x-2 ml-5">
           <div className="w-[100] h-[100]">
             <Image
@@ -76,7 +81,7 @@ const SingleMenuItem = ({ resId, menuItemId }) => {
               alt="Menu Item Image"
               width={75}
               height={75}
-              className="rounded-full"
+              className="rounded-full w-[80px] h-[80px] object-cover"
               priority="true"
             />
           </div>
@@ -96,22 +101,10 @@ const SingleMenuItem = ({ resId, menuItemId }) => {
           <div className=" w-full p-2 m-2">
             <p>{menuItem.description}</p>
           </div>
-          <div className="flex justify-center pt-5">
-            <button onClick={handleAddToCart}>
-              <Btn text="Add to Cart" />
-            </button>
+          <div className="flex w-full justify-center pt-5">
+            <Btn text="Add to Cart" onClick={handleAddToCart} />
           </div>
         </div>
-      </div>
-
-      <div className="flex justify-center items-center w-full p-2">
-        <Image
-          src={menuItem.image || MenuItemImg}
-          alt="MenuItem image"
-          width={300}
-          height={300}
-          priority="true"
-        />
       </div>
     </div>
   );

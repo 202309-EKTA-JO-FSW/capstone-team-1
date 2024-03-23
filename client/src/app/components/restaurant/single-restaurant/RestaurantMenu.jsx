@@ -103,9 +103,7 @@ const RestaurantMenu = ({ id, searchTxt }) => {
         {menuItems.length > 0 &&
           filteredmenuItems.map((item) => (
             <div key={item._id}>
-              <Link href={`/restaurant/${id}/${item._id}`}>
-                <MenuItemCard key={item.id} menuItem={item} />
-              </Link>
+              <MenuItemCard key={item.id} menuItem={item} id={id} />
             </div>
           ))}
       </div>
