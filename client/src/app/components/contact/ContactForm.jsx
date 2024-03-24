@@ -1,10 +1,23 @@
+"use client";
 import React from "react";
 import Btn from "../Btn";
+import { useRouter } from "next/navigation";
+
 const ContactForm = () => {
+  const route = useRouter();
+
+  const handleSubmit = () => {
+    route.refresh();
+  };
   return (
     <div className="flex flex-col items-center justify-center relative top-20 left-2">
       <h1 className="font-bold text-[24px] p-3">Conact Form</h1>
-      <form className="w-full max-w-md">
+      <form
+        action="https://formsubmit.co/team1.recoder@gmail.com"
+        method="POST"
+        onSubmit={handleSubmit}
+        className="w-full max-w-md"
+      >
         <div className=" flex flex-col  p-2 ">
           {/* Name */}
           <input

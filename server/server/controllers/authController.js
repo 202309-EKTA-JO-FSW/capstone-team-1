@@ -33,8 +33,6 @@ const login = async (req, res) => {
       maxAge: 1000 * 60 * 60 * 24,
     });
 
-    console.log(user);
-
     // send token with user details
     return res.status(201).json({
       user: {

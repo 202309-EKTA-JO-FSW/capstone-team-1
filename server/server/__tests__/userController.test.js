@@ -37,7 +37,7 @@ describe("User profile endpoints", () => {
         .get("/api/user/profile")
         .set("Authorization", `Bearer ${userToken}`)
         .send();
-      console.log(response.text);
+
       expect(response.status).toBe(200);
     });
 

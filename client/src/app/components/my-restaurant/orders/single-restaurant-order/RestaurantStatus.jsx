@@ -25,7 +25,7 @@ function RestaurantStatus({ order, setOrder }) {
       default:
         statusColor = "";
     }
-    console.log();
+
     return statusColor;
   };
 

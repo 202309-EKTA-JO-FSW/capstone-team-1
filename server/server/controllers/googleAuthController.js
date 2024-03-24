@@ -82,8 +82,8 @@ router.get(
       lastName: user.lastName,
       avatar: user.avatar,
       isAdmin: user.isAdmin,
-      country: user.address.country,
-      city: user.address.city,
+      country: user.address?.country || "",
+      city: user.address?.city || "",
       restaurant: user.restaurant,
     };
 

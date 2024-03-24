@@ -310,7 +310,7 @@ const updateAdminRestaurant = async (req, res) => {
         .json({ message: "Restaurant not found, should create a restaurant" });
     }
     const restaurant = await Restaurant.findById(restaurantId);
-    console.log(restaurant);
+
     if (!restaurant) {
       return res.status(404).json({ message: "Restaurant not found" });
     }
@@ -361,7 +361,10 @@ const getOrders = async (req, res) => {
       if (!user) return res.status(403).json({ message: "Access denied" });
 
       // find orders
-      const orders = await Order.find({ restaurant: user.restaurant })
+      const orders = await Order.find({
+        restaurant: user.restaurant,
+        status: { $exists: true },
+      })
         .populate("customer")
         .populate("restaurant")
         .populate("cartItems.menuItem")

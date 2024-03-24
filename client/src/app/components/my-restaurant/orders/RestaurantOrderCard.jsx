@@ -17,7 +17,7 @@ const RestaurantOrderCard = ({ order }) => {
       default:
         statusColor = "";
     }
-    console.log();
+
     return statusColor;
   };
 
