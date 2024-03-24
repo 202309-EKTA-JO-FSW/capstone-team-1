@@ -1,5 +1,5 @@
-// const backend_url = "https://capstone-team-1.onrender.com";
-const backend_url = "http://localhost:3001";
+const backend_url = "https://capstone-team-1.onrender.com";
+// const backend_url = "http://localhost:3001";
 
 const main_url = backend_url + "/api";
 
@@ -26,7 +26,7 @@ export const adminUpdateRestaurantUrl = main_url + `/admin/restaurant`;
 // menu items
 export const menuItemsUrl = (resId) =>
   main_url + `/restaurant/${resId}/menuItems`;
-  export const singleMenuItemUrl = (resId, itemId) =>
+export const singleMenuItemUrl = (resId, itemId) =>
   main_url + `/restaurant/${resId}/menuItem/${itemId}`;
 export const newMenuItemUrl = main_url + "/admin/restaurant/menuItem/new";
 export const updateMenuItemUrl = main_url + "/admin/restaurant/menuItem";

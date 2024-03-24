@@ -4,8 +4,8 @@ import menuitemPlaceholderImage from "../../../../../public/image/menuItem-image
 
 const Header = ({ restaurant }) => {
   return (
-    <header className="relative top-0 left-0 bg-green-500 w-full h-48 flex justify-center mb-28">
-      <div className="absolute flex flex-col md:flex-row items-center px-8 mt-10  md:mt-0 py-4">
+    <header className="relative top-0 left-0 bg-green-500 w-full h-48 flex justify-center mb-[200px]">
+      <div className="absolute flex flex-col md:flex-row items-center px-8 mt-10 md:mt-0 py-4 h-[300px] w-[700px]">
         <Image
           src={restaurant.image || menuitemPlaceholderImage}
           alt={restaurant.name}
