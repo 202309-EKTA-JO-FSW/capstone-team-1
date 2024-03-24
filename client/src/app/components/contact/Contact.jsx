@@ -20,7 +20,7 @@ const Contact = () => {
           <ContactCard
             icon={<MdAlternateEmail />}
             name={"E-mail"}
-            email={"info@food.com"}
+            email={"team1.recoder@gmail.com"}
           />
           <ContactCard
             icon={<FaPhoneVolume />}

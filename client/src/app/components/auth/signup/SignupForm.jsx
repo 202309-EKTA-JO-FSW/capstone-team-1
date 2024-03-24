@@ -27,7 +27,6 @@ const SignupForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(form);
     // save the user in database
     const signup = await fetchSignup(form);
 

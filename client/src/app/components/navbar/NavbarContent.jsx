@@ -9,7 +9,7 @@ const NavbarContent = ({ content }) => {
   };
 
   return (
-    <li className="md:ml-3 ">
+    <li className="md:ml-3 uppercase text-sm">
       <div
         className={
           isActive(content.path)

@@ -4,10 +4,8 @@ import Image from "next/image";
 import { MdModeEdit, MdCheck, MdClose, MdDelete } from "react-icons/md";
 import { fetchdeleteMenuItem, fetchUpdateMenuItem } from "@/app/lib/data";
 import menuItemImage from "../../../../../public/image/menuItem-image-placeholder.png";
-import { useRouter } from "next/navigation";
 
 const MenuItemCard = ({ menuItem, onDelete }) => {
-  const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
   const [editedMenuItem, setEditedMenuItem] = useState(menuItem);
 

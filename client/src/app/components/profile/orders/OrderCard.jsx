@@ -17,7 +17,7 @@ const OrderCard = ({ order }) => {
       default:
         statusColor = "";
     }
-    console.log();
+
     return statusColor;
   };
 

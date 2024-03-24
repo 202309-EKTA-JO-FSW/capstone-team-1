@@ -22,8 +22,8 @@ const UserInfo = ({ loading, cart, form, setForm }) => {
         if (user) {
           setForm({
             phoneNumber: user.phoneNumber || "",
-            // country: user.address ? user.address.country : "",
-            // city: user.address ? user.address.city : "",
+            country: user.address ? user.address.country : "",
+            city: user.address ? user.address.city : "",
             street: user.address ? user.address.street : "",
             zipcode: user.address ? user.address.zipcode : "",
           });
@@ -71,14 +71,16 @@ const UserInfo = ({ loading, cart, form, setForm }) => {
             name="country"
             placeholder="Country"
             className="w-full mr-4 field-cart"
-            value={form.country}
+            defaultValue={form.country}
+            disabled
           />
           <input
             type="text"
             name="city"
             placeholder="City"
             className="w-full ml-4 field-cart"
-            value={form.city}
+            defaultValue={form.city}
+            disabled
           />
         </div>
         <div className="flex justify-between w-full">

@@ -68,10 +68,18 @@ const SingleRestaurantOrder = ({ id }) => {
         <RestaurantInfo restaurant={order.restaurant} />
         <CustomerInfo customer={order.customer} />
       </div>
-
+      {/* Note */}
+      <div className="w-full mb-8">
+        <textarea
+          name="note"
+          className="border w-full bg-gray-50 rounded-md placeholder:text-gray-600 p-3"
+          placeholder="Note"
+          defaultValue={order.note}
+          disabled
+        />
+      </div>
       {/* order time  */}
       <OrderTime order={order} />
-
       {/* cancel btn */}
       {order.status !== "canceled" && order.status !== "delivered" && (
         <button

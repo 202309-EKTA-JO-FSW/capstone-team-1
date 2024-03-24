@@ -68,7 +68,7 @@ const RestaurantMenu = ({ id, searchTxt }) => {
 
   // filter menuItem with types
   const filteredmenuItems = menuItems.filter(
-    (item) => item.type === currentType
+    (item) => item.type.toLowerCase() === currentType.toLowerCase()
   );
 
   // filter btn color
@@ -90,7 +90,7 @@ const RestaurantMenu = ({ id, searchTxt }) => {
           types.map((type, i) => (
             <div key={i} onClick={() => setCurrentType(type)}>
               <p
-                className={`border-2 rounded-full p-2 mr-2 cursor-pointer hover:bg-light-green hover:border-main-green ${currentTypeColor(
+                className={` capitalize border-2 rounded-full p-2 mr-2 cursor-pointer hover:bg-light-green hover:border-main-green ${currentTypeColor(
                   type
                 )}`}
               >
