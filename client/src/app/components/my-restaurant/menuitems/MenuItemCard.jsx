@@ -5,9 +5,10 @@ import { MdModeEdit, MdCheck, MdClose, MdDelete } from "react-icons/md";
 import { fetchdeleteMenuItem, fetchUpdateMenuItem } from "@/app/lib/data";
 import menuItemImage from "../../../../../public/image/menuItem-image-placeholder.png";
 
-const MenuItemCard = ({ menuItem, onDelete }) => {
+const MenuItemCard = ({ menuItem, onDelete, onUpdate }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedMenuItem, setEditedMenuItem] = useState(menuItem);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -16,16 +17,31 @@ const MenuItemCard = ({ menuItem, onDelete }) => {
   const handleCancelEdit = () => {
     setIsEditing(false);
     setEditedMenuItem(menuItem);
+    setSelectedImage(null);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setEditedMenuItem(editedMenuItem);
+    const formData = new FormData();
+    for (const key in editedMenuItem) {
+      formData.append(key, editedMenuItem[key]);
+    }
+    if (selectedImage) {
+      formData.append("image", selectedImage);
+    }
     setIsEditing(false);
-    const updatedMenuItem = await fetchUpdateMenuItem(
-      menuItem._id,
-      editedMenuItem
-    );
+    await fetchUpdateMenuItem(menuItem._id, formData);
+    onUpdate();
+  };
+
+  const handleImgChange = (e) => {
+    const fileImg = e.target.files[0];
+
+    setSelectedImage(fileImg);
+    setEditedMenuItem((prevMenuItem) => ({
+      ...prevMenuItem,
+      image: selectedImage,
+    }));
   };
 
   const handleChange = (e) => {
@@ -47,14 +63,44 @@ const MenuItemCard = ({ menuItem, onDelete }) => {
   return (
     <div className="h-[460px]  w-[200px] sm:w-[210px] md:w-[220px] lg:w-[230px] m-6 flex flex-col justify-center bg-white shadow-md rounded-lg overflow-hidden border border-gray-100 hover:bg-light-green">
       <div className="relative h-[250px] w-full flex justify-center items-center rounded">
-        <Image
-          src={editedMenuItem.image || menuItemImage}
-          alt={editedMenuItem.name}
-          sizes="200vw"
-          priority={true}
-          className=" object-cover"
-          fill
-        />
+        {isEditing ? (
+          <label htmlFor="fileInput" className="cursor-pointer">
+            <input
+              id="fileInput"
+              type="file"
+              accept="image/*"
+              onChange={handleImgChange}
+              className="hidden"
+            />
+            {selectedImage ? (
+              <Image
+                src={URL.createObjectURL(selectedImage)}
+                alt="Selected Image"
+                className="object-cover"
+                sizes="200vw"
+                fill
+              />
+            ) : (
+              <Image
+                src={editedMenuItem.image || URL.createObjectURL(selectedImage)}
+                alt={editedMenuItem.name}
+                sizes="200vw"
+                priority={true}
+                className="object-cover"
+                fill
+              />
+            )}
+          </label>
+        ) : (
+          <Image
+            src={editedMenuItem.image || menuItemImage}
+            alt={editedMenuItem.name}
+            sizes="200vw"
+            priority={true}
+            className="object-cover"
+            fill
+          />
+        )}
       </div>
       <div className="justify-center p-2 font-normal">
         {isEditing ? (

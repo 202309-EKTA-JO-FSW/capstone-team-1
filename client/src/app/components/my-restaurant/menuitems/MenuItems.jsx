@@ -20,7 +20,7 @@ function MenuItems() {
     const getMenuItems = async () => {
       setLoading(true);
       const menuItemsData = await fetchMenuItem(restaurantId);
-      console.log(menuItemsData);
+
       setMenuItems(menuItemsData);
       setLoading(false);
     };
@@ -35,6 +35,12 @@ function MenuItems() {
     // getMenuItems();
   };
 
+  const handleUpdate = async () => {
+    setLoading(true);
+    const menuItemsData = await fetchMenuItem(restaurantId);
+    setMenuItems(menuItemsData);
+    setLoading(false);
+  };
   return (
     <div className=" flex flex-col justify-center w-full p-5 md:mx-2 border border-white">
       <h1 className="items-center font-bold text-3xl mb-2 text-center">
@@ -54,6 +60,7 @@ function MenuItems() {
               key={menuItem._id}
               menuItem={menuItem}
               onDelete={handleDelete}
+              onUpdate={handleUpdate}
             />
           ))}
       </div>
