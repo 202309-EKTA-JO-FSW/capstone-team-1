@@ -20,6 +20,7 @@ router.put("/restaurant", adminController.updateAdminRestaurant);
 router.post("/restaurant/menuItem/new", adminController.addNewItem);
 router.put("/restaurant/menuItem/:itemId", adminController.updateItem);
 router.delete("/restaurant/menuItem/:itemId", adminController.deleteItem);
+router.get("/restaurant/menuItems", adminController.getAllMenuItems);
 
 // order
 router.put("/restaurant/order/:orderId", adminController.updateSingleOrder);

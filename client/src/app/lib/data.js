@@ -20,8 +20,10 @@ const {
   singleRestaurantOrderUrl,
   singleRestaurantUrl,
   singleMenuItemUrl,
+  getAllAdminMenuItemsUrl,
 } = require("./utils");
 
+////////////////////////// AUTH /////////////////////
 // signup
 export const fetchSignup = async (form) => {
   try {
@@ -83,6 +85,9 @@ export const fetchGoogleUser = async () => {
   }
 };
 
+////////////////////////////////////////////////////////
+
+////////////////////////// Restaurant /////////////////////
 // fetch restaurant
 export const fetchRestaurants = async (page, limit, body) => {
   try {
@@ -139,6 +144,8 @@ export const createRestaurant = async (form) => {
   }
 };
 
+////////////////////////////////////////////////////////
+
 // fetch menu items
 export const fetchMenuItem = async (resId) => {
   try {
@@ -181,6 +188,21 @@ export const fetchUpdateMenuItem = async (menuItemId, formData) => {
     return error.message;
   }
 };
+
+// get admin menuItems
+export const fetchAdminMenuItem = async () => {
+  try {
+    const res = await fetch(getAllAdminMenuItemsUrl, {
+      credentials: "include",
+    });
+    return res.json();
+  } catch (error) {
+    console.error(error.message);
+    return error.message;
+  }
+};
+
+////////////////////////////////////////////////////////
 
 //get admin restaurant
 export const getAdminRestaurant = async () => {

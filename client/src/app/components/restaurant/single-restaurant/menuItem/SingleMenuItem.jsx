@@ -1,15 +1,14 @@
 "use client";
-
 import React, { useEffect, useState } from "react";
 import {
   fetchSingleMenuItem,
   fetchSingleRestaurant,
   fetchPostCart,
 } from "@/app/lib/data";
-import ResImage from "../../../../../public/image/restaurant-placeholder.png";
+import ResImage from "../../../../../../public/image/restaurant-placeholder.png";
 import Image from "next/image";
-import Btn from "../../Btn";
-import MenuItemImg from "../../../../../public/image/menuItem-image-placeholder.png";
+import Btn from "../../../Btn";
+import MenuItemImg from "../../../../../../public/image/menuItem-image-placeholder.png";
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import { itemsCount } from "@/app/redux/features/cart/CartSlice";
 import { useRouter } from "next/navigation";
@@ -63,7 +62,7 @@ const SingleMenuItem = ({ resId, menuItemId }) => {
 
   return (
     <div className="flex flex-col lg:flex-row items-center justify-center lg:justify-between w-full pt-[70px]">
-      <div className="flex justify-center items-center w-full lg:w-[60%] p-2">
+      <div className="flex justify-center items-center w-full lg:w-[50%] p-2">
         <Image
           src={menuItem.image || MenuItemImg}
           alt="MenuItem image"
@@ -73,7 +72,7 @@ const SingleMenuItem = ({ resId, menuItemId }) => {
           className="object-cover rounded-md w-full h-full "
         />
       </div>
-      <div className="flex flex-col justify-center items-start px-4 m-2 w-full lg:w-[40%]">
+      <div className="flex flex-col justify-center items-start px-4 m-2 w-full lg:w-[50%]">
         <div className="flex items-center space-x-2 ml-5">
           <div className="w-[100] h-[100]">
             <Image
@@ -101,8 +100,11 @@ const SingleMenuItem = ({ resId, menuItemId }) => {
           <div className=" w-full p-2 m-2">
             <p>{menuItem.description}</p>
           </div>
-          <div className="flex w-full justify-center pt-5">
-            <Btn text="Add to Cart" onClick={handleAddToCart} />
+          <div
+            className="flex w-full justify-center pt-5"
+            onClick={handleAddToCart}
+          >
+            <Btn text="Add to Cart" />
           </div>
         </div>
       </div>

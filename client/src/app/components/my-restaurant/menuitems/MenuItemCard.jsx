@@ -82,7 +82,7 @@ const MenuItemCard = ({ menuItem, onDelete, onUpdate }) => {
               />
             ) : (
               <Image
-                src={editedMenuItem.image || URL.createObjectURL(selectedImage)}
+                src={editedMenuItem.image}
                 alt={editedMenuItem.name}
                 sizes="200vw"
                 priority={true}

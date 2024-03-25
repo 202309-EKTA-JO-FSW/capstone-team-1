@@ -1,5 +1,5 @@
 "use client";
-import SingleMenuItem from "@/app/components/restaurant/single-restaurant/SingleMenuItem";
+import SingleMenuItem from "@/app/components/restaurant/single-restaurant/menuItem/SingleMenuItem";
 import React from "react";
 
 const SingleMenuItemPage = ({ params }) => {

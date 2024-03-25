@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { fetchMenuItem } from "@/app/lib/data";
+import { fetchAdminMenuItem, fetchMenuItem } from "@/app/lib/data";
 
 import MenuItemCard from "./MenuItemCard";
 import Link from "next/link";
@@ -10,16 +10,12 @@ import Loading from "../../loading/Loading";
 
 function MenuItems() {
   const [menuItems, setMenuItems] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [restaurantId, setRestaurantId] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem("user"));
-    const restaurantId = storedUser.restaurant;
-    setRestaurantId(restaurantId);
     const getMenuItems = async () => {
       setLoading(true);
-      const menuItemsData = await fetchMenuItem(restaurantId);
+      const menuItemsData = await fetchAdminMenuItem();
 
       setMenuItems(menuItemsData);
       setLoading(false);
@@ -30,14 +26,14 @@ function MenuItems() {
   const handleDelete = async (deletedItem) => {
     const updatedMenuItems = menuItems.filter((item) => item !== deletedItem);
     setMenuItems(updatedMenuItems);
-    const menuItemsData = await fetchMenuItem(restaurantId);
+    const menuItemsData = await fetchAdminMenuItem();
     setMenuItems(menuItemsData);
     // getMenuItems();
   };
 
   const handleUpdate = async () => {
     setLoading(true);
-    const menuItemsData = await fetchMenuItem(restaurantId);
+    const menuItemsData = await fetchAdminMenuItem();
     setMenuItems(menuItemsData);
     setLoading(false);
   };

@@ -5,6 +5,36 @@ const { uploadImage, deleteImage } = require("../utils/images/imageStorage");
 const { validateRestaurant } = require("../utils/validation");
 const Order = require("../models/orderModel");
 
+// get all menuItems
+const getAllMenuItems = async (req, res) => {
+  const page = parseInt(req.query.page) || 0;
+  const itemsPerPage = parseInt(req.query.offset) || 10;
+  try {
+    const user = await User.findById(req.userId);
+    // checking if the user is admin
+    if (!user || !user.isAdmin) {
+      return res
+        .status(403) // because user is unauthorized
+        .json({
+          message:
+            "Access Denied: Only owner of restaurant is allowed to add menu items",
+        });
+    }
+
+    // restaurant id
+    const resId = user.restaurant;
+
+    // get all menuItems
+    const allMenuItems = await MenuItem.find({ restaurant: resId })
+      .skip(page * itemsPerPage)
+      .limit(itemsPerPage);
+
+    return res.status(200).json(allMenuItems);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 // add a new menuItem
 const addNewItem = async (req, res) => {
   const { name, description, price, type, available } = req.body;
@@ -443,4 +473,5 @@ module.exports = {
   getOrders,
   getSingleOrder,
   updateSingleOrder,
+  getAllMenuItems,
 };
