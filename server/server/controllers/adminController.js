@@ -6,7 +6,7 @@ const { validateRestaurant } = require("../utils/validation");
 const Order = require("../models/orderModel");
 
 // get all menuItems
-const getAllMenuItems = async () => {
+const getAllMenuItems = async (req, res) => {
   const page = parseInt(req.query.page) || 0;
   const itemsPerPage = parseInt(req.query.offset) || 10;
   try {
@@ -25,8 +25,7 @@ const getAllMenuItems = async () => {
     const resId = user.restaurant;
 
     // get all menuItems
-    const allMenuItems = await menuItemModel
-      .find({ restaurant: resId })
+    const allMenuItems = await MenuItem.find({ restaurant: resId })
       .skip(page * itemsPerPage)
       .limit(itemsPerPage);
 
