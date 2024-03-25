@@ -25,7 +25,7 @@ const Contact = () => {
           <ContactCard
             icon={<FaPhoneVolume />}
             name={"Phone"}
-            phone={"+962771231231"}
+            phone={"+9627612312311"}
           />
         </div>
       </div>

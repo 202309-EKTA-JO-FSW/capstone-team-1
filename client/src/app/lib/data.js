@@ -19,7 +19,7 @@ const {
   restaurantOrdersUrl,
   singleRestaurantOrderUrl,
   singleRestaurantUrl,
-  singleMenuItemUrl
+  singleMenuItemUrl,
 } = require("./utils");
 
 // signup
@@ -167,18 +167,14 @@ export const postItem = async (formData) => {
 };
 
 // update menu Items
-export const fetchUpdateMenuItem = async (menuItemId, menuItem) => {
+export const fetchUpdateMenuItem = async (menuItemId, formData) => {
   const url = `${updateMenuItemUrl}/${menuItemId}`;
   try {
     const res = await fetch(url, {
       method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(menuItem),
+      body: formData,
       credentials: "include",
     });
-
     return res.json();
   } catch (error) {
     console.error(error.message);
@@ -514,10 +510,10 @@ export const fetchSearchMenuItem = async (resId, searchValue) => {
   }
 };
 
-//fetch single MenuItem                
-export const fetchSingleMenuItem = async ( resId, itemId) => {
+//fetch single MenuItem
+export const fetchSingleMenuItem = async (resId, itemId) => {
   try {
-    const res = await fetch(singleMenuItemUrl( resId,itemId));
+    const res = await fetch(singleMenuItemUrl(resId, itemId));
     return await res.json();
   } catch (error) {
     console.error("Error fetching menu item:", error);
