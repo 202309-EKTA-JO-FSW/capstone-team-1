@@ -1,5 +1,5 @@
-// const backend_url = "https://capstone-team-1.onrender.com";
-const backend_url = "http://localhost:3001";
+const backend_url = "https://capstone-team-1.onrender.com";
+// const backend_url = "http://localhost:3001";
 
 const main_url = backend_url + "/api";
 

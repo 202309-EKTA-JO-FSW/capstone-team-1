@@ -19,7 +19,7 @@ const SideBar = () => {
 
   return (
     <div className="sidebar">
-      <div className="flex md:flex-col">
+      <div className="flex items-center md:flex-col">
         {contents.map((content) => (
           <div key={content.name}>
             <Link href={`/${mainPath}/${content.path}`}>
