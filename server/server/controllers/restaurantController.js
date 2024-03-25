@@ -139,13 +139,15 @@ async function filterRestaurant(req, res) {
 // get all MenuItems for chosen restaurant w/ pagination
 const getAllRestaurantMenuItems = async (req, res) => {
   const { resId } = req.params;
-  const page = parseInt(req.query.page) || 0;
-  const itemsPerPage = parseInt(req.query.offset) || 10;
+  // const page = parseInt(req.query.page) || 0;
+  // const itemsPerPage = parseInt(req.query.offset) || 10;
   try {
-    const allMenuItems = await menuItemModel
-      .find({ restaurant: resId, available: true })
-      .skip(page * itemsPerPage)
-      .limit(itemsPerPage);
+    const allMenuItems = await menuItemModel.find({
+      restaurant: resId,
+      available: true,
+    });
+    // .skip(page * itemsPerPage)
+    // .limit(itemsPerPage);
 
     return res.status(200).json(allMenuItems);
   } catch (err) {

@@ -7,8 +7,6 @@ const Order = require("../models/orderModel");
 
 // get all menuItems
 const getAllMenuItems = async (req, res) => {
-  const page = parseInt(req.query.page) || 0;
-  const itemsPerPage = parseInt(req.query.offset) || 10;
   try {
     const user = await User.findById(req.userId);
     // checking if the user is admin
@@ -25,9 +23,7 @@ const getAllMenuItems = async (req, res) => {
     const resId = user.restaurant;
 
     // get all menuItems
-    const allMenuItems = await MenuItem.find({ restaurant: resId })
-      .skip(page * itemsPerPage)
-      .limit(itemsPerPage);
+    const allMenuItems = await MenuItem.find({ restaurant: resId });
 
     return res.status(200).json(allMenuItems);
   } catch (err) {
