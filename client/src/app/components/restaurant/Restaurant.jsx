@@ -27,21 +27,23 @@ function Restaurant() {
       try {
         let restaurantsData = [];
         if (searchTxt) {
+          setLoading(true);
           restaurantsData = await searchRestaurant(
             searchTxt,
             page,
             limit,
             body
           );
+          setLoading(false);
         } else {
+          setLoading(true);
           restaurantsData = await fetchRestaurants(page, limit, body);
+          setLoading(false);
         }
         setRestaurants(restaurantsData.restaurants);
         setTotalPages(restaurantsData.totalPages);
       } catch (error) {
         console.error("Error getting restaurants:", error.message);
-      } finally {
-        setLoading(false);
       }
     };
 
