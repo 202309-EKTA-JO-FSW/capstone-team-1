@@ -2,6 +2,8 @@ const express = require("express");
 const cors = require("cors");
 const apiRoutes = require("./routes");
 const cookieParser = require("cookie-parser");
+// add keep awake file to prevent the too sleep
+require("./utils/keep-awake");
 
 require("dotenv").config();
 
