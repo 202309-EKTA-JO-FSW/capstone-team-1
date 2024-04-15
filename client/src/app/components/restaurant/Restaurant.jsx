@@ -74,7 +74,9 @@ function Restaurant() {
       {/* loading display */}
       {loading && <Loading />}
       {/* if There is no restaurnats  */}
-      {restaurants.length === 0 && <Empty text={"No restaurant found"} />}
+      {!loading && restaurants.length === 0 && (
+        <Empty text={"No restaurant found"} />
+      )}
       <div className="w-full flex flex-wrap justify-center lg:justify-start">
         {!loading &&
           restaurants &&
