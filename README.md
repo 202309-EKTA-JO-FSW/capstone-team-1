@@ -12,7 +12,7 @@ Our project is a full-stack e-commerce platform designed to streamline the order
 
 - **Development Environment**: Our development environment is fully Dockerized, providing a consistent setup for both frontend and backend development. This ensures uniformity across various configurations, facilitating collaboration and reducing deployment hiccups.
 
-# Developers
+## Developers
 
 - **Gorgees Odisho**
 - **Hala Qitouqa**
