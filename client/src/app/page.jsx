@@ -14,7 +14,7 @@ export default function Home() {
           <div className="p-6 flex flex-col md:flex-row">
             <div className="mr-0 md:mr-40 mt-10 md:mt-40 text-center md:text-left">
               <h2 className="text-3xl md:text-4xl font-extrabold mb-4">
-                Savor Every <span className="text-main-green">Bite</span>,<br />
+                Save Every <span className="text-main-green">Bite</span>,<br />
                 Anywhere
               </h2>
               <p className="mb-6">
