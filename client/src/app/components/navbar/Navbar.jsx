@@ -2,6 +2,8 @@
 
 import {
   AppBar,
+  Avatar,
+  Badge,
   Box,
   Button,
   Container,
@@ -16,8 +18,15 @@ import Logo from "./Logo";
 import FreshFix from "../../../../public/FreshFix.png";
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
+import LocalGroceryStoreOutlinedIcon from "@mui/icons-material/LocalGroceryStoreOutlined";
+import Btn from "../Btn";
+import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
+import { loginUser } from "@/app/redux/features/auth/AuthSlice";
+import { itemsCount } from "@/app/redux/features/cart/CartSlice";
+import { fetchCart } from "@/app/lib/data";
+import placeholderImage from "../../../../public/Avatar-Profile-Image.png";
 
 const pages = [
   { name: "home", path: "/" },
@@ -35,7 +44,57 @@ const colors = {
 
 function Navbar() {
   const currentPath = usePathname();
+  const dispatch = useAppDispatch();
   const [anchorElNav, setAnchorElNav] = useState(null);
+  const [userInfo, setUserInfo] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const user = useAppSelector((state) => state.authReducer.value);
+
+  useEffect(() => {
+    // Function to handle local storage change event
+    const handleStorageChange = () => {
+      const storedUser = JSON.parse(localStorage.getItem("user"));
+      setUserInfo(storedUser);
+    };
+    // Add event listener for storage change
+    window.addEventListener("storage", handleStorageChange);
+    // Initial setup
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+
+    setUserInfo(storedUser);
+    setLoading(false);
+    // Cleanup function
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
+
+  useEffect(() => {
+    // Dispatch login action if user is logged in
+    if (userInfo) {
+      dispatch(
+        loginUser({
+          isAdmin: userInfo.isAdmin,
+          restaurant: userInfo.restaurant,
+        })
+      );
+    }
+  }, [userInfo, dispatch]);
+
+  useEffect(() => {
+    const getCart = async () => {
+      if (user.isLogin) {
+        const cart = await fetchCart();
+        dispatch(itemsCount(cart.itemsCount));
+      }
+    };
+    getCart();
+  }, [user]);
+
+  // get items count in cart
+  const cartItemsCount = useAppSelector((state) => state.cartReducer.value);
+
+  // menu toggle
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -50,11 +109,11 @@ function Navbar() {
 
   return (
     <AppBar
-      position="static"
+      elevation={0}
+      position="sticky"
       sx={{
         backgroundColor: "white",
         color: "black",
-        boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
       }}
     >
       <Toolbar>
@@ -69,7 +128,13 @@ function Navbar() {
           }}
         >
           {/* content pages small size */}
-          <div className="flex">
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "flex-end",
+              alignItems: "center",
+            }}
+          >
             {/* Logo */}
             <Box sx={{ display: { xs: "flex", md: "none" } }}>
               <Logo />
@@ -103,33 +168,47 @@ function Navbar() {
                   display: { xs: "block", md: "none" },
                 }}
               >
-                {pages.map((page) => (
-                  <Link href={page.path} key={page.name}>
-                    <MenuItem onClick={handleCloseNavMenu}>
-                      <Typography
-                        textAlign="center"
-                        sx={{
-                          color: `${
-                            isActive(page.path) ? colors["main-green"] : "black"
-                          }`,
-                          fontWeight: `${isActive(page.path) ? "bold" : ""}`,
-                          display: "block",
-                          "&:hover": {
-                            color: `${colors["main-green"]}`,
-                            backgroundColor: "transparent",
-                          },
-                        }}
-                      >
-                        {page.name}
-                      </Typography>
-                    </MenuItem>
-                  </Link>
-                ))}
+                {pages.map((page) => {
+                  if (
+                    page.path === "/my-restaurant" &&
+                    (!userInfo || (userInfo && !userInfo.isAdmin))
+                  ) {
+                    return null;
+                  } else {
+                    return (
+                      <Link href={page.path} key={page.name}>
+                        <MenuItem onClick={handleCloseNavMenu}>
+                          <Typography
+                            textAlign="center"
+                            sx={{
+                              color: `${
+                                isActive(page.path)
+                                  ? colors["main-green"]
+                                  : "black"
+                              }`,
+                              fontWeight: `${
+                                isActive(page.path) ? "bold" : ""
+                              }`,
+                              display: "block",
+                              "&:hover": {
+                                color: `${colors["main-green"]}`,
+                                backgroundColor: "transparent",
+                              },
+                            }}
+                          >
+                            {page.name}
+                          </Typography>
+                        </MenuItem>
+                      </Link>
+                    );
+                  }
+                })}
               </Menu>
             </Box>
-          </div>
+          </Box>
+
           {/* content pages large size */}
-          <div className="flex items-center">
+          <Box sx={{ display: "flex", alignItems: "center", flexGrow: 3 }}>
             {/* Logo */}
             <Box
               sx={{ display: { xs: "none", md: "flex", marginRight: "20px" } }}
@@ -146,28 +225,87 @@ function Navbar() {
               </Link>
             </Box>
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-              {pages.map((page) => (
-                <Link href={page.path} key={page.name}>
-                  <Button
-                    sx={{
-                      my: 2,
-                      color: `${
-                        isActive(page.path) ? colors["main-green"] : "black"
-                      }`,
-                      fontWeight: `${isActive(page.path) ? "bold" : ""}`,
-                      display: "block",
-                      "&:hover": {
-                        color: `${colors["main-green"]}`,
-                        backgroundColor: "transparent",
-                      },
-                    }}
-                  >
-                    {page.name}
-                  </Button>
-                </Link>
-              ))}
+              {pages.map((page) => {
+                if (
+                  page.path === "/my-restaurant" &&
+                  (!userInfo || (userInfo && !userInfo.isAdmin))
+                ) {
+                  return null;
+                } else {
+                  return (
+                    <Link href={page.path} key={page.name}>
+                      <Button
+                        sx={{
+                          my: 2,
+                          color: `${
+                            isActive(page.path) ? colors["main-green"] : "black"
+                          }`,
+                          fontWeight: `${isActive(page.path) ? "bold" : ""}`,
+                          display: "block",
+                          "&:hover": {
+                            color: `${colors["main-green"]}`,
+                            backgroundColor: "transparent",
+                          },
+                        }}
+                      >
+                        {page.name}
+                      </Button>
+                    </Link>
+                  );
+                }
+              })}
             </Box>
-          </div>
+          </Box>
+
+          {/* section 2 */}
+          {loading ? (
+            <div></div>
+          ) : (
+            <Box
+              sx={{
+                flexGrow: 1,
+                display: "flex",
+                justifyContent: "flex-end",
+                alignItems: "center",
+              }}
+            >
+              {/* card icon */}
+              <Link href={"/cart"}>
+                <IconButton size="large" sx={{ marginRight: "10px" }}>
+                  <Badge badgeContent={cartItemsCount} color="error">
+                    <LocalGroceryStoreOutlinedIcon />
+                  </Badge>
+                </IconButton>
+              </Link>
+
+              {/* user profile */}
+              {userInfo && (
+                <Link
+                  href={"/profile"}
+                  className="flex justify-end items-center"
+                >
+                  {/* sx={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    alignItems: "center",
+                  }} */}
+
+                  <IconButton sx={{ p: 0, marginRight: "7px" }}>
+                    <Avatar
+                      alt={userInfo.firstName}
+                      src={userInfo.avatar || placeholderImage}
+                    />
+                  </IconButton>
+                  <Typography>{`Hello, ${userInfo.firstName}`}</Typography>
+                </Link>
+              )}
+              {!userInfo && (
+                <Link href="/login">
+                  <Btn text={"LOGIN"} />
+                </Link>
+              )}
+            </Box>
+          )}
         </Container>
       </Toolbar>
     </AppBar>

@@ -19,7 +19,7 @@ export default function RootLayout({ children }) {
       <body suppressHydrationWarning={true} className={inter.className}>
         <AppRouterCacheProvider>
           <StoreProvider>
-            <NavBar />
+            {/* <NavBar /> */}
             <Navbar />
             <MessageBox />
             <div className="min-h-screen">{children}</div>
