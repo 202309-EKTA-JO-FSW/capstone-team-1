@@ -17,8 +17,15 @@ import FreshFix from "../../../../public/FreshFix.png";
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 
-const pages = ["Products", "Pricing", "Blog"];
+const pages = [
+  { name: "home", path: "/" },
+  { name: "restaurant", path: "/restaurant" },
+  { name: "about us", path: "/about-us" },
+  { name: "contact us", path: "/contact" },
+  { name: "my restaurant", path: "/my-restaurant" },
+];
 
 const colors = {
   "main-green": "#39DB4A",
@@ -27,12 +34,18 @@ const colors = {
 };
 
 function Navbar() {
+  const currentPath = usePathname();
   const [anchorElNav, setAnchorElNav] = useState(null);
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
+  };
+
+  // check the ccurent page
+  const isActive = (path) => {
+    return path === "/" ? currentPath === path : currentPath.startsWith(path);
   };
 
   return (
@@ -91,9 +104,26 @@ function Navbar() {
                 }}
               >
                 {pages.map((page) => (
-                  <MenuItem key={page} onClick={handleCloseNavMenu}>
-                    <Typography textAlign="center">{page}</Typography>
-                  </MenuItem>
+                  <Link href={page.path} key={page.name}>
+                    <MenuItem onClick={handleCloseNavMenu}>
+                      <Typography
+                        textAlign="center"
+                        sx={{
+                          color: `${
+                            isActive(page.path) ? colors["main-green"] : "black"
+                          }`,
+                          fontWeight: `${isActive(page.path) ? "bold" : ""}`,
+                          display: "block",
+                          "&:hover": {
+                            color: `${colors["main-green"]}`,
+                            backgroundColor: "transparent",
+                          },
+                        }}
+                      >
+                        {page.name}
+                      </Typography>
+                    </MenuItem>
+                  </Link>
                 ))}
               </Menu>
             </Box>
@@ -117,21 +147,24 @@ function Navbar() {
             </Box>
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
               {pages.map((page) => (
-                <Button
-                  key={page}
-                  sx={{
-                    my: 2,
-                    color: "#000",
-                    display: "block",
-                    "&:hover": {
-                      color: `${colors["main-green"]}`,
-                      backgroundColor: "transparent",
-                      fontWeight: "bold",
-                    },
-                  }}
-                >
-                  {page}
-                </Button>
+                <Link href={page.path} key={page.name}>
+                  <Button
+                    sx={{
+                      my: 2,
+                      color: `${
+                        isActive(page.path) ? colors["main-green"] : "black"
+                      }`,
+                      fontWeight: `${isActive(page.path) ? "bold" : ""}`,
+                      display: "block",
+                      "&:hover": {
+                        color: `${colors["main-green"]}`,
+                        backgroundColor: "transparent",
+                      },
+                    }}
+                  >
+                    {page.name}
+                  </Button>
+                </Link>
               ))}
             </Box>
           </div>
