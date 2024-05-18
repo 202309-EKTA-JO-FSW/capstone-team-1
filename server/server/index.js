@@ -3,7 +3,7 @@ const cors = require("cors");
 const apiRoutes = require("./routes");
 const cookieParser = require("cookie-parser");
 
-require("dotenv").config();
+require("dotenv").config().parsed;
 
 const { connectToMongo } = require("./db/connection");
 const passport = require("passport");

@@ -6,6 +6,8 @@ const { createToken } = require("./authController");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const jwt = require("jsonwebtoken");
 
+require("dotenv").config().parsed;
+
 passport.use(
   new GoogleStrategy(
     {
